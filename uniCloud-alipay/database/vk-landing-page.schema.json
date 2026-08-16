@@ -2,9 +2,9 @@
   "bsonType": "object",
   "required": ["sections"],
   "permission": {
-    "create": false,
+    "create": true,
     "read": true,
-    "update": false,
+    "update": true,
     "delete": false
   },
   "properties": {
@@ -16,19 +16,22 @@
       "title": "页面区块",
       "description": "有序的区块数组，每个区块包含 type、enable、data",
       "permission": {
-        "read": true
+        "read": true,
+        "write": true
       }
     },
     "_add_time": {
       "description": "创建时间",
       "permission": {
-        "read": true
+        "read": true,
+        "write": true
       }
     },
     "_update_time": {
       "description": "修改时间",
       "permission": {
-        "read": true
+        "read": true,
+        "write": true
       }
     }
   }

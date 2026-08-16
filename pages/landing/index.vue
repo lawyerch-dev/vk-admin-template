@@ -38,6 +38,10 @@
         v-if="section.type === 'advantages' && section.enable"
         :data="section.data"
       />
+      <ProductsSection
+        v-if="section.type === 'products' && section.enable"
+        :data="section.data"
+      />
       <CTASection
         v-if="section.type === 'cta' && section.enable"
         :data="section.data"
@@ -60,11 +64,12 @@ import StatsSection from './components/StatsSection.vue';
 import FeaturesSection from './components/FeaturesSection.vue';
 import AdvantagesSection from './components/AdvantagesSection.vue';
 import CTASection from './components/CTASection.vue';
+import ProductsSection from './components/ProductsSection.vue';
 
 let vk = uni.vk;
 
 export default {
-  components: { HeroSection, StatsSection, FeaturesSection, AdvantagesSection, CTASection },
+  components: { HeroSection, StatsSection, FeaturesSection, AdvantagesSection, CTASection, ProductsSection },
   data() {
     return {
       scrolled: false,

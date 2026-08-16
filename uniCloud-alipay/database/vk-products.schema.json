@@ -34,6 +34,11 @@
       "title": "下载地址",
       "description": "产品下载链接"
     },
+    "detail_url": {
+      "bsonType": "string",
+      "title": "详情文档链接",
+      "description": "产品详情文档链接（飞书文档等），用户查看详情时跳转"
+    },
     "price_points": {
       "bsonType": "int",
       "title": "收费积分",

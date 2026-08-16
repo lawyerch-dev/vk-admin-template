@@ -64,6 +64,14 @@ module.exports = {
 				}
 			},
 			{
+				type: "products", enable: true,
+				data: {
+					title: "产品中心",
+					subtitle: "选择适合您的产品，提升工作效率",
+					max_show: 6
+				}
+			},
+			{
 				type: "cta", enable: true,
 				data: {
 					title: "准备好开始了吗？",

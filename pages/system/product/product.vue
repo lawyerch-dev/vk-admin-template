@@ -223,6 +223,42 @@
         </div>
       </template>
 
+      <!-- 详情文档列 -->
+      <template v-slot:detail_url="{ row }">
+        <div
+          v-if="editingCell.rowId === row._id && editingCell.field === 'detail_url'"
+          @click.stop
+          :data-editing-cell="`${row._id}-detail_url`"
+        >
+          <el-input
+            v-model="editingCell.value"
+            size="mini"
+            placeholder="飞书文档链接"
+            @blur="handleBlur(row, 'detail_url')"
+            @keyup.enter.native="saveCellEdit(row)"
+            @keyup.esc.native="cancelCellEdit"
+            autofocus
+          ></el-input>
+        </div>
+        <div
+          v-else
+          @dblclick="startCellEdit(row, 'detail_url', row.detail_url || '')"
+          style="cursor: pointer; min-height: 20px; word-break: break-all;"
+          :title="isAdmin ? '双击编辑' : (row.detail_url || '')"
+        >
+          <el-link
+            v-if="row.detail_url"
+            :href="row.detail_url"
+            target="_blank"
+            type="primary"
+            icon="el-icon-document"
+          >
+            查看文档
+          </el-link>
+          <span v-else style="color: #909399;">-</span>
+        </div>
+      </template>
+
       <!-- 购买价格列 -->
       <template v-slot:buy_price="{ row }">
         <div
@@ -1027,6 +1063,7 @@ export default {
           { key: "description", title: "产品描述", type: "text", width: 200, slot: true },
           { key: "product_type", title: "产品类型", type: "text", width: 120 },
           { key: "download_url", title: "下载地址", type: "text", width: 250, slot: true },
+          { key: "detail_url", title: "详情文档", type: "text", width: 200, slot: true },
           {
             key: "price_standard",
             title: "收费标准",
@@ -1162,6 +1199,13 @@ export default {
               key: "version_logs",
               title: "版本更新日志",
               slot: true,
+            },
+            {
+              key: "detail_url",
+              title: "详情文档链接",
+              type: "text",
+              placeholder: "请输入飞书文档链接",
+              tips: "用户点击查看详情时跳转的文档链接（飞书文档等）",
             },
             // ========== 收费配置 ==========
             { key: "", title: "收费配置", type: "bar-title" },
@@ -1367,6 +1411,7 @@ export default {
         product_type: "",
         product_image: "",
         download_url: "",
+        detail_url: "",
         price_points: 1,
         price_months: 1,
         price_machines: 1,
@@ -1406,6 +1451,7 @@ export default {
         product_type: item.product_type,
         product_image: item.product_image || "",
         download_url: item.download_url || "",
+        detail_url: item.detail_url || "",
         price_points: item.price_points || 5,
         price_months: item.price_months || 1,
         price_machines: item.price_machines || 1,

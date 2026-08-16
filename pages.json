@@ -10,6 +10,12 @@
     },
     { "path": "pages/index/index" },
     {
+      "path": "pages/products/index",
+      "style": {
+        "navigationBarTitleText": "产品中心"
+      }
+    },
+    {
       "path": "pages/login/index",
       "style": {
         "topWindow": false,

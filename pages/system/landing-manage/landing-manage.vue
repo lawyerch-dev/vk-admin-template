@@ -139,6 +139,22 @@
             </div>
           </div>
 
+          <!-- 产品展示 -->
+          <div v-if="section.type === 'products'" class="editor-grid">
+            <div class="editor-field editor-field--full">
+              <label>标题</label>
+              <el-input v-model="section.data.title" size="small" placeholder="产品中心" />
+            </div>
+            <div class="editor-field editor-field--full">
+              <label>副标题</label>
+              <el-input v-model="section.data.subtitle" size="small" placeholder="选择适合您的产品" />
+            </div>
+            <div class="editor-field">
+              <label>最多展示</label>
+              <el-input-number v-model="section.data.max_show" :min="1" :max="12" size="small" />
+            </div>
+          </div>
+
           <!-- CTA -->
           <div v-if="section.type === 'cta'" class="editor-grid">
             <div class="editor-field editor-field--full">
@@ -186,6 +202,7 @@ export default {
         stats: '数据统计',
         features: '功能卡片',
         advantages: '优势',
+        products: '产品展示',
         cta: '行动号召'
       },
       sectionIcons: {
@@ -193,6 +210,7 @@ export default {
         stats: '📊',
         features: '✨',
         advantages: '💎',
+        products: '📦',
         cta: '🚀'
       },
       sectionColors: {
@@ -200,6 +218,7 @@ export default {
         stats: '#0ea5e9',
         features: '#8b5cf6',
         advantages: '#f59e0b',
+        products: '#f97316',
         cta: '#10b981'
       }
     };
