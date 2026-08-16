@@ -18,10 +18,8 @@ export default {
   },
   methods: {
     handlePrimary() {
-      const action = (this.data.btn_primary || {}).action;
-      if (action === 'scroll') {
-        this.$emit('scroll-to-features');
-      }
+      const { windowHeight } = uni.getSystemInfoSync();
+      uni.pageScrollTo({ scrollTop: windowHeight, duration: 300 });
     },
     handleGhost() {
       const action = (this.data.btn_ghost || {}).action;

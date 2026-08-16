@@ -23,7 +23,6 @@
       <HeroSection
         v-if="section.type === 'hero' && section.enable"
         :data="section.data"
-        @scroll-to-features="scrollToFeatures"
         @navigate="navigateTo"
       />
       <StatsSection
@@ -106,15 +105,6 @@ export default {
           // 静默失败，使用默认空数据
         }
       });
-    },
-
-    // 滚动到功能区块
-    scrollToFeatures() {
-      uni.createSelectorQuery().select('#features').boundingClientRect(rect => {
-        if (rect) {
-          uni.pageScrollTo({ scrollTop: rect.top - 50, duration: 300 });
-        }
-      }).exec();
     },
 
     // 页面跳转
