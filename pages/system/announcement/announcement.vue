@@ -176,7 +176,7 @@ export default {
 }
 .preview-header {
   padding: 14px 18px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4facfe 55%, #e1e8f2 100%);
   color: #fff;
   font-size: 16px;
   font-weight: 600;

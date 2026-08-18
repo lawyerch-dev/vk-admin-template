@@ -649,7 +649,7 @@ export default {
 	justify-content: space-between;
 	align-items: center;
 	padding: 14px 18px;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background: linear-gradient(135deg, #4facfe 55%, #e1e8f2 100%);
 	color: #fff;
 }
 
@@ -735,7 +735,7 @@ export default {
 .log-detail-btn {
 	font-size: 12px;
 	color: #fff;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background: linear-gradient(135deg, #4facfe 55%, #e1e8f2 100%);
 	padding: 3px 10px;
 	border-radius: 4px;
 	cursor: pointer;
@@ -746,7 +746,7 @@ export default {
 	gap: 4px;
 	&:hover {
 		transform: translateX(2px);
-		box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+		box-shadow: 0 2px 8px rgba(79, 172, 254, 0.4);
 	}
 }
 
