@@ -4,6 +4,7 @@
 		<div class="config-tips">
 			<el-alert title="配置说明" type="info" :closable="false" show-icon>
 				<ul>
+					<li>默认预设「链动小店」（pay.ldxp.cn），新增店铺以此为模板</li>
 					<li>选中哪个店铺，购买积分页与自助修复就使用哪个店铺的网关和套餐</li>
 					<li>每个店铺自带一套套餐（含该平台商品key），店铺之间相互独立</li>
 					<li>店铺列表点「选择」→ 该店铺成为当前店铺，下方显示其网关与套餐供编辑</li>
@@ -52,7 +53,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<div class="tip-line">点击店铺行或「选择」按钮切换当前店铺；下方显示该店铺的网关与套餐，编辑后点「保存配置」生效。</div>
+			<div class="tip-line">点击店铺行或「选择」按钮会弹出二次确认，确认后切换当前店铺；下方显示该店铺的网关与套餐，编辑后点「保存配置」生效。</div>
 		</el-card>
 
 		<!-- 当前选中店铺的完整配置 -->
@@ -77,7 +78,7 @@
 			</el-form>
 
 			<el-card class="inner-card">
-				<div slot="header">接口路径</div>
+				<div slot="header">接口路径（一般保持默认）</div>
 				<el-form :model="selectedStore" label-width="150px" label-position="right">
 					<el-form-item label="创建订单接口">
 						<el-input v-model="selectedStore.pay_order_path" placeholder="/shopApi/Pay/order"></el-input>
@@ -98,10 +99,10 @@
 				<div slot="header">商户凭证（自助修复查单用）</div>
 				<el-form :model="selectedStore" label-width="150px" label-position="right">
 					<el-form-item label="商户API账号">
-						<el-input v-model="selectedStore.merchant_user"></el-input>
+						<el-input v-model="selectedStore.merchant_user" placeholder="必填，自助修复查单用"></el-input>
 					</el-form-item>
 					<el-form-item label="商户API密码">
-						<el-input v-model="selectedStore.merchant_pass" type="password" show-password></el-input>
+						<el-input v-model="selectedStore.merchant_pass" type="password" show-password placeholder="必填，自助修复查单用"></el-input>
 					</el-form-item>
 				</el-form>
 			</el-card>
@@ -201,40 +202,61 @@ export default {
 				}
 			});
 		},
-		// 选择店铺（同时作为当前店铺；行点击或按钮都走这里）
+		// 选择店铺（二次确认后切换，避免频繁切换影响前端服务）
 		selectStore(store) {
 			if (!store) return;
-			that.selected_store_id = store.store_id;
-			that.selectedStore = that.stores.find(s => s.store_id === store.store_id) || null;
+			// 如果点击的是当前店铺，不需要切换
+			if (store.store_id === that.selected_store_id) return;
+			that.$confirm(
+				`确定切换到店铺「${store.name}」吗？\n切换后前端购买积分和自助修复将使用该店铺的网关。`,
+				'切换店铺确认',
+				{
+					confirmButtonText: '确定切换',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}
+			).then(() => {
+				that.selected_store_id = store.store_id;
+				that.selectedStore = that.stores.find(s => s.store_id === store.store_id) || null;
+				vk.toast('已切换，记得保存配置生效');
+			}).catch(() => {});
 		},
 		// 行高亮当前店铺
 		rowClassName({ row }) {
 			return row.store_id === that.selected_store_id ? 'current-store-row' : '';
 		},
-		// 新增店铺
+		// 新增店铺（基于链动小店预设，主要修改域名/channel_id/商品key）
 		addStore() {
 			const store_id = 'store_' + Date.now();
+			// 链动小店预设套餐模板
+			const ldxpPackages = [
+				{ id: 1, name: '体验卡（10积分）', points: 10, price: 10, discount: '', description: '适合新手体验', recommended: false, goods_key: '1eoood' },
+				{ id: 2, name: '基础套餐（50积分）', points: 50, price: 45, discount: '省5元', description: '性价比之选', recommended: false, goods_key: '3x529g' },
+				{ id: 3, name: '超值套餐（100积分）', points: 100, price: 90, discount: '省10元', description: '最受欢迎', recommended: true, goods_key: '5jrm9q' },
+				{ id: 4, name: '豪华套餐（300积分）', points: 300, price: 270, discount: '省30元', description: '超值优惠', recommended: false, goods_key: 'ici991' },
+				{ id: 5, name: '至尊套餐（500积分）', points: 500, price: 450, discount: '省50元', description: '刚需必选', recommended: false, goods_key: '2d0h8p' },
+				{ id: 6, name: '终极套餐（1000积分）', points: 1000, price: 900, discount: '省100元', description: '土豪专属', recommended: false, goods_key: 'et8wmn' }
+			];
 			that.stores.push({
 				store_id,
 				name: '新店铺',
-				base_url: 'https://yunxiangit.com.cn',
-				channel_id: 3,
+				base_url: 'https://pay.ldxp.cn',  // 链动小店
+				channel_id: 4,                    // 链动小店默认通道
 				query_password: '',
 				pay_order_path: '/shopApi/Pay/order',
 				pay_query_path: '/shopApi/Pay/query',
 				merchant_login_path: '/merchantApi/user/login',
 				merchant_order_info_path: '/merchantApi/Order/orderInfo',
-				merchant_user: '',
-				merchant_pass: '',
-				packages: [
-					{ id: 1, name: '新套餐1', points: 0, price: 0, discount: '', description: '', recommended: false, goods_key: '' }
-				]
+				merchant_user: '',  // 管理员填写
+				merchant_pass: '',  // 管理员填写
+				packages: ldxpPackages
 			});
 			that.selectStore(that.stores[that.stores.length - 1]);
 		},
 		// 删除店铺
 		removeStore(store_id) {
-			that.$confirm('确定删除该店铺吗？', '提示', {
+			const store = that.stores.find(s => s.store_id === store_id);
+			that.$confirm(`确定删除店铺「${store ? store.name : ''}」吗？`, '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'
@@ -243,7 +265,9 @@ export default {
 				if (idx > -1) that.stores.splice(idx, 1);
 				if (that.selected_store_id === store_id) {
 					if (that.stores.length) {
-						that.selectStore(that.stores[0]);
+						that.selected_store_id = that.stores[0].store_id;
+						that.selectedStore = that.stores[0];
+						vk.toast(`已自动切换到「${that.stores[0].name}」`);
 					} else {
 						that.selected_store_id = '';
 						that.selectedStore = null;
@@ -290,6 +314,14 @@ export default {
 				}
 				if (!s.channel_id || s.channel_id <= 0) {
 					vk.toast(`店铺「${s.name}」的支付通道ID必须是正整数`);
+					return;
+				}
+				if (!s.merchant_user || !String(s.merchant_user).trim()) {
+					vk.toast(`店铺「${s.name}」的商户API账号不能为空`);
+					return;
+				}
+				if (!s.merchant_pass || !String(s.merchant_pass).trim()) {
+					vk.toast(`店铺「${s.name}」的商户API密码不能为空`);
 					return;
 				}
 				if (!s.packages || !s.packages.length) {

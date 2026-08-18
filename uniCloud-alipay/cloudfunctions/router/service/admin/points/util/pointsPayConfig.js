@@ -28,7 +28,32 @@
 
 const CONFIG_KEY = 'points_pay_config';
 
-// 默认套餐（含当前支付平台 yunxiangit.com.cn 的商品key）
+// 链动小店预设套餐
+const LDXP_PACKAGES = [
+	{ id: 1, name: '体验卡（10积分）', points: 10, price: 10, discount: '', description: '适合新手体验', recommended: false, goods_key: '1eoood' },
+	{ id: 2, name: '基础套餐（50积分）', points: 50, price: 45, discount: '省5元', description: '性价比之选', recommended: false, goods_key: '3x529g' },
+	{ id: 3, name: '超值套餐（100积分）', points: 100, price: 90, discount: '省10元', description: '最受欢迎', recommended: true, goods_key: '5jrm9q' },
+	{ id: 4, name: '豪华套餐（300积分）', points: 300, price: 270, discount: '省30元', description: '超值优惠', recommended: false, goods_key: 'ici991' },
+	{ id: 5, name: '至尊套餐（500积分）', points: 500, price: 450, discount: '省50元', description: '刚需必选', recommended: false, goods_key: '2d0h8p' },
+	{ id: 6, name: '终极套餐（1000积分）', points: 1000, price: 900, discount: '省100元', description: '土豪专属', recommended: false, goods_key: 'et8wmn' }
+];
+
+// 链动小店默认配置
+const LDXP_STORE = {
+	store_id: 'ldxp',
+	name: '链动小店',
+	base_url: 'https://pay.ldxp.cn',
+	channel_id: 4,
+	query_password: '',
+	pay_order_path: '/shopApi/Pay/order',
+	pay_query_path: '/shopApi/Pay/query',
+	merchant_login_path: '/merchantApi/user/login',
+	merchant_order_info_path: '/merchantApi/Order/orderInfo',
+	merchant_user: '',
+	merchant_pass: ''
+};
+
+// 兼容旧版默认套餐（yunxiangit.com.cn）
 const DEFAULT_PACKAGES = [
 	{ id: 1, name: '体验套餐（10积分）', points: 10, price: 10, discount: '', description: '适合新手体验', recommended: false, goods_key: 't1hw3w' },
 	{ id: 2, name: '基础套餐（50积分）', points: 50, price: 45, discount: '省5元', description: '性价比之选', recommended: false, goods_key: 'u4zjhq' },
@@ -38,7 +63,7 @@ const DEFAULT_PACKAGES = [
 	{ id: 6, name: '终极套餐（1000积分）', points: 1000, price: 900, discount: '省100元', description: '土豪专属', recommended: false, goods_key: 'y3qiel' }
 ];
 
-// 默认接口路径（当前平台为同套「小店」软件）
+// 兼容旧版默认店铺（yunxiangit.com.cn）
 const DEFAULT_STORE = {
 	store_id: 'default',
 	name: '默认店铺',
@@ -49,17 +74,21 @@ const DEFAULT_STORE = {
 	pay_query_path: '/shopApi/Pay/query',
 	merchant_login_path: '/merchantApi/user/login',
 	merchant_order_info_path: '/merchantApi/Order/orderInfo',
-	merchant_user: 'ai-auto-man',
-	merchant_pass: 'Aa123456'
+	merchant_user: '',
+	merchant_pass: ''
 };
 
 /**
  * 返回默认配置（深拷贝，避免共享引用）
+ * 默认使用链动小店
  */
 function getDefaultConfig() {
 	return {
-		active_store_id: 'default',
-		stores: [ mergeStore({ ...DEFAULT_STORE, packages: DEFAULT_PACKAGES.map(mergePackage) }) ]
+		active_store_id: 'ldxp',
+		stores: [
+			mergeStore({ ...LDXP_STORE, packages: LDXP_PACKAGES.map(mergePackage) }),
+			mergeStore({ ...DEFAULT_STORE, packages: DEFAULT_PACKAGES.map(mergePackage) })
+		]
 	};
 }
 
@@ -287,6 +316,8 @@ module.exports = {
 	CONFIG_KEY,
 	DEFAULT_PACKAGES,
 	DEFAULT_STORE,
+	LDXP_PACKAGES,
+	LDXP_STORE,
 	getDefaultConfig,
 	mergePackage,
 	mergeStore,
