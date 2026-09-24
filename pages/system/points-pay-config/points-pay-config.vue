@@ -82,35 +82,37 @@
 				</el-form-item>
 			</el-form>
 
-			<el-card class="inner-card">
-				<div slot="header">{{ $t('admin.pointsPay.apiPathsHeader') }}</div>
-				<el-form :model="selectedStore" label-width="150px" label-position="right">
-					<el-form-item :label="$t('admin.pointsPay.fieldPayOrder')">
-						<el-input v-model="selectedStore.pay_order_path" placeholder="/shopApi/Pay/order"></el-input>
-					</el-form-item>
-					<el-form-item :label="$t('admin.pointsPay.fieldPayQuery')">
-						<el-input v-model="selectedStore.pay_query_path" placeholder="/shopApi/Pay/query"></el-input>
-					</el-form-item>
-					<el-form-item :label="$t('admin.pointsPay.fieldMerchantLogin')">
-						<el-input v-model="selectedStore.merchant_login_path" placeholder="/merchantApi/user/login"></el-input>
-					</el-form-item>
-					<el-form-item :label="$t('admin.pointsPay.fieldMerchantOrder')">
-						<el-input v-model="selectedStore.merchant_order_info_path" placeholder="/merchantApi/Order/orderInfo"></el-input>
-					</el-form-item>
-				</el-form>
-			</el-card>
+			<view class="dual-panel">
+				<el-card class="inner-card panel-card">
+					<div slot="header">{{ $t('admin.pointsPay.apiPathsHeader') }}</div>
+					<el-form :model="selectedStore" label-width="120px" label-position="right">
+						<el-form-item :label="$t('admin.pointsPay.fieldPayOrder')">
+							<el-input v-model="selectedStore.pay_order_path" placeholder="/shopApi/Pay/order"></el-input>
+						</el-form-item>
+						<el-form-item :label="$t('admin.pointsPay.fieldPayQuery')">
+							<el-input v-model="selectedStore.pay_query_path" placeholder="/shopApi/Pay/query"></el-input>
+						</el-form-item>
+						<el-form-item :label="$t('admin.pointsPay.fieldMerchantLogin')">
+							<el-input v-model="selectedStore.merchant_login_path" placeholder="/merchantApi/user/login"></el-input>
+						</el-form-item>
+						<el-form-item :label="$t('admin.pointsPay.fieldMerchantOrder')">
+							<el-input v-model="selectedStore.merchant_order_info_path" placeholder="/merchantApi/Order/orderInfo"></el-input>
+						</el-form-item>
+					</el-form>
+				</el-card>
 
-			<el-card class="inner-card">
-				<div slot="header">{{ $t('admin.pointsPay.merchantCredsHeader') }}</div>
-				<el-form :model="selectedStore" label-width="150px" label-position="right">
-					<el-form-item :label="$t('admin.pointsPay.fieldMerchantUser')">
-						<el-input v-model="selectedStore.merchant_user" :placeholder="$t('admin.pointsPay.merchantUserPlaceholder')"></el-input>
-					</el-form-item>
-					<el-form-item :label="$t('admin.pointsPay.fieldMerchantPass')">
-						<el-input v-model="selectedStore.merchant_pass" type="password" show-password :placeholder="$t('admin.pointsPay.merchantPassPlaceholder')"></el-input>
-					</el-form-item>
-				</el-form>
-			</el-card>
+				<el-card class="inner-card panel-card">
+					<div slot="header">{{ $t('admin.pointsPay.merchantCredsHeader') }}</div>
+					<el-form :model="selectedStore" label-width="120px" label-position="right">
+						<el-form-item :label="$t('admin.pointsPay.fieldMerchantUser')">
+							<el-input v-model="selectedStore.merchant_user" :placeholder="$t('admin.pointsPay.merchantUserPlaceholder')"></el-input>
+						</el-form-item>
+						<el-form-item :label="$t('admin.pointsPay.fieldMerchantPass')">
+							<el-input v-model="selectedStore.merchant_pass" type="password" show-password :placeholder="$t('admin.pointsPay.merchantPassPlaceholder')"></el-input>
+						</el-form-item>
+					</el-form>
+				</el-card>
+			</view>
 
 			<!-- 该店铺自己的套餐（含商品key） -->
 			<div class="sub-header">
@@ -402,6 +404,27 @@ export default {
 
 .inner-card {
 	margin-bottom: 20px;
+}
+
+/* 接口路径 + 商户凭证 一行双栏 */
+.dual-panel {
+	display: flex;
+	align-items: stretch;
+	gap: 16px;
+	margin-bottom: 4px;
+
+	.panel-card {
+		flex: 1 1 0;
+		min-width: 0;
+		margin-bottom: 16px;
+	}
+}
+
+@media screen and (max-width: 960px) {
+	.dual-panel {
+		flex-direction: column;
+		gap: 0;
+	}
 }
 
 .card-header {
