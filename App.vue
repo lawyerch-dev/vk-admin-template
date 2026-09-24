@@ -47,6 +47,8 @@ export default {
 					let { menus = [] } = data;
 					// 合并去重
 					menus = vk.pubfn.arr_concat(menus, config.sideBar.staticMenu, "menu_id");
+					// 按角色过滤菜单（演示账号：仅产品列表）
+					menus = that.filterMenusByRole(menus, data.userInfo);
 					// 排序
 					menus.sort((a, b) => {
 						let sortA = a.sort || 0;
@@ -76,6 +78,42 @@ export default {
 					}
 				}
 			});
+		},
+		// 按角色过滤侧边栏菜单
+		filterMenusByRole(menus, userInfo) {
+			const role = (userInfo && userInfo.role) || [];
+			const isAdmin = role.includes("admin");
+			// 仅产品列表：只保留「产品列表」
+			const productOnly = !isAdmin && role.includes("demo-product");
+			const filterOne = (item) => {
+				if (!item) return null;
+				if (item.hidden_menu || item.menu_id === "vk-in") return item;
+				if (productOnly) {
+					if (item.menu_id === "my-products") return item;
+					return null;
+				}
+				// 非管理员隐藏「管理员专属」分组标题
+				if (!isAdmin && item.menu_id === "__divider_admin__") return null;
+				return item;
+			};
+			const walk = (list) => {
+				const out = [];
+				for (const item of list) {
+					const kept = filterOne(item);
+					if (!kept) continue;
+					if (kept.children && kept.children.length) {
+						const children = walk(kept.children);
+						if (children.length === 0 && kept.url !== "" && kept.menu_id !== "vk-in") {
+							// 无可见子级且非隐藏壳节点
+							if (!kept.url) continue;
+						}
+						kept.children = children;
+					}
+					out.push(kept);
+				}
+				return out;
+			};
+			return walk(menus || []);
 		},
 		// 检查充值异常告警
 		async checkRechargeAlerts() {

@@ -1,12 +1,11 @@
 "use strict";
 
 /**
- * 初始化演示/测试账号（可重复执行）
+ * 初始化演示账号（可重复执行）
  * 统一密码：123456
- * 均无完全权限（不含 admin 超管角色），便于给客户演示不同功能权限：
- * - demo-ops  产品运营：产品管理 + 数据统计
- * - demo-view 只读访客：仅查询
- * - demo-user 基础用户：可进后台，几乎无管理权限
+ * 仅两种演示角色，均无完全权限：
+ * - demo-view    只读参观：可看菜单/数据，不可增删改
+ * - demo-product 仅产品列表：侧边栏只保留「产品列表」
  *
  * 密码加密走 uni-id，不在此处硬编码 passwordSecret。
  */
@@ -31,21 +30,9 @@ exports.main = async (event = {}) => {
 	// 演示角色（不使用 admin）
 	const roles = [
 		{
-			role_id: "demo-ops",
-			role_name: "产品运营",
-			comment: "演示：产品管理 + 数据统计",
-			permission: ["system-uni-product-manage", "system-uni-statistics"]
-		},
-		{
-			role_id: "demo-view",
-			role_name: "只读访客",
-			comment: "演示：仅查询",
-			permission: ["sys-permission-read"]
-		},
-		{
-			role_id: "demo-user",
-			role_name: "基础用户",
-			comment: "演示：可进后台，无管理权限",
+			role_id: "demo-product",
+			role_name: "仅产品列表",
+			comment: "演示：只看产品列表菜单",
 			permission: []
 		}
 	];
@@ -68,25 +55,17 @@ exports.main = async (event = {}) => {
 
 	const accounts = [
 		{
-			username: "demo-ops",
-			nickname: "产品运营",
-			role: ["demo-ops"],
-			allow_login_background: true,
-			desc: "产品管理 + 数据统计"
-		},
-		{
+			// 只读参观：复用 query-all（仅查询，不可增删改）
 			username: "demo-view",
-			nickname: "只读访客",
-			role: ["demo-view"],
-			allow_login_background: true,
-			desc: "仅查询，不可增删改"
+			nickname: "只读参观",
+			role: ["query-all"],
+			allow_login_background: true
 		},
 		{
-			username: "demo-user",
-			nickname: "基础用户",
-			role: ["demo-user"],
-			allow_login_background: true,
-			desc: "可进后台，无管理权限"
+			username: "demo-product",
+			nickname: "仅产品列表",
+			role: ["demo-product"],
+			allow_login_background: true
 		}
 	];
 
@@ -111,20 +90,20 @@ exports.main = async (event = {}) => {
 				...baseData,
 				last_update_date: now
 			});
-			results.push({ username: account.username, action: "updated", id, desc: account.desc });
+			results.push({ username: account.username, action: "updated", id });
 		} else {
 			const addRes = await userCol.add({
 				...baseData,
 				register_date: now,
 				register_ip: "127.0.0.1"
 			});
-			results.push({ username: account.username, action: "created", id: addRes.id, desc: account.desc });
+			results.push({ username: account.username, action: "created", id: addRes.id });
 		}
 	}
 
 	return {
 		code: 0,
-		msg: "演示账号初始化完成，统一密码 123456（均无完全权限）",
+		msg: "演示账号初始化完成（demo-view / demo-product），密码 123456",
 		data: {
 			accounts: results.map((item) => {
 				const meta = accounts.find((a) => a.username === item.username);
@@ -133,8 +112,6 @@ exports.main = async (event = {}) => {
 					password: "123456",
 					nickname: meta.nickname,
 					role: meta.role,
-					allow_login_background: meta.allow_login_background,
-					desc: item.desc,
 					action: item.action
 				};
 			})
