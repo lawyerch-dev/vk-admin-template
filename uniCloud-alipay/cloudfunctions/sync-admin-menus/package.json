@@ -1,0 +1,7 @@
+{
+  "name": "sync-admin-menus",
+  "version": "1.0.0",
+  "description": "同步管理员菜单（产品配置等）到 opendb-admin-menus",
+  "main": "index.js",
+  "dependencies": {}
+}

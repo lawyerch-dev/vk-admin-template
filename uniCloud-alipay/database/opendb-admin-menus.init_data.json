@@ -92,6 +92,88 @@
     "sort": 1010
   },
   {
+    "_id": "product-config",
+    "_add_time": 1596416400000,
+    "enable": true,
+    "icon": "el-icon-goods",
+    "menu_id": "product-config",
+    "name": "产品配置",
+    "sort": 1005,
+    "comment": "产品与运营配置"
+  },
+  {
+    "_id": "product-config-product",
+    "sort": 1,
+    "url": "/pages/system/product/product",
+    "_add_time": 1596416400000,
+    "enable": true,
+    "icon": "el-icon-s-goods",
+    "menu_id": "product-config-product",
+    "name": "产品管理",
+    "comment": "维护产品名称、价格、可见性与下载",
+    "parent_id": "product-config"
+  },
+  {
+    "_id": "product-config-category",
+    "sort": 2,
+    "url": "/pages/system/product-category/product-category",
+    "_add_time": 1596416400000,
+    "enable": true,
+    "icon": "el-icon-menu",
+    "menu_id": "product-config-category",
+    "name": "产品分类",
+    "comment": "维护产品分类",
+    "parent_id": "product-config"
+  },
+  {
+    "_id": "product-config-statistics",
+    "sort": 3,
+    "url": "/pages/system/statistics/statistics",
+    "_add_time": 1596416400000,
+    "enable": true,
+    "icon": "el-icon-s-data",
+    "menu_id": "product-config-statistics",
+    "name": "数据统计",
+    "comment": "用户积分与购买记录查询",
+    "parent_id": "product-config"
+  },
+  {
+    "_id": "product-config-rebate",
+    "sort": 4,
+    "url": "/pages/system/rebate-config/rebate-config",
+    "_add_time": 1596416400000,
+    "enable": true,
+    "icon": "el-icon-s-marketing",
+    "menu_id": "product-config-rebate",
+    "name": "返利配置",
+    "comment": "邀请返利阶梯配置",
+    "parent_id": "product-config"
+  },
+  {
+    "_id": "product-config-rebate-records",
+    "sort": 5,
+    "url": "/pages/system/rebate-records/rebate-records",
+    "_add_time": 1596416400000,
+    "enable": true,
+    "icon": "el-icon-notebook-2",
+    "menu_id": "product-config-rebate-records",
+    "name": "返利记录",
+    "comment": "返利发放记录",
+    "parent_id": "product-config"
+  },
+  {
+    "_id": "product-config-landing",
+    "sort": 6,
+    "url": "/pages/system/landing-manage/landing-manage",
+    "_add_time": 1596416400000,
+    "enable": true,
+    "icon": "el-icon-monitor",
+    "menu_id": "product-config-landing",
+    "name": "落地页配置",
+    "comment": "对外落地页区块与产品展示配置",
+    "parent_id": "product-config"
+  },
+  {
     "_id": "system-uni-announcement",
     "sort": 1,
     "url": "/pages/system/announcement/announcement",
