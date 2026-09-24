@@ -56,16 +56,10 @@
 						<view class="navbar-prefs">
 							<nav-prefs />
 						</view>
-						<view class="navbar-user navbar-user--always" @click="togglePopupMenu">
-							<view class="username">
-								<text>{{ vk.getVuex("$user.userInfo.username") }}</text>
-							</view>
-							<vk-data-icon
-								class="arrowdown"
-								name="vk-icon-unfold"
-								:color="textColor"
-								size="13"
-							></vk-data-icon>
+						<view class="navbar-user navbar-user--always" :class="{ active: popupMenuOpened }" @click="togglePopupMenu">
+							<text class="avatar">{{ avatarChar }}</text>
+							<text class="username">{{ vk.getVuex("$user.userInfo.username") }}</text>
+							<text class="caret">▾</text>
 						</view>
 						<view class="vk-mask" @click="togglePopupMenu"></view>
 						<view class="navbar-menu">
@@ -84,24 +78,20 @@
 								</el-badge>
 							</view>
 							<!-- #endif -->
-							<view
-								v-if="vk.getVuex('$app.width') >= 1100 && debug"
-								v-for="link in links"
-								:key="link.url"
-								class="menu-item text-overflow"
-							>
-								<vk-data-link class="menu-link" :href="link.url" :text="$t(link.textKey)" />
+							<view class="menu-header">
+								<text class="avatar avatar--lg">{{ avatarChar }}</text>
+								<view class="menu-header__meta">
+									<text class="menu-header__name">{{ vk.getVuex("$user.userInfo.nickname") || vk.getVuex("$user.userInfo.username") }}</text>
+									<text class="menu-header__role">{{ vk.getVuex("$user.userInfo.username") }}</text>
+								</view>
 							</view>
-							<view class="menu-item text-overflow user-chip">
-								<text>{{ vk.getVuex("$user.userInfo.username") }}</text>
+							<view class="menu-divider"></view>
+							<view class="menu-item menu-row" @click="openForm('updatePassword')">
+								<text class="menu-row__label">{{ $t('nav.changePassword') }}</text>
 							</view>
-							<view class="menu-item action-btn" @click="openForm('updatePassword')">
-								<text class="text-overflow">{{ $t('nav.changePassword') }}</text>
+							<view class="menu-item menu-row menu-row--danger" @click="logout">
+								<text class="menu-row__label">{{ $t('nav.logout') }}</text>
 							</view>
-							<view class="menu-item action-btn action-btn--danger">
-								<text class="logout pointer text-overflow" @click="logout">{{ $t('nav.logout') }}</text>
-							</view>
-							<view class="popup-menu__arrow"></view>
 						</view>
 					</view>
 				</view>
@@ -424,6 +414,45 @@ export default {
 
 		.navbar-user--always {
 			display: flex !important;
+			align-items: center;
+			gap: 8px;
+			height: 34px;
+			padding: 0 10px 0 4px;
+			border-radius: 999px;
+			background: var(--vk-bg-muted, #f1f5f9);
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+
+		.navbar-user--always:hover,
+		.navbar-user--always.active {
+			background: var(--vk-primary-light, #eff6ff);
+		}
+
+		.avatar {
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			background: var(--vk-primary, #3b82f6);
+			color: #fff;
+			font-size: 12px;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.avatar--lg {
+			width: 36px;
+			height: 36px;
+			font-size: 14px;
+		}
+
+		.caret {
+			font-size: 10px;
+			color: var(--vk-text-secondary, #64748b);
+			margin-left: 2px;
 		}
 
 		.navbar-right .vk-mask {
@@ -440,15 +469,71 @@ export default {
 			align-items: stretch;
 			position: absolute;
 			right: 12px;
-			top: 46px;
-			min-width: 160px;
+			top: 44px;
+			min-width: 220px;
 			background: var(--vk-card, #ffffff);
 			border: 1px solid var(--vk-border, #e2e8f0);
-			border-radius: 10px;
-			box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
-			padding: 8px;
-			gap: 6px;
+			border-radius: 12px;
+			box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+			padding: 10px;
+			gap: 2px;
 			z-index: 1000;
+		}
+
+		.menu-header {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 8px 10px 10px;
+		}
+
+		.menu-header__meta {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+		}
+
+		.menu-header__name {
+			font-size: 14px;
+			font-weight: 600;
+			color: var(--vk-text, #1e293b);
+		}
+
+		.menu-header__role {
+			font-size: 12px;
+			color: var(--vk-text-secondary, #64748b);
+			margin-top: 2px;
+		}
+
+		.menu-divider {
+			height: 1px;
+			background: var(--vk-border, #e2e8f0);
+			margin: 4px 6px 8px;
+		}
+
+		.menu-row {
+			display: flex;
+			align-items: center;
+			padding: 9px 12px;
+			border-radius: 8px;
+			cursor: pointer;
+		}
+
+		.menu-row:hover {
+			background: var(--vk-bg-muted, #f1f5f9);
+		}
+
+		.menu-row__label {
+			font-size: 13px;
+			color: var(--vk-text, #1e293b);
+		}
+
+		.menu-row--danger .menu-row__label {
+			color: #ef4444;
+		}
+
+		.menu-row--danger:hover {
+			background: #fef2f2;
 		}
 
 		.popup-menu .navbar-right .vk-mask {

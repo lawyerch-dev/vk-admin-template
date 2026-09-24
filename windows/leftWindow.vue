@@ -16,7 +16,7 @@
 					:unique-opened="true"
 					:collapse="vk.getVuex('$app.leftCollapse')"
 					:collapse-transition="false"
-					:theme="theme"
+					:theme="menuTheme"
 					default-menu-icon="el-icon-folder-opened"
 					default-sub-menu-icon="el-icon-tickets"
 					@select="select"
@@ -31,7 +31,22 @@
 	export default {
 		data() {
 			return {
-				theme: config.theme
+				menuTheme: {
+					use: "runtime",
+					runtime: {
+						leftMenu: {
+							backgroundColor: "var(--vk-bg-secondary)",
+							subBackgroundColor: "var(--vk-bg-secondary)",
+							textColor: "var(--vk-text)",
+							activeTextColor: "var(--vk-primary)",
+							activeBackgroundColor: "var(--vk-primary-light)",
+							hoverTextColor: "var(--vk-text)",
+							hoverBackgroundColor: "var(--vk-bg-muted)",
+							collapseActiveTextColor: "var(--vk-primary)",
+							collapseActiveBackgroundColor: "var(--vk-primary-light)"
+						}
+					}
+				}
 			}
 		},
 		methods: {
@@ -89,18 +104,9 @@
 				return groups;
 			},
 			styleCom(){
-				// 菜单组件主题色：与全局深浅色同一套 CSS 变量
 				return {
-					"backgroundColor": "var(--vk-bg-secondary)",
-					"textColor": "var(--vk-text)",
-					"activeTextColor": "var(--vk-primary)",
-					"activeBackgroundColor": "var(--vk-primary-light)",
-					"hoverTextColor": "var(--vk-text)",
-					"hoverBackgroundColor": "var(--vk-bg-muted)",
-					"subBackgroundColor": "var(--vk-bg-secondary)",
-					"collapseActiveTextColor": "var(--vk-primary)",
-					"collapseActiveBackgroundColor": "var(--vk-primary-light)",
-					"background-color": "var(--vk-bg-secondary)"
+					backgroundColor: "var(--vk-bg-secondary)",
+					color: "var(--vk-text)"
 				};
 			},
 			classCom(){
