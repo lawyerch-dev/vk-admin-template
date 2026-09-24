@@ -120,12 +120,12 @@
 				</el-table-column>
 				<el-table-column :label="$t('admin.pointsPay.colPoints')" width="95" align="center">
 					<template slot-scope="{ row }">
-						<el-input-number v-model="row.points" :min="1" size="small"></el-input-number>
+						<el-input-number v-model="row.points" :min="1" size="small" :controls="false"></el-input-number>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('admin.pointsPay.colPrice')" width="105" align="center">
 					<template slot-scope="{ row }">
-						<el-input-number v-model="row.price" :min="0" size="small"></el-input-number>
+						<el-input-number v-model="row.price" :min="0" size="small" :controls="false"></el-input-number>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('admin.pointsPay.colDiscount')" width="100">
