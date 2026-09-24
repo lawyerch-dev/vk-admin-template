@@ -163,7 +163,7 @@
   },
   {
     "_id": "product-config-landing",
-    "sort": 1008,
+    "sort": 1000,
     "url": "/pages/system/landing-manage/landing-manage",
     "_add_time": 1596416400000,
     "enable": true,

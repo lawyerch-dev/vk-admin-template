@@ -79,7 +79,7 @@ const MENUS = [
 		icon: "el-icon-monitor",
 		comment: "对外落地页区块与产品展示配置（与产品配置同级）",
 		url: "/pages/system/landing-manage/landing-manage",
-		sort: 1008,
+		sort: 1000,
 		enable: true,
 		parent_id: ""
 	}
