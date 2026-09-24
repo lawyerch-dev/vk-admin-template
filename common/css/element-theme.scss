@@ -422,6 +422,44 @@
 	color: var(--vk-primary, #3b82f6) !important;
 }
 
+/* 弹窗右上角：关闭 / 全屏等图标（Element + vk-icon） */
+.el-dialog__headerbtn,
+.vk-data-dialog .right-btn-box,
+.vk-data-dialog.dialog-form .el-dialog__header .right-btn-box {
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.el-dialog__headerbtn i,
+.el-dialog__headerbtn .el-dialog__close,
+.el-dialog__headerbtn [class^="el-icon-"],
+.el-dialog__headerbtn [class*=" el-icon-"],
+.vk-data-dialog .right-btn-box .vk-icon,
+.vk-data-dialog .right-btn-box i,
+.vk-data-dialog.dialog-form .el-dialog__header .vk-icon {
+	color: var(--vk-text-secondary, #64748b) !important;
+	fill: var(--vk-text-secondary, #64748b) !important;
+}
+
+.el-dialog__headerbtn:hover i,
+.el-dialog__headerbtn:hover .el-dialog__close,
+.el-dialog__headerbtn:hover [class^="el-icon-"],
+.vk-data-dialog .right-btn-box .vk-icon:hover,
+.vk-data-dialog.dialog-form .el-dialog__header .vk-icon:hover {
+	color: var(--vk-primary, #3b82f6) !important;
+	fill: var(--vk-primary, #3b82f6) !important;
+}
+
+/* message-box 右上角关闭 */
+.el-message-box__headerbtn .el-message-box__close,
+.el-message-box__headerbtn i {
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.el-message-box__headerbtn:hover .el-message-box__close,
+.el-message-box__headerbtn:hover i {
+	color: var(--vk-primary, #3b82f6) !important;
+}
+
 .el-overlay-mask,
 .v-modal {
 	background-color: rgba(15, 23, 42, 0.45) !important;
