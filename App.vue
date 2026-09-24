@@ -36,7 +36,12 @@ export default {
 			}
 			// 已登录但当前在公开页：不要求后台权限，正常展示
 			if (!isPublic && !that.isAllowLoginBackground()) {
-				vk.alert("您的账户无登陆权限", () => {
+				that.$alert("您的账户无登陆权限", "提示", {
+					confirmButtonText: "确定",
+					customClass: "vk-confirm-box"
+				}).then(() => {
+					that.navigateToLogin();
+				}).catch(() => {
 					that.navigateToLogin();
 				});
 				return false;
@@ -131,7 +136,10 @@ export default {
 					if (alerts.length > 3) {
 						message += `...还有 ${alerts.length - 3} 条`;
 					}
-					vk.alert(message, '充值异常告警');
+					that.$alert(message, '充值异常告警', {
+						confirmButtonText: '确定',
+						customClass: 'vk-confirm-box'
+					}).catch(() => {});
 				}
 			} catch (e) {
 				console.error('检查充值告警失败：', e);
@@ -182,11 +190,14 @@ export default {
 					},
 					success: (data) => {
 						if (!data.info || data.info.appid !== systemInfo.appId) {
-							vk.confirm(`您当前登录的应用【${systemInfo.appId}】未在已有应用列表中，是否需要去添加？`, '提示', '前往应用管理', '取消', res => {
-								if (res.confirm) {
-									vk.navigateTo('/pages_plugs/system/app/list');
-								}
-							});
+							that.$confirm(`您当前登录的应用【${systemInfo.appId}】未在已有应用列表中，是否需要去添加？`, '提示', {
+								confirmButtonText: '前往应用管理',
+								cancelButtonText: '取消',
+								customClass: 'vk-confirm-box',
+								distinguishCancelAndClose: true
+							}).then(() => {
+								vk.navigateTo('/pages_plugs/system/app/list');
+							}).catch(() => {});
 						}
 					}
 				});
