@@ -19,7 +19,12 @@
 		<el-card class="config-card">
 			<div slot="header" class="card-header">
 				<span>{{ $t('admin.pointsPay.storeList') }}</span>
-				<el-button type="primary" icon="el-icon-plus" size="small" @click="addStore">{{ $t('admin.pointsPay.addStore') }}</el-button>
+				<view class="header-actions">
+					<el-button type="primary" icon="el-icon-plus" size="small" @click="addStore">{{ $t('admin.pointsPay.addStore') }}</el-button>
+					<el-button type="success" icon="el-icon-check" size="small" @click="saveConfig" :loading="saving">
+						{{ $t('admin.pointsPay.saveConfig') }}
+					</el-button>
+				</view>
 			</div>
 			<el-table
 				:data="stores"
@@ -118,14 +123,26 @@
 						<el-input v-model="row.name" size="small" :placeholder="$t('admin.pointsPay.packageNamePlaceholder')"></el-input>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('admin.pointsPay.colPoints')" width="95" align="center">
+				<el-table-column :label="$t('admin.pointsPay.colPoints')" min-width="110" align="center">
 					<template slot-scope="{ row }">
-						<el-input-number v-model="row.points" :min="1" size="small" :controls="false"></el-input-number>
+						<el-input-number
+							v-model="row.points"
+							:min="1"
+							size="small"
+							:controls="false"
+							class="num-cell-input"
+						></el-input-number>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('admin.pointsPay.colPrice')" width="105" align="center">
+				<el-table-column :label="$t('admin.pointsPay.colPrice')" min-width="120" align="center">
 					<template slot-scope="{ row }">
-						<el-input-number v-model="row.price" :min="0" size="small" :controls="false"></el-input-number>
+						<el-input-number
+							v-model="row.price"
+							:min="0"
+							size="small"
+							:controls="false"
+							class="num-cell-input"
+						></el-input-number>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('admin.pointsPay.colDiscount')" width="100">
@@ -155,13 +172,6 @@
 				</el-table-column>
 			</el-table>
 		</el-card>
-
-		<!-- 操作按钮 -->
-		<div class="action-bar">
-			<el-button type="primary" icon="el-icon-check" size="small" @click="saveConfig" :loading="saving">
-				{{ $t('admin.pointsPay.saveConfig') }}
-			</el-button>
-		</div>
 	</view>
 </template>
 
@@ -420,8 +430,25 @@ export default {
 	background: var(--vk-bg-secondary);
 }
 
-.action-bar {
-	margin-bottom: 20px;
+.header-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* 表格内数字输入：去掉加减后默认宽约 150px，会溢出窄列，改为撑满 */
+.num-cell-input {
+	width: 100% !important;
+
+	::v-deep .el-input {
+		width: 100% !important;
+	}
+
+	::v-deep .el-input__inner {
+		padding-left: 8px !important;
+		padding-right: 8px !important;
+		text-align: center;
+	}
 }
 
 .config-tips {
