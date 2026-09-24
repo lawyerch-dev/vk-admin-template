@@ -117,8 +117,8 @@
 
 	.captcha-img-box,
 	.captcha {
-		height: 44px;
-		line-height: 44px;
+		height: 40px;
+		line-height: 40px;
 	}
 
 	.captcha-img-box {
@@ -135,16 +135,21 @@
 		flex: 1;
 		padding: 0 20rpx;
 		margin-left: 20rpx;
+		border: 1px solid var(--vk-border, #e2e8f0);
 		border-radius: 8px;
 		/* #ifndef APP-NVUE */
 		box-sizing: border-box;
 		/* #endif */
 	}
 
+	.captcha:focus {
+		border-color: var(--vk-primary, #3b82f6);
+	}
+
 	.captcha-img-box,
 	.captcha-img,
 	.loding {
-		height: 44px !important;
+		height: 40px !important;
 		width: 100px;
 	}
 	
