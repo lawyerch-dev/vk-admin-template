@@ -69,7 +69,7 @@
 						</view>
 						<!-- #endif -->
 						<view class="navbar-prefs">
-							<nav-prefs />
+							<nav-prefs @locale-change="onLocaleChange" />
 						</view>
 						<view class="back-site pointer" @click.stop="goLanding">
 							<vk-data-icon name="el-icon-s-home" size="14" color="#ffffff"></vk-data-icon>
@@ -165,8 +165,26 @@ export default {
 	mounted() {
 		this.vk.menuTabs = this.$refs.menuTabs;
 		this.checkMenuCollapse();
+		this.refreshTabNames();
 	},
 	methods: {
+		// 语言切换后刷新已打开页签标题
+		onLocaleChange() {
+			this.refreshTabNames();
+		},
+		refreshTabNames() {
+			const tabs = this.$refs.menuTabs;
+			if (!tabs || !tabs.tabs || !Array.isArray(tabs.tabs.list)) return;
+			tabs.tabs.list = tabs.tabs.list.map((tab) => {
+				const key = tab.menu_id ? `menu.${tab.menu_id}` : '';
+				let name = tab.name;
+				if (key && this.$t) {
+					const translated = this.$t(key);
+					if (translated && translated !== key) name = translated;
+				}
+				return Object.assign({}, tab, { name });
+			});
+		},
 		// 返回前台落地页
 		goLanding() {
 			let that = this;

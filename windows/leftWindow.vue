@@ -53,6 +53,24 @@
 			select(e){
 
 			},
+			// 按 menu_id 覆盖英文菜单名，缺 key 时回退数据库/静态配置中文
+			trMenuName(item) {
+				if (!item) return '';
+				const key = item.menu_id ? `menu.${item.menu_id}` : '';
+				if (key && this.$t) {
+					const translated = this.$t(key);
+					if (translated && translated !== key) return translated;
+				}
+				return item.name || '';
+			},
+			mapMenuItem(item) {
+				if (!item) return item;
+				const out = Object.assign({}, item, { name: this.trMenuName(item) });
+				if (item.children && item.children.length) {
+					out.children = item.children.map((child) => this.mapMenuItem(child));
+				}
+				return out;
+			},
 		},
 		// 监听属性
 		watch: {
@@ -71,6 +89,9 @@
 		// 计算属性
 		computed: {
 			menuGroups() {
+				// 依赖 locale，切换语言时重算菜单文案
+				const locale = this.$i18n && this.$i18n.locale;
+				void locale;
 				let navMenu = vk.getVuex('$app.navMenu') || [];
 				let userInfo = vk.getVuex('$user.userInfo') || {};
 				let isAdmin = userInfo.role && userInfo.role.includes('admin');
@@ -93,9 +114,9 @@
 							groups.push({ items: current });
 							current = [];
 						}
-						groups.push({ divider: true, label: item.name || '' });
+						groups.push({ divider: true, label: this.trMenuName(item) });
 					} else {
-						current.push(item);
+						current.push(this.mapMenuItem(item));
 					}
 				}
 				if (current.length > 0) {

@@ -2,14 +2,14 @@
 	<view class="mini-none">
 		<view style="display: flex;">
 			<view
-				v-for="(item, index) in vk.getVuex('$app.menuMap')"
+				v-for="(item, index) in menuMapCom"
 				:key="index"
 				@click="pageTo(item)"
 				class="top-bar"
 			>
 				<view class="item-content" v-if="item.name">
 					{{ item.name }}
-					<text v-if="index !== vk.getVuex('$app.menuMap').length - 1" class="item-content-text">
+					<text v-if="index !== menuMapCom.length - 1" class="item-content-text">
 						/
 					</text>
 				</view>
@@ -38,7 +38,22 @@ export default {
 	// 过滤器
 	filters: {},
 	// 计算属性
-	computed: {}
+	computed: {
+		menuMapCom() {
+			const locale = this.$i18n && this.$i18n.locale;
+			void locale;
+			const list = this.vk.getVuex('$app.menuMap') || [];
+			return list.map((item) => {
+				const key = item && item.menu_id ? `menu.${item.menu_id}` : '';
+				let name = item && item.name;
+				if (key && this.$t) {
+					const translated = this.$t(key);
+					if (translated && translated !== key) name = translated;
+				}
+				return Object.assign({}, item, { name });
+			});
+		}
+	}
 };
 </script>
 
