@@ -744,6 +744,95 @@ body > .el-time-select {
 }
 
 /* ============================================================
+   弹窗内部：bar-title / 数字加减 / 下拉三角
+   ============================================================ */
+/* vk-data-form 分组标题条（默认 #f8f8f8 白底） */
+.vk-data-form .bar-title,
+.vk-data-form-item .bar-title {
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+	color: var(--vk-text, #1e293b) !important;
+	border: 1px solid var(--vk-border, #e2e8f0) !important;
+}
+
+.vk-data-form .item-tips {
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+/* 数字输入 +/- 控件 */
+.el-input-number__increase,
+.el-input-number__decrease {
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.el-input-number__increase:hover,
+.el-input-number__decrease:hover {
+	color: var(--vk-primary, #3b82f6) !important;
+}
+
+.el-input-number__increase.is-disabled,
+.el-input-number__decrease.is-disabled,
+.el-input-number__increase.is-disabled:hover,
+.el-input-number__decrease.is-disabled:hover {
+	color: var(--vk-text-muted, #94a3b8) !important;
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+}
+
+.el-input-number .el-input__inner {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	color: var(--vk-text, #1e293b) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+/* 下拉/弹层小三角：默认描边浅色，深色下多余白三角 */
+.popper__arrow,
+.el-popper .popper__arrow,
+.el-select-dropdown__popper .popper__arrow,
+.el-picker__popper .popper__arrow,
+.el-tooltip__popper .popper__arrow {
+	border-color: transparent !important;
+}
+
+.popper__arrow::after,
+.el-popper .popper__arrow::after,
+.el-select-dropdown__popper .popper__arrow::after,
+.el-picker__popper .popper__arrow::after {
+	border-color: transparent !important;
+}
+
+/* 若仍需可见箭头，用卡片色而不是白三角 */
+.el-select-dropdown__popper.el-popper[x-placement^="bottom"] .popper__arrow,
+.el-picker__popper[x-placement^="bottom"] .popper__arrow {
+	border-bottom-color: var(--vk-border, #e2e8f0) !important;
+	border-top-color: transparent !important;
+}
+
+.el-select-dropdown__popper.el-popper[x-placement^="bottom"] .popper__arrow::after,
+.el-picker__popper[x-placement^="bottom"] .popper__arrow::after {
+	border-bottom-color: var(--vk-card, #ffffff) !important;
+	border-top-color: transparent !important;
+}
+
+.el-select-dropdown__popper.el-popper[x-placement^="top"] .popper__arrow,
+.el-picker__popper[x-placement^="top"] .popper__arrow {
+	border-top-color: var(--vk-border, #e2e8f0) !important;
+	border-bottom-color: transparent !important;
+}
+
+.el-select-dropdown__popper.el-popper[x-placement^="top"] .popper__arrow::after,
+.el-picker__popper[x-placement^="top"] .popper__arrow::after {
+	border-top-color: var(--vk-card, #ffffff) !important;
+	border-bottom-color: transparent !important;
+}
+
+/* 弹窗底部按钮条（vk 默认 #fff） */
+.vk-data-form .dialog-footer {
+	background-color: var(--vk-card, #ffffff) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+/* ============================================================
    素材管理 / vk-data-input-file-select（uni-id-files list 同源样式）
    框架内写死 #fff/#f6f4f4/#e8e8f0/#f4faff，深色下刺眼
    ============================================================ */
