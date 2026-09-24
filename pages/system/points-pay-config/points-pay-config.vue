@@ -160,7 +160,7 @@
 						<el-input v-model="row.description" size="small" :placeholder="$t('admin.pointsPay.descPlaceholder')"></el-input>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('admin.pointsPay.colGoodsKey')" min-width="140" align="center">
+				<el-table-column :label="$t('admin.pointsPay.colGoodsKey')" width="110" align="center">
 					<template slot-scope="{ row }">
 						<el-input v-model="row.goods_key" size="small" :placeholder="$t('admin.pointsPay.goodsKeyPlaceholder')"></el-input>
 					</template>
