@@ -131,7 +131,7 @@ export default {
     },
 
     goRegister() {
-      vk.navigateTo({ url: '/pages/login/index' });
+      vk.navigateTo({ url: '/pages/login/index?tab=register' });
     },
 
     goAdmin() {

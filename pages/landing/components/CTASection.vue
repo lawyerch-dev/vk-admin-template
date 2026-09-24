@@ -15,7 +15,7 @@ export default {
   },
   methods: {
     handleClick() {
-      this.$emit('navigate', '/pages/login/index');
+      this.$emit('navigate', '/pages/login/index?tab=register');
     }
   }
 };
