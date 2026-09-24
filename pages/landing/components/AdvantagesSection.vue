@@ -1,7 +1,7 @@
 <template>
   <view class="advantages">
     <view class="advantages__inner">
-      <text class="section__title">{{ data.title || $t('advantages.title') }}</text>
+      <text class="section__title">{{ trText(data.title, 'advantages.title') }}</text>
       <text class="section__subtitle">{{ data.subtitle || '' }}</text>
       <view class="advantages__list">
         <view class="adv-item" v-for="(item, i) in data.items" :key="i">

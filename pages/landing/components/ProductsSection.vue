@@ -1,8 +1,8 @@
 <template>
   <view class="products-section">
     <view class="products-section__inner">
-      <text class="products-section__title">{{ data.title || $t('products.title') }}</text>
-      <text class="products-section__sub">{{ data.subtitle || $t('products.subtitle') }}</text>
+      <text class="products-section__title">{{ trText(data.title, 'products.title') }}</text>
+      <text class="products-section__sub">{{ trText(data.subtitle, 'products.subtitle') }}</text>
 
       <!-- 产品网格 -->
       <view v-if="loading" class="products-section__loading">
@@ -99,6 +99,13 @@ export default {
     this.loadProducts();
   },
   methods: {
+    // 英文模式下覆盖后台配置的中文文案
+    trText(text, key) {
+      const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
+      if (locale === 'en' && this.$t) return this.$t(key);
+      return text;
+    },
+
     loadProducts() {
       const vk = uni.vk;
       vk.callFunction({

@@ -50,17 +50,31 @@ export default {
 		switchLocale(value) {
 			if (this.locale === value) return;
 			this.locale = value;
+			// 同时写 vue-i18n 与本组件状态，并强制刷新整棵页面树
 			this.$setLocale(value);
+			if (this.$i18n) this.$i18n.locale = value;
 			this.$forceUpdate();
-			const pages = getCurrentPages();
-			const page = pages[pages.length - 1];
-			if (page && page.$vm) page.$vm.$forceUpdate();
+			try {
+				const pages = getCurrentPages();
+				for (let i = 0; i < pages.length; i++) {
+					const vm = pages[i].$vm;
+					if (vm) vm.$forceUpdate();
+				}
+			} catch (e) {}
 			this.$emit('locale-change', value);
 		},
 		switchMode(value) {
 			if (this.mode === value) return;
 			this.mode = value;
 			applyColorMode(value);
+			this.$forceUpdate();
+			try {
+				const pages = getCurrentPages();
+				for (let i = 0; i < pages.length; i++) {
+					const vm = pages[i].$vm;
+					if (vm) vm.$forceUpdate();
+				}
+			} catch (e) {}
 			this.$emit('theme-change', value);
 		}
 	}

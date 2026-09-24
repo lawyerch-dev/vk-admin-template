@@ -40,14 +40,12 @@ const i18n = new VueI18n({
 	messages,
 });
 
-/** 设置应用语言（同步 vue-i18n + uni.setLocale） */
+/** 设置应用语言（只改 vue-i18n，不要调 uni.setLocale，避免整页重载冲掉状态） */
 export function setLocale(locale) {
 	if (!messages[locale]) locale = "zh-Hans";
 	i18n.locale = locale;
 	try {
-		if (typeof uni.setLocale === "function") {
-			uni.setLocale(locale);
-		}
+		uni.setStorageSync("vk_locale", locale);
 	} catch (e) {}
 	return i18n.locale;
 }

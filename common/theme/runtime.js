@@ -1,8 +1,9 @@
 /**
- * 全局主题：浅色 / 深色（不是换品牌色）
- * 统一通过 CSS 变量注入，页面只用 var(--vk-*)
+ * 全局主题：浅色 / 深色
+ * 用 <style id="vk-theme-vars"> 注入 :root/page/uni-page-body，优先级最高，保证切换立刻生效
  */
 const STORAGE_KEY = "vk_color_mode";
+const STYLE_ID = "vk-theme-vars";
 
 export const modes = {
 	light: {
@@ -39,15 +40,38 @@ export const modes = {
 	},
 };
 
+function varsToCss(vars) {
+	const body = Object.keys(vars)
+		.map((k) => `${k}: ${vars[k]}`)
+		.join(";");
+	// 覆盖 html / page / uni-app 页面容器，避免 page 上的默认值把变量“锁死”
+	return `:root, html, body, page, uni-app, uni-page, uni-page-body, .uni-page-body {${body}}`;
+}
+
 function inject(vars) {
 	// #ifdef H5
 	if (typeof document !== "undefined") {
+		let styleEl = document.getElementById(STYLE_ID);
+		if (!styleEl) {
+			styleEl = document.createElement("style");
+			styleEl.id = STYLE_ID;
+			document.head.appendChild(styleEl);
+		}
+		styleEl.textContent = varsToCss(vars);
+
 		const root = document.documentElement;
 		Object.keys(vars).forEach((k) => root.style.setProperty(k, vars[k]));
 		try {
 			document.body.style.background = vars["--vk-bg"];
 			document.body.style.color = vars["--vk-text"];
 		} catch (e) {}
+		// 页面容器也写一份，双保险
+		const pages = document.querySelectorAll("uni-page-body, uni-page, page, .uni-page-body");
+		pages.forEach((el) => {
+			el.style.background = vars["--vk-bg"];
+			el.style.color = vars["--vk-text"];
+			Object.keys(vars).forEach((k) => el.style.setProperty(k, vars[k]));
+		});
 		return vars;
 	}
 	// #endif
@@ -72,7 +96,6 @@ export function getColorMode() {
 		const saved = uni.getStorageSync(STORAGE_KEY);
 		if (saved === "light" || saved === "dark") return saved;
 	} catch (e) {}
-	// 跟随系统
 	try {
 		const info = uni.getSystemInfoSync();
 		if (info.osTheme === "dark") return "dark";
@@ -86,7 +109,6 @@ export function restoreColorMode() {
 
 /** 兼容旧调用 */
 export function applyBrand(name) {
-	// name 为 dark 时切深色，否则浅色（品牌色固定蓝）
 	if (name === "dark" || (name && name.mode === "dark")) return applyColorMode("dark");
 	return applyColorMode("light");
 }

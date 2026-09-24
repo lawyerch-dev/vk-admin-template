@@ -1,9 +1,9 @@
 <template>
   <view class="cta">
     <view class="cta__inner">
-      <text class="cta__title">{{ data.title || $t('cta.title') }}</text>
+      <text class="cta__title">{{ trText(data.title, 'cta.title') }}</text>
       <text class="cta__sub">{{ data.subtitle || '' }}</text>
-      <text class="btn btn--primary btn--lg" @click="handleClick">{{ data.btn_text || $t('cta.register') }}</text>
+      <text class="btn btn--primary btn--lg" @click="handleClick">{{ trText(data.btn_text, 'cta.register') }}</text>
     </view>
   </view>
 </template>
@@ -14,6 +14,13 @@ export default {
     data: { type: Object, default: () => ({}) }
   },
   methods: {
+    // 英文模式下覆盖后台配置的中文文案
+    trText(text, key) {
+      const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
+      if (locale === 'en' && this.$t) return this.$t(key);
+      return text;
+    },
+
     handleClick() {
       this.$emit('navigate', '/pages/login/index?tab=register');
     }

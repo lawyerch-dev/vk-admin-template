@@ -1,7 +1,7 @@
 <template>
   <view class="features" id="features">
     <view class="features__inner">
-      <text class="section__title">{{ data.title || $t('features.title') }}</text>
+      <text class="section__title">{{ trText(data.title, 'features.title') }}</text>
       <text class="section__subtitle">{{ data.subtitle || '' }}</text>
       <view class="features__grid" :class="'features__grid--' + (data.columns || 3)">
         <view class="feature-card" v-for="(item, i) in data.items" :key="i">

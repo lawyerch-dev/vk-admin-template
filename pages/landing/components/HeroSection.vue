@@ -1,11 +1,11 @@
 <template>
   <view class="hero">
     <view class="hero__inner">
-      <text class="hero__title">{{ data.title || '' }}</text>
-      <text class="hero__sub">{{ data.subtitle || '' }}</text>
+      <text class="hero__title">{{ trText(data.title, 'login.title') }}</text>
+      <text class="hero__sub">{{ trText(data.subtitle, 'login.subtitle') }}</text>
       <view class="hero__actions">
-        <text class="btn btn--primary" @click="handlePrimary">{{ (data.btn_primary || {}).text || $t('hero.more') }}</text>
-        <text class="btn btn--outline" @click="handleGhost">{{ (data.btn_ghost || {}).text || $t('hero.console') }}</text>
+        <text class="btn btn--primary" @click="handlePrimary">{{ trText((data.btn_primary || {}).text, 'hero.more') }}</text>
+        <text class="btn btn--outline" @click="handleGhost">{{ trText((data.btn_ghost || {}).text, 'hero.console') }}</text>
       </view>
     </view>
   </view>
@@ -17,6 +17,13 @@ export default {
     data: { type: Object, default: () => ({}) }
   },
   methods: {
+    // 英文模式下覆盖后台配置的中文文案
+    trText(text, key) {
+      const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
+      if (locale === 'en' && this.$t) return this.$t(key);
+      return text;
+    },
+
     handlePrimary() {
       const { windowHeight } = uni.getSystemInfoSync();
       uni.pageScrollTo({ scrollTop: windowHeight, duration: 300 });
