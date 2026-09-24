@@ -1,5 +1,18 @@
 <template>
 	<view class="login-page">
+		<!-- 顶部导航（与主页一致） -->
+		<view class="nav">
+			<view class="nav__inner">
+				<view class="nav__left" @click="goHome">
+					<image class="nav__logo" src="/static/logo.png" mode="aspectFit"></image>
+					<text class="nav__brand">AI 商务定制</text>
+				</view>
+				<view class="nav__right">
+					<text class="nav__link" @click="goHome">返回主页</text>
+				</view>
+			</view>
+		</view>
+
 		<view class="login-card">
 			<!-- 头部 -->
 			<view class="card-header">
@@ -186,6 +199,9 @@ export default {
 		onForgotSuccess() {
 			this.activeTab = 'login';
 		},
+		goHome() {
+			uni.reLaunch({ url: '/pages/landing/index' });
+		},
 		openAgreement() {
 			const url = 'https://bluerangala.feishu.cn/docx/IXoedH1Oso18iDxxjWsck9SBnfb?from=from_copylink';
 			// #ifdef H5
@@ -204,12 +220,85 @@ export default {
 <style lang="scss" scoped>
 .login-page {
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: 100vh;
+	min-height: 100vh;
 	background-color: #F1F5F9;
 	padding: 20px;
+	padding-top: 84px;
 	box-sizing: border-box;
+}
+
+// 顶部导航（与主页一致）
+.nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+	background: rgba(255, 255, 255, 0.9);
+	backdrop-filter: blur(12px);
+	border-bottom: 1px solid #e2e8f0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+	&__inner {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 24px;
+		height: 64px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&__left {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		cursor: pointer;
+	}
+
+	&__logo {
+		width: 32px;
+		height: 32px;
+	}
+
+	&__brand {
+		font-size: 18px;
+		font-weight: 700;
+		color: #1e293b;
+	}
+
+	&__right {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+
+	&__link {
+		font-size: 14px;
+		color: #64748b;
+		cursor: pointer;
+
+		&:hover {
+			color: #1e293b;
+		}
+	}
+
+	&__btn {
+		padding: 8px 20px;
+		background: #3b82f6;
+		color: #ffffff;
+		border-radius: 6px;
+		font-size: 14px;
+		font-weight: 500;
+		cursor: pointer;
+
+		&:hover {
+			background: #2563eb;
+		}
+	}
 }
 
 .login-card {
