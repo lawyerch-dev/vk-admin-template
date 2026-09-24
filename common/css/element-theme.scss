@@ -647,3 +647,179 @@ body > .el-time-select {
 	background-color: var(--vk-card, #ffffff) !important;
 	border-color: var(--vk-border, #e2e8f0) !important;
 }
+
+/* ============================================================
+   素材管理 / vk-data-input-file-select（uni-id-files list 同源样式）
+   框架内写死 #fff/#f6f4f4/#e8e8f0/#f4faff，深色下刺眼
+   ============================================================ */
+.page-body .nav,
+.vk-data-input-file-select .nav {
+	background-color: var(--vk-card, #ffffff) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.page-body .nav-list,
+.vk-data-input-file-select .nav-list {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	border-bottom-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.page-body .nav-list:hover,
+.vk-data-input-file-select .nav-list:hover {
+	color: var(--vk-primary, #3b82f6) !important;
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+}
+
+/* 源码 scoped 里带 !important，需抬高优先级 */
+uni-page-body .page-body .selected-nav,
+uni-page-body .page-body .selected_nav,
+uni-page-body .vk-data-input-file-select .selected-nav,
+uni-page-body .vk-data-input-file-select .selected_nav,
+.el-dialog__wrapper .vk-data-input-file-select .selected-nav,
+.el-dialog__wrapper .vk-data-input-file-select .selected_nav {
+	background-color: var(--vk-primary-light, #eff6ff) !important;
+	color: var(--vk-primary, #3b82f6) !important;
+}
+
+.page-body .add-group,
+.vk-data-input-file-select .add-group {
+	border-color: var(--vk-primary, #3b82f6) !important;
+	color: var(--vk-primary, #3b82f6) !important;
+	background-color: transparent !important;
+}
+
+.page-body .add-group:hover,
+.page-body .add-group:active,
+.vk-data-input-file-select .add-group:hover,
+.vk-data-input-file-select .add-group:active {
+	background-color: var(--vk-primary, #3b82f6) !important;
+	color: #ffffff !important;
+}
+
+.page-body .main,
+.vk-data-input-file-select .main {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.page-body .content-item,
+.page-body .update-img,
+.vk-data-input-file-select .content-item,
+.vk-data-input-file-select .update-img {
+	background-color: var(--vk-card, #ffffff) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text-muted, #94a3b8) !important;
+}
+
+.page-body .content-item:hover,
+.vk-data-input-file-select .content-item:hover,
+uni-page-body .page-body .choose-image,
+uni-page-body .page-body .content-item.choose-image,
+.el-dialog__wrapper .vk-data-input-file-select .choose-image,
+.el-dialog__wrapper .vk-data-input-file-select .content-item.choose-image {
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+	border-color: var(--vk-primary, #3b82f6) !important;
+}
+
+.page-body .item-file .suffix,
+.vk-data-input-file-select .item-file .suffix {
+	color: var(--vk-text-muted, #94a3b8) !important;
+}
+
+.page-body .tips,
+.page-body .tips .title,
+.page-body .tips .operation,
+.vk-data-input-file-select .tips,
+.vk-data-input-file-select .tips .title,
+.vk-data-input-file-select .tips .operation,
+uni-page-body .page-body .choose-image .tips,
+uni-page-body .page-body .content-item.choose-image .tips {
+	color: var(--vk-text-secondary, #64748b) !important;
+	background-color: var(--vk-card, #ffffff) !important;
+}
+
+uni-page-body .page-body .choose-image .tips,
+uni-page-body .page-body .content-item.choose-image .tips {
+	background-color: var(--vk-primary-light, #eff6ff) !important;
+}
+
+.page-body .tips .operation:hover,
+.vk-data-input-file-select .tips .operation:hover {
+	color: var(--vk-primary, #3b82f6) !important;
+}
+
+.page-body .footer,
+.vk-data-input-file-select .footer {
+	background-color: var(--vk-card, #ffffff) !important;
+	border-top: 1px solid var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.page-body .footer .num,
+.page-body .footer .footer-item,
+.vk-data-input-file-select .footer .num,
+.vk-data-input-file-select .footer .footer-item {
+	color: var(--vk-primary, #3b82f6) !important;
+	background-color: var(--vk-card, #ffffff) !important;
+	border-color: var(--vk-primary-border, #93c5fd) !important;
+}
+
+.page-body .no-selected .footer-item,
+.vk-data-input-file-select .no-selected .footer-item,
+uni-page-body .page-body .no-selected .footer-item,
+.el-dialog__wrapper .vk-data-input-file-select .no-selected .footer-item {
+	color: var(--vk-text-muted, #94a3b8) !important;
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+.page-body .footer-label,
+.vk-data-input-file-select .footer-label {
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.page-body .add-btn,
+.vk-data-input-file-select .add-btn {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text-muted, #94a3b8) !important;
+}
+
+.page-body .image-list .image-item,
+.vk-data-input-file-select .image-list .image-item {
+	background-color: var(--vk-card, #ffffff) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+/* 素材页 radio 按钮组（图片/视频/其他） */
+.el-radio-button__inner {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+	background-color: var(--vk-primary, #3b82f6) !important;
+	border-color: var(--vk-primary, #3b82f6) !important;
+	color: #ffffff !important;
+	box-shadow: -1px 0 0 0 var(--vk-primary, #3b82f6) !important;
+}
+
+/* 分页 jumper / sizes 输入 */
+.page-body .footer .el-pagination,
+.page-body .footer .el-pagination__total,
+.page-body .footer .el-pagination__jump,
+.vk-data-input-file-select .el-pagination,
+.vk-data-input-file-select .el-pagination__total,
+.vk-data-input-file-select .el-pagination__jump {
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.page-body .footer .el-input__inner,
+.vk-data-input-file-select .el-input__inner {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	color: var(--vk-text, #1e293b) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
