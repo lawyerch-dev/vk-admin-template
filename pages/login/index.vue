@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import config from '@/app.config.js'
 import LoginForm from './components/login-form.vue'
 import RegisterForm from './components/register-form.vue'
 import ForgotForm from './components/forgot-form.vue'

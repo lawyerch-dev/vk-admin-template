@@ -85,31 +85,29 @@ export default {
 			const isAdmin = role.includes("admin");
 			// 仅产品列表：只保留「产品列表」
 			const productOnly = !isAdmin && role.includes("demo-product");
-			const filterOne = (item) => {
-				if (!item) return null;
-				if (item.hidden_menu || item.menu_id === "vk-in") return item;
-				if (productOnly) {
-					if (item.menu_id === "my-products") return item;
-					return null;
-				}
-				// 非管理员隐藏「管理员专属」分组标题
-				if (!isAdmin && item.menu_id === "__divider_admin__") return null;
-				return item;
-			};
 			const walk = (list) => {
 				const out = [];
-				for (const item of list) {
-					const kept = filterOne(item);
-					if (!kept) continue;
-					if (kept.children && kept.children.length) {
-						const children = walk(kept.children);
-						if (children.length === 0 && kept.url !== "" && kept.menu_id !== "vk-in") {
-							// 无可见子级且非隐藏壳节点
-							if (!kept.url) continue;
-						}
-						kept.children = children;
+				for (const raw of list) {
+					if (!raw) continue;
+					// 不可变拷贝，避免直接改 vuex 里的菜单对象
+					const item = Object.assign({}, raw);
+					if (item.hidden_menu || item.menu_id === "vk-in") {
+						if (item.children) item.children = walk(item.children);
+						out.push(item);
+						continue;
 					}
-					out.push(kept);
+					if (productOnly) {
+						if (item.menu_id === "my-products") out.push(item);
+						continue;
+					}
+					// 非管理员隐藏「管理员专属」分组标题
+					if (!isAdmin && item.menu_id === "__divider_admin__") continue;
+					if (item.children && item.children.length) {
+						const children = walk(item.children);
+						if (children.length === 0 && !item.url && item.menu_id !== "vk-in") continue;
+						item.children = children;
+					}
+					out.push(item);
 				}
 				return out;
 			};
