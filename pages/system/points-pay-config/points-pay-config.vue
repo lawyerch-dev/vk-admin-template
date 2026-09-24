@@ -51,7 +51,7 @@
 						size="small"
 						:disabled="stores.length <= 1"
 						@click="removeStore(selected_store_id)"
-					>{{ $t('admin.common.delete') }}</el-button>
+					>{{ $t('admin.pointsPay.removeStore') }}</el-button>
 				</view>
 			</div>
 			<div class="tip-line">{{ $t('admin.pointsPay.storeTipLine') }}</div>
