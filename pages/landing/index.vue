@@ -12,7 +12,7 @@
           <text class="nav__btn" @click="goAdmin">进入后台</text>
         </view>
         <view class="nav__right" v-else>
-          <text class="nav__link" @click="goLogin">登录</text>
+          <text class="nav__btn nav__btn--ghost" @click="goLogin">登录</text>
           <text class="nav__btn" @click="goRegister">免费注册</text>
         </view>
       </view>
@@ -227,6 +227,16 @@ export default {
 
     &:hover {
       background: #2563eb;
+    }
+
+    &--ghost {
+      background: #ffffff;
+      color: #3b82f6;
+      border: 1px solid #3b82f6;
+
+      &:hover {
+        background: #eff6ff;
+      }
     }
   }
 }

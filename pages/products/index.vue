@@ -8,7 +8,7 @@
           <text class="nav__brand">AI 商务定制</text>
         </view>
         <view class="nav__right">
-          <text class="nav__link" @click="goHome">首页</text>
+          <text class="nav__btn nav__btn--ghost" @click="goHome">首页</text>
           <text v-if="isLoggedIn" class="nav__btn" @click="goAdmin">进入后台</text>
           <text v-else class="nav__btn" @click="goLogin">登录</text>
         </view>
@@ -335,6 +335,16 @@ export default {
 
     &:hover {
       background: #2563eb;
+    }
+
+    &--ghost {
+      background: #ffffff;
+      color: #3b82f6;
+      border: 1px solid #3b82f6;
+
+      &:hover {
+        background: #eff6ff;
+      }
     }
   }
 }
