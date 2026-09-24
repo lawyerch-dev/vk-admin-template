@@ -14,10 +14,6 @@ npm-debug.log*
 .env
 .env.*
 
-# uni-id 密钥配置（含 passwordSecret / tokenSecret，禁止入库）
-uni_modules/uni-id/uniCloud/cloudfunctions/common/uni-id/config.json
-uni_modules/uni-config-center/uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json
-
 # Temp files
 *.tmp
 *.bak
