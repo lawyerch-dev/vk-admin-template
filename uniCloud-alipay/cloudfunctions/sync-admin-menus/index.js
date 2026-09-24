@@ -92,27 +92,45 @@ exports.main = async () => {
 	const result = { inserted: 0, updated: 0, skipped: 0 };
 
 	for (const menu of MENUS) {
+		const payload = {
+			name: menu.name,
+			icon: menu.icon,
+			comment: menu.comment,
+			url: menu.url || "",
+			sort: menu.sort,
+			enable: true,
+			parent_id: menu.parent_id || "",
+			last_update_date: now
+		};
 		const exist = await col.where({ menu_id: menu.menu_id }).limit(1).get();
 		if (exist.data && exist.data.length) {
-			await col.doc(exist.data[0]._id).update({
-				name: menu.name,
-				icon: menu.icon,
-				comment: menu.comment,
-				url: menu.url,
-				sort: menu.sort,
-				enable: true,
-				parent_id: menu.parent_id || null,
-				last_update_date: now
-			});
+			await col.doc(exist.data[0]._id).update(payload);
 			result.updated++;
 		} else {
 			await col.add({
-				...menu,
-				_add_time: now,
-				last_update_date: now
+				...payload,
+				_id: menu._id,
+				menu_id: menu.menu_id,
+				_add_time: now
 			});
 			result.inserted++;
 		}
+	}
+
+	// 自动并入 admin 角色菜单，无需再进「菜单赋予」手点
+	try {
+		const roleCol = db.collection("uni-id-roles");
+		const adminRole = await roleCol.where({ role_id: "admin" }).limit(1).get();
+		if (adminRole.data && adminRole.data.length) {
+			const roleDoc = adminRole.data[0];
+			const menuIds = MENUS.map((m) => m.menu_id);
+			const oldMenu = Array.isArray(roleDoc.menu) ? roleDoc.menu : [];
+			const merged = [...new Set([...oldMenu, ...menuIds])];
+			await roleCol.doc(roleDoc._id).update({ menu: merged });
+			result.adminRoleMenuCount = merged.length;
+		}
+	} catch (e) {
+		result.adminRoleError = (e && e.message) || String(e);
 	}
 
 	// 回读全量菜单，便于确认「产品配置」是否已入库
@@ -120,7 +138,7 @@ exports.main = async () => {
 	const menuList = (all.data || []).map((m) => ({
 		menu_id: m.menu_id,
 		name: m.name,
-		parent_id: m.parent_id || null,
+		parent_id: m.parent_id || "",
 		enable: m.enable
 	}));
 

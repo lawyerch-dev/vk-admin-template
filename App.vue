@@ -104,6 +104,7 @@ export default {
 					if (!isAdmin && item.menu_id === "__divider_admin__") continue;
 					if (item.children && item.children.length) {
 						const children = walk(item.children);
+						// 有子菜单却全被滤掉且自身无 url 时才丢弃；url 为空字符串的分组保留
 						if (children.length === 0 && !item.url && item.menu_id !== "vk-in") continue;
 						item.children = children;
 					}
