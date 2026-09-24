@@ -89,17 +89,18 @@
 				return groups;
 			},
 			styleCom(){
-				// 侧栏跟随全局深浅色变量
+				// 菜单组件主题色：与全局深浅色同一套 CSS 变量
 				return {
-					backgroundColor: "var(--vk-bg-secondary)",
-					textColor: "var(--vk-text)",
-					activeTextColor: "var(--vk-primary)",
-					activeBackgroundColor: "var(--vk-primary-light)",
-					hoverTextColor: "var(--vk-text)",
-					hoverBackgroundColor: "var(--vk-bg-muted)",
-					subBackgroundColor: "var(--vk-bg-secondary)",
-					collapseActiveTextColor: "var(--vk-primary)",
-					collapseActiveBackgroundColor: "var(--vk-primary-light)"
+					"backgroundColor": "var(--vk-bg-secondary)",
+					"textColor": "var(--vk-text)",
+					"activeTextColor": "var(--vk-primary)",
+					"activeBackgroundColor": "var(--vk-primary-light)",
+					"hoverTextColor": "var(--vk-text)",
+					"hoverBackgroundColor": "var(--vk-bg-muted)",
+					"subBackgroundColor": "var(--vk-bg-secondary)",
+					"collapseActiveTextColor": "var(--vk-primary)",
+					"collapseActiveBackgroundColor": "var(--vk-primary-light)",
+					"background-color": "var(--vk-bg-secondary)"
 				};
 			},
 			classCom(){
@@ -120,18 +121,20 @@
 
 	.sidebar {
 		position: fixed;
-		top: var(--window-top);
 		width: $sidebar-width;
 		--sidebar-width: #{$sidebar-width};
 		--sidebar-collapse-width: #{$sidebar-collapse-width};
-		height: calc(100vh - (var(--window-top)) + 50px);
-		box-sizing: border-box;
-		box-shadow: var(--boxShadow, 2px 0 0px rgba(0,21,4,0.2));
-		border-top: var(--borderTop);
-		background-color: $left-window-bg-color;
-		padding-bottom: 10px;
+		/* 顶栏 50px 以下铺满到视口底，避免左下角色层 */
 		top: 50px;
+		height: calc(100vh - 50px);
+		box-sizing: border-box;
+		box-shadow: none;
+		border-top: none;
+		border-right: 1px solid var(--vk-border, #e2e8f0);
+		background-color: var(--vk-bg-secondary, #f8fafc) !important;
+		padding-bottom: 0;
 		z-index: 998;
+		overflow: hidden;
 	}
 	.sidebar.collapse{
 		width: $sidebar-collapse-width;
@@ -155,12 +158,12 @@
 	.menu-divider__line {
 		flex: 1;
 		height: 1px;
-		background-color: rgba(255, 255, 255, 0.12);
+		background-color: var(--vk-border, #e2e8f0);
 	}
 
 	.menu-divider__label {
 		font-size: 11px;
-		color: rgba(255, 255, 255, 0.4);
+		color: var(--vk-text-muted, #94a3b8);
 		white-space: nowrap;
 		letter-spacing: 1px;
 	}

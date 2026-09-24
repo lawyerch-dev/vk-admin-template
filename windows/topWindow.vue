@@ -560,7 +560,7 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background-color: var(--vk-bg-secondary, #191a23);
+			background-color: var(--vk-card, #ffffff);
 			height: 50px;
 			.logo-image{
 				width: 38px;
