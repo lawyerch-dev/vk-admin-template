@@ -47,21 +47,18 @@
 			<text class="btn-text">登 录</text>
 		</view>
 
-		<!-- 演示账号（无完全权限，点击可填充） -->
+		<!-- 演示账号：点击填充 -->
 		<view v-if="testUsers.length" class="demo-accounts">
-			<text class="demo-title">演示账号（密码均为 123456，点击填充）</text>
-			<view
-				v-for="user in testUsers"
-				:key="user.username"
-				class="demo-item"
-				@click="fillTestUser(user)"
-			>
-				<view class="demo-item__main">
-					<text class="demo-item__name">{{ user.nickname }}</text>
-					<text class="demo-item__desc">{{ user.desc }}</text>
-				</view>
-				<text class="demo-item__account">{{ user.username }}</text>
+			<view class="demo-row">
+				<text class="demo-title">演示账号</text>
+				<text
+					v-for="user in testUsers"
+					:key="user.username"
+					class="demo-chip"
+					@click="fillTestUser(user)"
+				>{{ user.nickname }}</text>
 			</view>
+			<text class="demo-hint">密码 123456 · 点击填充</text>
 		</view>
 	</view>
 </template>
@@ -120,7 +117,6 @@ export default {
 		fillTestUser(user) {
 			this.form.username = user.username;
 			this.form.password = user.password || '123456';
-			vk.toast(`已填充：${user.nickname}`, 'none');
 		},
 		handleSubmit() {
 			if (!this.form.agreement) {
@@ -251,65 +247,43 @@ export default {
 }
 
 .demo-accounts {
-	margin-top: 4px;
-	padding-top: 12px;
-	border-top-width: 1px;
-	border-top-color: #E2E8F0;
-	border-top-style: dashed;
+	margin-top: 8px;
+}
+
+.demo-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
 }
 
 .demo-title {
 	font-size: 12px;
 	color: #94A3B8;
-	margin-bottom: 8px;
-	display: block;
+	margin-right: 2px;
 }
 
-.demo-item {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	padding: 10px 12px;
-	margin-bottom: 8px;
-	background-color: #F8FAFC;
-	border-width: 1px;
-	border-color: #E2E8F0;
-	border-style: solid;
-	border-radius: 8px;
-}
-
-.demo-item:active {
-	background-color: #EFF6FF;
-	border-color: #93C5FD;
-}
-
-.demo-item__main {
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-	margin-right: 8px;
-}
-
-.demo-item__name {
-	font-size: 13px;
-	font-weight: 600;
-	color: #0F172A;
-	line-height: 18px;
-}
-
-.demo-item__desc {
-	font-size: 12px;
-	color: #64748B;
-	line-height: 16px;
-	margin-top: 2px;
-}
-
-.demo-item__account {
+.demo-chip {
 	font-size: 12px;
 	color: #0891B2;
-	font-weight: 500;
-	flex-shrink: 0;
+	background-color: #ECFEFF;
+	border: 1px solid #A5F3FC;
+	border-radius: 999px;
+	padding: 4px 10px;
+	line-height: 16px;
+}
+
+.demo-chip:active {
+	background-color: #CFFAFE;
+}
+
+.demo-hint {
+	display: block;
+	margin-top: 6px;
+	font-size: 11px;
+	color: #CBD5E1;
+	text-align: center;
 }
 
 .btn-text {
