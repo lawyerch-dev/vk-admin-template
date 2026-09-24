@@ -4,6 +4,17 @@
    必须在 element-custom.scss 与 vk-unicloud-admin-ui 之后加载
    ============================================================ */
 
+/* 文本选中（点击卡密 user-select:all 时可见） */
+::selection {
+	background: var(--vk-primary, #3b82f6) !important;
+	color: #ffffff !important;
+}
+
+::-moz-selection {
+	background: var(--vk-primary, #3b82f6) !important;
+	color: #ffffff !important;
+}
+
 /* ---------- 基础表单控件 ---------- */
 .el-input__inner,
 .el-textarea__inner,

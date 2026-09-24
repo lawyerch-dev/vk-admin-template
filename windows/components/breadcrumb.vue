@@ -51,7 +51,7 @@ export default {
 	margin-left: 0px;
 }
 .item-content {
-	color: #606266;
+	color: var(--vk-text-secondary, #606266);
 }
 .item-content:hover {
 	color: #409eff;

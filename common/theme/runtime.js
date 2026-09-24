@@ -48,6 +48,41 @@ function varsToCss(vars) {
 	return `:root, html, body, page, uni-app, uni-page, uni-page-body, .uni-page-body {${body}}`;
 }
 
+const DIALOG_FIX_ID = "vk-dialog-theme-fix";
+
+function injectDialogFix() {
+	// Element MessageBox 等 teleported 弹层，编译期样式可能盖过主题，这里再压一层
+	if (typeof document === "undefined") return;
+	let el = document.getElementById(DIALOG_FIX_ID);
+	if (!el) {
+		el = document.createElement("style");
+		el.id = DIALOG_FIX_ID;
+		document.head.appendChild(el);
+	}
+	el.textContent = `
+.el-message-box, .el-message-box__wrapper .el-message-box {
+  background-color: var(--vk-card, #ffffff) !important;
+  color: var(--vk-text, #1e293b) !important;
+  border-color: var(--vk-border, #e2e8f0) !important;
+}
+.el-message-box__title, .el-message-box__message {
+  color: var(--vk-text, #1e293b) !important;
+}
+.el-message-box__headerbtn .el-message-box__close {
+  color: var(--vk-text-secondary, #64748b) !important;
+}
+::selection { background: var(--vk-primary, #3b82f6) !important; color: #fff !important; }
+.el-tooltip__popper, .el-popper {
+  background: var(--vk-card, #ffffff) !important;
+  color: var(--vk-text, #1e293b) !important;
+  border-color: var(--vk-border, #e2e8f0) !important;
+}
+.el-select-dropdown, .el-picker__popper {
+  background-color: var(--vk-card, #ffffff) !important;
+}
+`;
+}
+
 function inject(vars) {
 	// #ifdef H5
 	if (typeof document !== "undefined") {
@@ -58,6 +93,7 @@ function inject(vars) {
 			document.head.appendChild(styleEl);
 		}
 		styleEl.textContent = varsToCss(vars);
+		injectDialogFix();
 
 		const root = document.documentElement;
 		Object.keys(vars).forEach((k) => root.style.setProperty(k, vars[k]));

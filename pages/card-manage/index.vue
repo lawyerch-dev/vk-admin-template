@@ -862,9 +862,16 @@ export default {
 		color: var(--vk-primary, #409eff);
 		cursor: pointer;
 		user-select: all;
+		-webkit-user-select: all;
 		padding: 4px 8px;
 		border-radius: 4px;
 		transition: all 0.3s;
+
+		/* 点击全选时避免浅色 selection 把字吃掉 */
+		&::selection {
+			background: var(--vk-primary, #3b82f6) !important;
+			color: #ffffff !important;
+		}
 
 		&:hover {
 			background: var(--vk-primary-light, #ecf5ff);
@@ -873,6 +880,7 @@ export default {
 
 		&:active {
 			background: var(--vk-primary-soft, #d9ecff);
+			color: var(--vk-primary-hover, #2563eb);
 		}
 	}
 
