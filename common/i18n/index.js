@@ -1,9 +1,17 @@
 /**
- * 轻量 i18n：Vue.prototype.$t / $setLocale
- * 默认中文简体，可切换 en
+ * uni-app 官方 VueI18n 方案（Vue2 内置 vue-i18n@8）
+ * https://uniapp.dcloud.net.cn/tutorial/i18n.html
+ *
+ * 页面模板：$t('key')
+ * JS：this.$t('key')
+ * 切换语言：this.$i18n.locale = 'en'（或 this.$setLocale('en')）
  */
-import zhHans from "./zh-Hans.js";
-import en from "./en.js";
+import Vue from "vue";
+import VueI18n from "vue-i18n";
+import zhHans from "../../locale/zh-Hans.json";
+import en from "../../locale/en.json";
+
+Vue.use(VueI18n);
 
 const messages = {
 	"zh-Hans": zhHans,
@@ -11,35 +19,48 @@ const messages = {
 	en,
 };
 
-const STORAGE_KEY = "vk_locale";
-
-let current = "zh-Hans";
-try {
-	current = uni.getStorageSync(STORAGE_KEY) || "zh-Hans";
-} catch (e) {}
-
-export function getLocale() {
-	return current;
+function resolveLocale() {
+	// 优先应用语言，其次系统语言，默认中文简体
+	try {
+		const appLocale = uni.getLocale && uni.getLocale();
+		if (appLocale && messages[appLocale]) return appLocale;
+	} catch (e) {}
+	try {
+		const sys = uni.getSystemInfoSync();
+		const lang = sys.language || sys.appLanguage || "";
+		if (lang && messages[lang]) return lang;
+		if (lang && lang.indexOf("en") === 0) return "en";
+	} catch (e) {}
+	return "zh-Hans";
 }
 
+const i18n = new VueI18n({
+	locale: resolveLocale(),
+	fallbackLocale: "zh-Hans",
+	messages,
+});
+
+/** 设置应用语言（同步 vue-i18n + uni.setLocale） */
 export function setLocale(locale) {
 	if (!messages[locale]) locale = "zh-Hans";
-	current = locale;
+	i18n.locale = locale;
 	try {
-		uni.setStorageSync(STORAGE_KEY, locale);
+		if (typeof uni.setLocale === "function") {
+			uni.setLocale(locale);
+		}
 	} catch (e) {}
-	return current;
+	return i18n.locale;
 }
 
-export function t(key, fallback) {
-	const dict = messages[current] || messages["zh-Hans"];
-	return dict[key] || messages["zh-Hans"][key] || fallback || key;
+export function getLocale() {
+	return i18n.locale;
 }
 
-export function installI18n(Vue) {
-	Vue.prototype.$t = t;
-	Vue.prototype.$setLocale = setLocale;
-	Vue.prototype.$getLocale = getLocale;
+/** 在 main.js 中：Vue.use 安装并传给根实例 */
+export function installI18n(VueCtor) {
+	VueCtor.prototype.$setLocale = setLocale;
+	VueCtor.prototype.$getLocale = getLocale;
 }
 
-export default { installI18n, t, setLocale, getLocale, messages };
+export { i18n, messages };
+export default i18n;

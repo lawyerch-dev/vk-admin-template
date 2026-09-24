@@ -1,4 +1,4 @@
-export default {
+{
 	"nav.brand": "AI Business",
 	"nav.home": "Home",
 	"nav.products": "Products",
@@ -44,4 +44,6 @@ export default {
 	"login.required": "*",
 	"common.ok": "OK",
 	"common.cancel": "Cancel",
-};
+	"pages.login.title": "Sign In",
+	"pages.products.title": "Products"
+}

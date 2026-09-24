@@ -1,4 +1,4 @@
-export default {
+{
 	"nav.brand": "AI 商务定制",
 	"nav.home": "返回主页",
 	"nav.products": "产品中心",
@@ -44,4 +44,6 @@ export default {
 	"login.required": "*",
 	"common.ok": "确定",
 	"common.cancel": "取消",
-};
+	"pages.login.title": "登录",
+	"pages.products.title": "产品中心"
+}

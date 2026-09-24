@@ -38,10 +38,10 @@ modulesFiles.keys().map((modulePath, index) => {
 // 引入 自定义全局css 样式
 import '@/common/css/app.scss';
 
-// 轻量 i18n + 品牌换肤
-import { installI18n } from '@/common/i18n';
+// 国际化（官方 VueI18n）+ 品牌换肤
+import i18n, { installI18n } from '@/common/i18n';
 import { restoreBrand, brandTokens } from '@/common/theme/runtime';
-Vue.use({ install: installI18n });
+installI18n(Vue);
 Vue.prototype.$brand = () => brandTokens;
 restoreBrand();
 
@@ -51,6 +51,7 @@ App.mpType = 'app'
 
 const app = new Vue({
 	store,
+	i18n,
 	...App
 })
 app.$mount()
