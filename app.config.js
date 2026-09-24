@@ -15,9 +15,9 @@ export default {
 		testUser: {
 			show: true, // 登录页展示演示账号
 			list: [
-				{ username: "demo-ops", password: "123456", nickname: "运营" },
-				{ username: "demo-view", password: "123456", nickname: "只读" },
-				{ username: "demo-user", password: "123456", nickname: "基础" }
+				{ username: "demo-ops", password: "123456", desc: "产品运营" },
+				{ username: "demo-view", password: "123456", desc: "只读查询" },
+				{ username: "demo-user", password: "123456", desc: "基础权限" }
 			]
 		}
 	},

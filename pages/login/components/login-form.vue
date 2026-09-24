@@ -49,16 +49,19 @@
 
 		<!-- 演示账号：点击填充 -->
 		<view v-if="testUsers.length" class="demo-accounts">
-			<view class="demo-row">
+			<view class="demo-head">
 				<text class="demo-title">演示账号</text>
-				<text
-					v-for="user in testUsers"
-					:key="user.username"
-					class="demo-chip"
-					@click="fillTestUser(user)"
-				>{{ user.nickname }}</text>
+				<text class="demo-hint">密码 123456 · 点击填充</text>
 			</view>
-			<text class="demo-hint">密码 123456 · 点击填充</text>
+			<view
+				v-for="user in testUsers"
+				:key="user.username"
+				class="demo-row"
+				@click="fillTestUser(user)"
+			>
+				<text class="demo-account">{{ user.username }}</text>
+				<text class="demo-tag">{{ user.desc }}</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -250,40 +253,56 @@ export default {
 	margin-top: 8px;
 }
 
-.demo-row {
+.demo-head {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	flex-wrap: wrap;
-	gap: 6px;
+	justify-content: space-between;
+	margin-bottom: 6px;
 }
 
 .demo-title {
 	font-size: 12px;
-	color: #94A3B8;
-	margin-right: 2px;
-}
-
-.demo-chip {
-	font-size: 12px;
-	color: #0891B2;
-	background-color: #ECFEFF;
-	border: 1px solid #A5F3FC;
-	border-radius: 999px;
-	padding: 4px 10px;
-	line-height: 16px;
-}
-
-.demo-chip:active {
-	background-color: #CFFAFE;
+	font-weight: 600;
+	color: #64748B;
 }
 
 .demo-hint {
-	display: block;
-	margin-top: 6px;
 	font-size: 11px;
-	color: #CBD5E1;
-	text-align: center;
+	color: #94A3B8;
+}
+
+.demo-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 7px 10px;
+	margin-bottom: 6px;
+	background-color: #F8FAFC;
+	border: 1px solid #E2E8F0;
+	border-radius: 6px;
+}
+
+.demo-row:active {
+	background-color: #EFF6FF;
+	border-color: #93C5FD;
+}
+
+.demo-account {
+	font-size: 13px;
+	font-weight: 600;
+	color: #0F172A;
+	font-family: Menlo, Monaco, Consolas, monospace;
+}
+
+.demo-tag {
+	font-size: 12px;
+	color: #0891B2;
+	background-color: #ECFEFF;
+	border-radius: 4px;
+	padding: 2px 8px;
+	line-height: 16px;
 }
 
 .btn-text {
