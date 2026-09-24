@@ -173,7 +173,7 @@ export default {
     loadProducts() {
       return new Promise((resolve) => {
         vk.callFunction({
-          url: 'admin/product/sys/getPublicList',
+          url: 'admin/product/pub/getPublicList',
           data: {},
           success: (res) => {
             this.products = res.data || [];
@@ -191,7 +191,7 @@ export default {
     loadCategories() {
       return new Promise((resolve) => {
         vk.callFunction({
-          url: 'admin/product-category/sys/getAll',
+          url: 'admin/product-category/pub/getAll',
           data: {},
           success: (res) => {
             this.categories = res.data || [];
@@ -256,6 +256,10 @@ export default {
       uni.navigateTo({ url: '/pages/login/index' });
     },
     goAdmin() {
+      if (!this.isLoggedIn) {
+        uni.navigateTo({ url: '/pages/login/index' });
+        return;
+      }
       uni.reLaunch({ url: '/pages/index/index' });
     },
   },

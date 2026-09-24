@@ -94,7 +94,7 @@ export default {
     // 加载落地页配置
     loadPageConfig() {
       vk.callFunction({
-        url: 'admin/landing-page/sys/get',
+        url: 'admin/landing-page/pub/get',
         data: {},
         success: (res) => {
           if (res.data && res.data.sections) {
@@ -107,13 +107,19 @@ export default {
       });
     },
 
-    // 页面跳转
+    // 页面跳转（公开页自由浏览；进入后台才要求登录）
     navigateTo(url) {
-      if (this.isLoggedIn) {
-        vk.reLaunch({ url: '/pages/index/index' });
-      } else {
-        vk.navigateTo({ url });
+      if (!url) return;
+      if (url.indexOf('/pages/index') === 0 || url.indexOf('/pages_plugs') === 0) {
+        // 后台相关页面：未登录先去登录
+        if (this.isLoggedIn) {
+          vk.reLaunch({ url: '/pages/index/index' });
+        } else {
+          vk.navigateTo({ url: '/pages/login/index' });
+        }
+        return;
       }
+      vk.navigateTo({ url });
     },
 
     goLogin() {
@@ -129,6 +135,10 @@ export default {
     },
 
     goAdmin() {
+      if (!this.isLoggedIn) {
+        vk.navigateTo({ url: '/pages/login/index' });
+        return;
+      }
       vk.reLaunch({ url: '/pages/index/index' });
     }
   }

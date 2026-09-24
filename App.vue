@@ -8,16 +8,34 @@ import uniIdPagesInit from '@/uni_modules/uni-id-pages/init.js';
 export default {
 	computed: {},
 	methods: {
+		// 判断当前是否公开页（无需登录）
+		isPublicPage() {
+			let { appOptions = {} } = this;
+			let path = `/${appOptions.path || ""}`;
+			const publicPages = [
+				"/pages/login",
+				"/pages/landing",
+				"/pages/products",
+				"/pages_template/element",
+				"/pages_template/components/form",
+				"/pages_template/components/icons",
+			];
+			return publicPages.some((p) => path === p || path.startsWith(p + "/") || path.startsWith(p + "-"));
+		},
 		// 初始化菜单权限等数据
 		init() {
 			let that = this;
 			let { vk } = that;
-			// 如果token失效，直接跳登录页面
+			let isPublic = that.isPublicPage();
+			// 公开主页/产品页：未登录可浏览，仅点击进入后台时才要求登录
 			if (!vk.checkToken()) {
-				that.navigateToLogin();
+				if (!isPublic) {
+					that.navigateToLogin();
+				}
 				return false;
 			}
-			if (!that.isAllowLoginBackground()) {
+			// 已登录但当前在公开页：不要求后台权限，正常展示
+			if (!isPublic && !that.isAllowLoginBackground()) {
 				vk.alert("您的账户无登陆权限", () => {
 					that.navigateToLogin();
 				});

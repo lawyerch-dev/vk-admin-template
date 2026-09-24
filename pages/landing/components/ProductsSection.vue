@@ -102,7 +102,7 @@ export default {
     loadProducts() {
       const vk = uni.vk;
       vk.callFunction({
-        url: 'admin/product/sys/getPublicList',
+        url: 'admin/product/pub/getPublicList',
         data: {},
         success: (res) => {
           this.products = res.data || [];
