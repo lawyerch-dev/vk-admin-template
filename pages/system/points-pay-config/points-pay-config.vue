@@ -15,49 +15,45 @@
 			</el-alert>
 		</div>
 
-		<!-- 店铺列表 -->
-		<el-card class="config-card">
-			<div slot="header" class="card-header">
-				<span>{{ $t('admin.pointsPay.storeList') }}</span>
+		<!-- 店铺选择工具栏 -->
+		<el-card class="config-card store-toolbar-card">
+			<div class="store-toolbar">
+				<view class="store-picker">
+					<text class="picker-label">{{ $t('admin.pointsPay.storeList') }}</text>
+					<el-select
+						v-model="selected_store_id"
+						size="small"
+						class="store-select"
+						:placeholder="$t('admin.pointsPay.storeList')"
+						@change="onStoreChange"
+					>
+						<el-option
+							v-for="s in stores"
+							:key="s.store_id"
+							:label="s.name"
+							:value="s.store_id"
+						>
+							<view class="store-option">
+								<text class="store-option__name">{{ s.name }}</text>
+								<text class="store-option__url">{{ s.base_url }}</text>
+							</view>
+						</el-option>
+					</el-select>
+				</view>
 				<view class="header-actions">
 					<el-button type="primary" icon="el-icon-plus" size="small" @click="addStore">{{ $t('admin.pointsPay.addStore') }}</el-button>
+					<el-button
+						type="danger"
+						icon="el-icon-delete"
+						size="small"
+						:disabled="stores.length <= 1"
+						@click="removeStore(selected_store_id)"
+					>{{ $t('admin.common.delete') }}</el-button>
 					<el-button type="success" icon="el-icon-check" size="small" @click="saveConfig" :loading="saving">
 						{{ $t('admin.pointsPay.saveConfig') }}
 					</el-button>
 				</view>
 			</div>
-			<el-table
-				:data="stores"
-				style="width: 100%"
-				border
-				highlight-current-row
-				:row-class-name="rowClassName"
-				@row-click="selectStore"
-			>
-				<el-table-column prop="name" :label="$t('admin.pointsPay.colStoreName')" min-width="160">
-					<template slot-scope="{ row }">
-						{{ row.name }}
-						<el-tag v-if="row.store_id === selected_store_id" type="success" size="mini" style="margin-left: 6px">{{ $t('admin.pointsPay.currentTag') }}</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="base_url" :label="$t('admin.pointsPay.colGateway')" min-width="220"></el-table-column>
-				<el-table-column :label="$t('admin.common.action')" width="180" align="center">
-					<template slot-scope="{ row }">
-						<el-button
-							size="mini"
-							:type="row.store_id === selected_store_id ? 'primary' : 'default'"
-							@click.stop="selectStore(row)"
-						>{{ row.store_id === selected_store_id ? $t('admin.pointsPay.selected') : $t('admin.pointsPay.select') }}</el-button>
-						<el-button
-							size="mini"
-							type="danger"
-							icon="el-icon-delete"
-							:disabled="stores.length <= 1"
-							@click.stop="removeStore(row.store_id)"
-						></el-button>
-					</template>
-				</el-table-column>
-			</el-table>
 			<div class="tip-line">{{ $t('admin.pointsPay.storeTipLine') }}</div>
 		</el-card>
 
@@ -214,28 +210,13 @@ export default {
 				}
 			});
 		},
-		// 选择店铺（二次确认后切换，避免频繁切换影响前端服务）
-		selectStore(store) {
-			if (!store) return;
-			// 如果点击的是当前店铺，不需要切换
-			if (store.store_id === that.selected_store_id) return;
-			that.$confirm(
-				that.$t('admin.pointsPay.switchConfirm', { name: store.name }),
-				that.$t('admin.pointsPay.switchTitle'),
-				{
-					confirmButtonText: that.$t('admin.pointsPay.switchOk'),
-					cancelButtonText: that.$t('admin.common.cancel'),
-					type: 'warning'
-				}
-			).then(() => {
-				that.selected_store_id = store.store_id;
-				that.selectedStore = that.stores.find(s => s.store_id === store.store_id) || null;
-				vk.toast(that.$t('admin.pointsPay.switchedToast'));
-			}).catch(() => {});
+		// 下拉切换店铺：直接展示该店配置表单
+		onStoreChange(store_id) {
+			that.bindStore(store_id);
 		},
-		// 行高亮当前店铺
-		rowClassName({ row }) {
-			return row.store_id === that.selected_store_id ? 'current-store-row' : '';
+		bindStore(store_id) {
+			that.selected_store_id = store_id;
+			that.selectedStore = that.stores.find(s => s.store_id === store_id) || null;
 		},
 		// 新增店铺（基于链动小店预设，主要修改域名/channel_id/商品key）
 		addStore() {
@@ -263,7 +244,7 @@ export default {
 				merchant_pass: '',  // 管理员填写
 				packages: ldxpPackages
 			});
-			that.selectStore(that.stores[that.stores.length - 1]);
+			that.bindStore(store_id);
 		},
 		// 删除店铺
 		removeStore(store_id) {
@@ -281,8 +262,7 @@ export default {
 				if (idx > -1) that.stores.splice(idx, 1);
 				if (that.selected_store_id === store_id) {
 					if (that.stores.length) {
-						that.selected_store_id = that.stores[0].store_id;
-						that.selectedStore = that.stores[0];
+						that.bindStore(that.stores[0].store_id);
 						vk.toast(that.$t('admin.pointsPay.autoSwitched', { name: that.stores[0].name }));
 					} else {
 						that.selected_store_id = '';
@@ -451,6 +431,51 @@ export default {
 
 .current-store-row {
 	background: var(--vk-bg-secondary);
+}
+
+.store-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.store-picker {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+	flex: 1 1 320px;
+
+	.picker-label {
+		font-weight: 600;
+		color: var(--vk-text);
+		white-space: nowrap;
+	}
+
+	.store-select {
+		width: 100%;
+		max-width: 420px;
+	}
+}
+
+.store-option {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	line-height: 22px;
+
+	.store-option__name {
+		color: var(--vk-text);
+		font-weight: 500;
+	}
+
+	.store-option__url {
+		color: var(--vk-text-secondary, #64748b);
+		font-size: 12px;
+	}
 }
 
 .header-actions {
