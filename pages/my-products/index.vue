@@ -357,35 +357,40 @@ export default {
     },
     // 购买产品
     buyProduct(product) {
-      vk.confirm(
-        that.$t('myProducts.buyConfirmMsg', {
-          name: product.product_name,
-          n: product.buy_price
-        }),
-        that.$t('myProducts.buyConfirmTitle'),
-        that.$t('common.ok'),
-        that.$t('common.cancel'),
-        (res) => {
-          if (res.confirm) {
-            vk.callFunction({
-              url: "admin/product/kh/buyProduct",
-              data: {
-                product_id: product.product_id,
-                product_name: product.product_name,
-              },
-              title: that.$t('myProducts.buying'),
-              success: (data) => {
-                vk.toast(that.$t('myProducts.buySuccess'));
-                // 刷新产品列表
-                that.loadProducts();
-              },
-              fail: (err) => {
-                vk.toast(err.msg || that.$t('myProducts.buyFailed'));
-              },
-            });
+      const price = product.user_buy_price || product.buy_price;
+      that
+        .$confirm(
+          that.$t('myProducts.buyConfirmMsg', {
+            name: product.product_name,
+            n: price
+          }),
+          that.$t('myProducts.buyConfirmTitle'),
+          {
+            confirmButtonText: that.$t('common.ok'),
+            cancelButtonText: that.$t('common.cancel'),
+            type: 'warning',
+            customClass: 'buy-confirm-box',
+            distinguishCancelAndClose: true
           }
-        }
-      );
+        )
+        .then(() => {
+          vk.callFunction({
+            url: "admin/product/kh/buyProduct",
+            data: {
+              product_id: product.product_id,
+              product_name: product.product_name,
+            },
+            title: that.$t('myProducts.buying'),
+            success: (data) => {
+              vk.toast(that.$t('myProducts.buySuccess'));
+              that.loadProducts();
+            },
+            fail: (err) => {
+              vk.toast(err.msg || that.$t('myProducts.buyFailed'));
+            },
+          });
+        })
+        .catch(() => {});
     },
     // 联系客服
     contactCustomer(product) {
