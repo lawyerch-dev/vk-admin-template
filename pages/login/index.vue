@@ -8,6 +8,7 @@
 					<text class="nav__brand">{{ $t('nav.brand') }}</text>
 				</view>
 				<view class="nav__right">
+					<nav-prefs />
 					<text class="nav__btn nav__btn--ghost" @click="goHome">{{ $t('nav.home') }}</text>
 				</view>
 			</view>
@@ -75,6 +76,7 @@
 import LoginForm from './components/login-form.vue'
 import RegisterForm from './components/register-form.vue'
 import ForgotForm from './components/forgot-form.vue'
+import NavPrefs from '@/components/NavPrefs.vue'
 
 let vk = uni.vk;
 
@@ -82,7 +84,8 @@ export default {
 	components: {
 		LoginForm,
 		RegisterForm,
-		ForgotForm
+		ForgotForm,
+		NavPrefs
 	},
 	data() {
 		return {

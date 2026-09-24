@@ -7,13 +7,16 @@
           <image class="nav__logo" src="/static/logo.png" mode="aspectFit"></image>
           <text class="nav__brand">AI 商务定制</text>
         </view>
-        <view class="nav__right" v-if="isLoggedIn">
-          <text class="nav__user">{{ userInfo.nickname || userInfo.username || '用户' }}</text>
-          <text class="nav__btn" @click="goAdmin">进入后台</text>
-        </view>
-        <view class="nav__right" v-else>
-          <text class="nav__btn nav__btn--ghost" @click="goLogin">登录</text>
-          <text class="nav__btn" @click="goRegister">免费注册</text>
+        <view class="nav__right">
+          <nav-prefs />
+          <template v-if="isLoggedIn">
+            <text class="nav__user">{{ userInfo.nickname || userInfo.username || '用户' }}</text>
+            <text class="nav__btn" @click="goAdmin">进入后台</text>
+          </template>
+          <template v-else>
+            <text class="nav__btn nav__btn--ghost" @click="goLogin">登录</text>
+            <text class="nav__btn" @click="goRegister">免费注册</text>
+          </template>
         </view>
       </view>
     </view>
@@ -64,11 +67,12 @@ import FeaturesSection from './components/FeaturesSection.vue';
 import AdvantagesSection from './components/AdvantagesSection.vue';
 import CTASection from './components/CTASection.vue';
 import ProductsSection from './components/ProductsSection.vue';
+import NavPrefs from '@/components/NavPrefs.vue';
 
 let vk = uni.vk;
 
 export default {
-  components: { HeroSection, StatsSection, FeaturesSection, AdvantagesSection, CTASection, ProductsSection },
+  components: { HeroSection, StatsSection, FeaturesSection, AdvantagesSection, CTASection, ProductsSection, NavPrefs },
   data() {
     return {
       scrolled: false,
