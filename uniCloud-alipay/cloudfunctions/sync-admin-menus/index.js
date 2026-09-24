@@ -77,11 +77,11 @@ const MENUS = [
 		menu_id: "product-config-landing",
 		name: "落地页配置",
 		icon: "el-icon-monitor",
-		comment: "对外落地页区块与产品展示配置",
+		comment: "对外落地页区块与产品展示配置（与产品配置同级）",
 		url: "/pages/system/landing-manage/landing-manage",
-		sort: 6,
+		sort: 1008,
 		enable: true,
-		parent_id: "product-config"
+		parent_id: ""
 	}
 ];
 
