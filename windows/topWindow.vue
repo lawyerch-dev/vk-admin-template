@@ -225,28 +225,11 @@ export default {
 	// 计算属性
 	computed: {
 		topMenuStyle(){
-			let theme = this.theme;
-			if (theme && theme.use) {
-				let topMenu = theme[theme.use].topMenu;
-				let {
-					backgroundColor,
-					textColor
-				} = topMenu;
-				return {
-					backgroundColor,
-					color:textColor
-				}
-			} else {
-				return {}
-			}
+			// 顶栏跟全局深浅色变量，避免旧 theme 内联白底
+			return {};
 		},
 		textColor(){
-			let theme = this.theme;
-			if (theme && theme.use) {
-				return theme[theme.use].topMenu.textColor || "#999";
-			} else {
-				return "#999";
-			}
+			return "var(--vk-text, #1e293b)";
 		}
 	}
 };
@@ -258,9 +241,9 @@ export default {
 	width: 100%;
 	box-sizing: border-box;
 	display: flex;
-	border-bottom: 1px solid darken($top-window-bg-color, 3%);
-	background-color: $top-window-bg-color;
-	color: $top-window-text-color;
+	border-bottom: 1px solid var(--vk-border, #e2e8f0);
+	background-color: var(--vk-card, #ffffff);
+	color: var(--vk-text, #1e293b);
 	/* 左侧 */
 	.left {
 		width: calc(var(--window-left));
@@ -323,6 +306,7 @@ export default {
 		.title-text {
 			font-size: 13px;
 			line-height: 30px;
+			color: var(--vk-text);
 		}
 
 		.navbar-menu {
@@ -521,7 +505,7 @@ export default {
 			z-index: 999;
 			padding: 0px 15px;
 			margin: 5px 0;
-			background-color: #fff;
+			background-color: var(--vk-card);
 			border: 1px solid var(--vk-border);
 			border-radius: 4px;
 			box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -543,6 +527,8 @@ export default {
 	/* 右上 */
 	.right-top {
 		height: 50px;
+		background-color: var(--vk-card, #ffffff) !important;
+		color: var(--vk-text, #1e293b);
 	}
 	/* 右下 */
 	.right-bottom {
@@ -574,7 +560,7 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background-color: #191a23;
+			background-color: var(--vk-bg-secondary, #191a23);
 			height: 50px;
 			.logo-image{
 				width: 38px;
