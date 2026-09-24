@@ -14,20 +14,20 @@
         <div style="display: flex; gap: 10px; align-items: center;">
           <el-select
             v-model="queryForm1.formData.time_field"
-            placeholder="选择时间类型"
+            :placeholder="$t('card.query.timeTypePlaceholder')"
             clearable
             style="width: 120px;"
           >
-            <el-option label="购买时间" value="_add_time"></el-option>
-            <el-option label="开始使用时间" value="activate_time"></el-option>
-            <el-option label="过期时间" value="expire_time"></el-option>
+            <el-option :label="$t('card.query.buyTime')" value="_add_time"></el-option>
+            <el-option :label="$t('card.query.activateTime')" value="activate_time"></el-option>
+            <el-option :label="$t('card.query.expireTime')" value="expire_time"></el-option>
           </el-select>
           <el-date-picker
             v-model="queryForm1.formData.time_range"
             type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            :range-separator="$t('card.query.rangeTo')"
+            :start-placeholder="$t('card.query.startDate')"
+            :end-placeholder="$t('card.query.endDate')"
             value-format="timestamp"
             clearable
             style="width: 300px;"
@@ -41,25 +41,25 @@
           type="success"
           icon="el-icon-circle-plus-outline"
           @click="addBtn"
-          >购买卡密</el-button>
+          >{{ $t('card.buy') }}</el-button>
         <el-button
           type="info"
           icon="el-icon-setting"
           @click="batchSetPrefixSuffixBtn"
           :disabled="table1.multipleSelection.length === 0"
-          >批量设置前缀后缀</el-button>
+          >{{ $t('card.batchSetPrefixSuffix') }}</el-button>
         <el-button
           type="warning"
           icon="el-icon-download"
           @click="exportBtn"
           :disabled="table1.multipleSelection.length === 0"
-          >导出卡密</el-button>
+          >{{ $t('card.export') }}</el-button>
         <el-button
           type="danger"
           icon="el-icon-delete"
           @click="batchDeleteBtn"
           :disabled="table1.multipleSelection.length === 0"
-          >批量删除</el-button>
+          >{{ $t('card.batchDelete') }}</el-button>
       </template>
     </vk-data-table-query>
 
@@ -83,11 +83,11 @@
           <span 
             class="code-text" 
             @dblclick="copyCode(row.card_code)"
-            :title="'双击复制: ' + row.card_code"
+            :title="$t('card.copyTip', { code: row.card_code })"
           >
             {{ row.card_code }}
           </span>
-          <el-tooltip content="点击复制卡密" placement="top">
+          <el-tooltip :content="$t('card.clickToCopy')" placement="top">
             <i 
               class="el-icon-document-copy copy-icon"
               @click="copyCode(row.card_code)"
@@ -99,7 +99,7 @@
       <!-- 状态列 -->
       <template v-slot:status_text="{ row }">
         <el-tag :type="row.status_color || 'info'" size="small">
-          {{ row.status_text || '未知' }}
+          {{ formatStatusText(row.status_text) }}
         </el-tag>
       </template>
 
@@ -109,7 +109,7 @@
           :type="row.product_type === 'software' ? 'primary' : 'success'"
           size="small"
         >
-          {{ row.product_type === "software" ? "软件" : "插件" }}
+          {{ row.product_type === "software" ? $t('card.productType.software') : $t('card.productType.plugin') }}
         </el-tag>
       </template>
     </vk-data-table>
@@ -137,7 +137,7 @@
 
     <!-- 批量设置前缀后缀弹窗 -->
     <el-dialog
-      title="设置前后缀"
+      :title="$t('card.batchSetTitle')"
       :visible.sync="batchSetDialog.visible"
       width="600px"
       :close-on-click-modal="false"
@@ -145,34 +145,34 @@
       <div class="batch-set-dialog-content">
         <div class="batch-set-tip">
           <i class="el-icon-info"></i>
-          <span>将为选中的 {{ table1.multipleSelection.length }} 条卡密批量设置前缀和后缀</span>
+          <span>{{ $t('card.batchSetTip', { count: table1.multipleSelection.length }) }}</span>
         </div>
         <el-form :model="batchSetDialog.form" label-width="120px">
-          <el-form-item label="卡密前缀">
+          <el-form-item :label="$t('card.field.prefix')">
             <el-input
               v-model="batchSetDialog.form.prefix"
-              placeholder="请输入卡密前缀（可选，留空则不设置）"
+              :placeholder="$t('card.field.prefixPlaceholder')"
               maxlength="20"
               clearable
             >
-              <template slot="prepend">前缀</template>
+              <template slot="prepend">{{ $t('card.field.prefixLabel') }}</template>
             </el-input>
-            <div class="form-tip">设置后，卡密将以此前缀开头</div>
+            <div class="form-tip">{{ $t('card.field.prefixTip') }}</div>
           </el-form-item>
-          <el-form-item label="卡密后缀">
+          <el-form-item :label="$t('card.field.suffix')">
             <el-input
               v-model="batchSetDialog.form.suffix"
-              placeholder="请输入卡密后缀（可选，留空则不设置）"
+              :placeholder="$t('card.field.suffixPlaceholder')"
               maxlength="20"
               clearable
             >
-              <template slot="prepend">后缀</template>
+              <template slot="prepend">{{ $t('card.field.suffixLabel') }}</template>
             </el-input>
-            <div class="form-tip">设置后，卡密将以此后缀结尾</div>
+            <div class="form-tip">{{ $t('card.field.suffixTip') }}</div>
           </el-form-item>
-          <el-form-item label="预览效果">
+          <el-form-item :label="$t('card.field.preview')">
             <div class="preview-box">
-              <div class="preview-label">示例卡密：</div>
+              <div class="preview-label">{{ $t('card.field.sampleCode') }}</div>
               <div class="preview-code">
                 <span class="preview-prefix">{{ batchSetDialog.form.prefix || '' }}</span>
                 <span class="preview-original">a7f83b63d5f244c7bcdb4987e5694ac7</span>
@@ -183,8 +183,8 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="batchSetDialog.visible = false">取 消</el-button>
-        <el-button type="primary" @click="saveBatchSetPrefixSuffix">确 定</el-button>
+        <el-button @click="batchSetDialog.visible = false">{{ $t('card.cancel') }}</el-button>
+        <el-button type="primary" @click="saveBatchSetPrefixSuffix">{{ $t('card.confirm') }}</el-button>
       </span>
     </el-dialog>
 
@@ -235,12 +235,7 @@ export default {
         },
       },
       // 统计卡片配置
-      statsItems: [
-        { key: "total", label: "总卡密数", color: "#303133" },
-        { key: "unused", label: "未使用", color: "#67C23A" },
-        { key: "used", label: "已使用", color: "#909399" },
-        { key: "expired", label: "已过期", color: "#F56C6C" },
-      ],
+      statsItems: [],
       // 产品列表
       productList: [],
       // 用户积分信息（从 store 响应式读取）
@@ -248,146 +243,213 @@ export default {
       // 用户绑定机器统计（已合并到 stats.total_machines）
       table1: {
         action: "admin/card/kh/getList",
-        columns: [
-          {
-            key: "key",
-            title: "卡密",
-            type: "text",
-            width: 300,
-            slot: true,
-          },
-          { key: "product_name", title: "产品名称", type: "text", width: 150 },
-          {
-            key: "product_type",
-            title: "产品类型",
-            type: "text",
-            width: 100,
-            slot: true,
-          },
-          {
-            key: "status_text",
-            title: "状态",
-            type: "text",
-            width: 100,
-            slot: true,
-          },
-          { key: "limit_days_str", title: "有效天数", type: "text", width: 100 },
-          {
-            key: "max_machine_str",
-            title: "机器数",
-            type: "text",
-            width: 100,
-            defaultValue: "-",
-          },
-          {
-            key: "current_machine_count",
-            title: "已绑定",
-            type: "text",
-            width: 100,
-            defaultValue: "0",
-          },
-          {
-            key: "total_times_str",
-            title: "使用次数",
-            type: "text",
-            width: 100,
-            defaultValue: "-",
-          },
-          { key: "_add_time", title: "购买时间", type: "time", width: 180 },
-          {
-            key: "activate_time_str",
-            title: "开始使用时间",
-            type: "text",
-            width: 180,
-            defaultValue: "-",
-          },
-          {
-            key: "expire_time_str",
-            title: "卡密过期时间",
-            type: "text",
-            width: 180,
-            defaultValue: "-",
-          },
-          {
-            key: "remark",
-            title: "备注",
-            type: "text",
-            width: 200,
-            defaultValue: "-",
-          },
-        ],
+        columns: [],
         multipleSelection: [],
-        customRightBtns: [
-          {
-            title: "续费",
-            icon: "el-icon-refresh",
-            type: "warning",
-            onClick: (item) => that.renewBtn({ item }),
-            show: () => true, // 所有卡密都可以续费
-          },
-          {
-            title: "编辑",
-            icon: "el-icon-edit",
-            type: "primary",
-            onClick: (item) => that.editBtn({ item }),
-            show: () => true, // 所有卡密都可以编辑
-          },
-        ],
+        customRightBtns: [],
       },
       queryForm1: {
         formData: {
           time_field: "_add_time", // 默认筛选购买时间
         },
-        columns: [
-          {
-            key: "card_code",
-            type: "text",
-            title: "卡密",
-            placeholder: "请输入卡密",
-            mode: "%%",
-            col: { span: 5 },
-          },
-          {
-            key: "product_name",
-            type: "select",
-            title: "产品",
-            placeholder: "选择产品",
-            data: [],
-            col: { span: 4 },
-            mode: "=",
-          },
-          {
-            key: "status_text",
-            type: "select",
-            title: "状态",
-            placeholder: "选择状态",
-            data: [
-              { value: "未激活", label: "未激活" },
-              { value: "使用中", label: "使用中" },
-              { value: "已过期", label: "已过期" },
-              { value: "次数用完", label: "次数用完" },
-            ],
-            col: { span: 2 },
-          },
-          {
-            key: "time_filter",
-            type: "slot",
-            title: "时间筛选",
-            col: { span: 8 },
-          },
-        ],
+        columns: [],
       },
     };
   },
   computed: {
     userPoints() { return this.$store.state.$user.pointsInfo; },
   },
+  watch: {
+    '$i18n.locale'() {
+      that.applyI18n();
+    },
+  },
   onLoad(options = {}) {
     that = this;
     vk = that.vk;
+    that.applyI18n();
     that.init();
   },
   methods: {
+    // 初始化多语言文案（表头、按钮、筛选项等）
+    applyI18n() {
+      const currentKeys = (that.table1.columns || []).map((c) => c.key);
+      const builtColumns = that.buildTableColumns();
+      if (currentKeys.length > 0) {
+        const byKey = {};
+        builtColumns.forEach((c) => { byKey[c.key] = c; });
+        const ordered = [];
+        currentKeys.forEach((k) => { if (byKey[k]) ordered.push(byKey[k]); });
+        builtColumns.forEach((c) => {
+          if (!currentKeys.includes(c.key)) ordered.push(c);
+        });
+        that.table1.columns = ordered;
+      } else {
+        that.table1.columns = builtColumns;
+      }
+
+      const prevQueryData = {};
+      (that.queryForm1.columns || []).forEach((c) => {
+        if (c.data) prevQueryData[c.key] = c.data;
+      });
+      that.queryForm1.columns = that.buildQueryColumns().map((c) => {
+        if (prevQueryData[c.key]) c.data = prevQueryData[c.key];
+        return c;
+      });
+      that.statsItems = that.buildStatsItems();
+      that.table1.customRightBtns = that.buildCustomRightBtns();
+    },
+    buildStatsItems() {
+      return [
+        { key: "total", label: that.$t('card.stats.total'), color: "var(--vk-text, #1e293b)" },
+        { key: "unused", label: that.$t('card.stats.unused'), color: "#67C23A" },
+        { key: "used", label: that.$t('card.stats.used'), color: "var(--vk-text-secondary, #64748b)" },
+        { key: "expired", label: that.$t('card.stats.expired'), color: "#F56C6C" },
+      ];
+    },
+    buildTableColumns() {
+      return [
+        {
+          key: "key",
+          title: that.$t('card.table.cardCode'),
+          type: "text",
+          width: 300,
+          slot: true,
+        },
+        { key: "product_name", title: that.$t('card.table.productName'), type: "text", width: 150 },
+        {
+          key: "product_type",
+          title: that.$t('card.table.productType'),
+          type: "text",
+          width: 100,
+          slot: true,
+        },
+        {
+          key: "status_text",
+          title: that.$t('card.table.status'),
+          type: "text",
+          width: 100,
+          slot: true,
+        },
+        { key: "limit_days_str", title: that.$t('card.table.limitDays'), type: "text", width: 100 },
+        {
+          key: "max_machine_str",
+          title: that.$t('card.table.maxMachine'),
+          type: "text",
+          width: 100,
+          defaultValue: "-",
+        },
+        {
+          key: "current_machine_count",
+          title: that.$t('card.table.bound'),
+          type: "text",
+          width: 100,
+          defaultValue: "0",
+        },
+        {
+          key: "total_times_str",
+          title: that.$t('card.table.totalTimes'),
+          type: "text",
+          width: 100,
+          defaultValue: "-",
+        },
+        { key: "_add_time", title: that.$t('card.table.buyTime'), type: "time", width: 180 },
+        {
+          key: "activate_time_str",
+          title: that.$t('card.table.activateTime'),
+          type: "text",
+          width: 180,
+          defaultValue: "-",
+        },
+        {
+          key: "expire_time_str",
+          title: that.$t('card.table.expireTime'),
+          type: "text",
+          width: 180,
+          defaultValue: "-",
+        },
+        {
+          key: "remark",
+          title: that.$t('card.table.remark'),
+          type: "text",
+          width: 200,
+          defaultValue: "-",
+        },
+      ];
+    },
+    buildCustomRightBtns() {
+      return [
+        {
+          title: that.$t('card.renew'),
+          icon: "el-icon-refresh",
+          type: "warning",
+          onClick: (item) => that.renewBtn({ item }),
+          show: () => true, // 所有卡密都可以续费
+        },
+        {
+          title: that.$t('card.edit'),
+          icon: "el-icon-edit",
+          type: "primary",
+          onClick: (item) => that.editBtn({ item }),
+          show: () => true, // 所有卡密都可以编辑
+        },
+      ];
+    },
+    buildQueryColumns() {
+      return [
+        {
+          key: "card_code",
+          type: "text",
+          title: that.$t('card.table.cardCode'),
+          placeholder: that.$t('card.query.cardCodePlaceholder'),
+          mode: "%%",
+          col: { span: 5 },
+        },
+        {
+          key: "product_name",
+          type: "select",
+          title: that.$t('card.query.product'),
+          placeholder: that.$t('card.query.productPlaceholder'),
+          data: [],
+          col: { span: 4 },
+          mode: "=",
+        },
+        {
+          key: "status_text",
+          type: "select",
+          title: that.$t('card.table.status'),
+          placeholder: that.$t('card.query.statusPlaceholder'),
+          // value 保持中文，与后端查询条件一致
+          data: [
+            { value: "未激活", label: that.$t('card.status.unused') },
+            { value: "使用中", label: that.$t('card.status.active') },
+            { value: "已过期", label: that.$t('card.status.expired') },
+            { value: "次数用完", label: that.$t('card.status.timesUp') },
+          ],
+          col: { span: 2 },
+        },
+        {
+          key: "time_filter",
+          type: "slot",
+          title: that.$t('card.query.timeFilter'),
+          col: { span: 8 },
+        },
+      ];
+    },
+    formatStatusText(statusText) {
+      const map = {
+        "未激活": 'card.status.unused',
+        "使用中": 'card.status.active',
+        "已过期": 'card.status.expired',
+        "次数用完": 'card.status.timesUp',
+      };
+      const key = map[statusText];
+      return key ? that.$t(key) : (statusText || that.$t('card.status.unknown'));
+    },
+    formatProductType(productType) {
+      return productType === "software"
+        ? that.$t('card.productType.software')
+        : that.$t('card.productType.plugin');
+    },
     // 初始化
     async init() {
       await that.loadProducts();
@@ -479,7 +541,7 @@ export default {
           url: "/pages/points-shop/index",
           fail: (err) => {
             console.error('跳转失败：', err);
-            vk.toast("页面跳转失败，请重试");
+            vk.toast(that.$t('card.navFailed'));
           }
         });
       }, 100);
@@ -497,7 +559,7 @@ export default {
     // 显示积分不足提示（提取公共逻辑）
     showInsufficientPointsAlert(neededPoints) {
       const deficit = neededPoints - that.userPoints.available_points;
-      vk.alert(`积分不足！还需 ${deficit} 积分`, "提示", () => {
+      vk.alert(that.$t('card.pointsInsufficient', { points: deficit }), that.$t('card.tip'), () => {
         that.goToPointsShop();
       });
     },
@@ -509,7 +571,7 @@ export default {
     async addBtn() {
       const firstProduct = that.productList?.[0];
       if (!firstProduct) {
-        vk.alert("暂无可用产品，请先购买产品后再生成卡密", "提示", () => {
+        vk.alert(that.$t('card.noProduct'), that.$t('card.tip'), () => {
           uni.navigateTo({ url: "/pages/my-products/index" });
         });
         return;
@@ -572,10 +634,10 @@ export default {
     // 删除
     deleteBtn({ item, deleteFn }) {
       vk.confirm(
-        `确定要删除卡密【${item.card_code}】吗？`,
-        "提示",
-        "确定",
-        "取消",
+        that.$t('card.deleteConfirm', { code: item.card_code }),
+        that.$t('card.tip'),
+        that.$t('card.confirm'),
+        that.$t('card.cancel'),
         (res) => {
           if (res.confirm) {
             deleteFn({
@@ -589,13 +651,13 @@ export default {
     // 批量删除
     batchDeleteBtn() {
       if (that.table1.multipleSelection.length === 0) {
-        return vk.toast("请先选择要删除的卡密");
+        return vk.toast(that.$t('card.selectToDelete'));
       }
       vk.confirm(
-        `确定要删除选中的 ${that.table1.multipleSelection.length} 条卡密吗？`,
-        "提示",
-        "确定",
-        "取消",
+        that.$t('card.batchDeleteConfirm', { count: that.table1.multipleSelection.length }),
+        that.$t('card.tip'),
+        that.$t('card.confirm'),
+        that.$t('card.cancel'),
         (res) => {
           if (res.confirm) {
           vk.callFunction({
@@ -604,7 +666,7 @@ export default {
               ids: that.table1.multipleSelection.map((item) => item._id),
             },
             success: () => {
-              vk.toast("删除成功");
+              vk.toast(that.$t('card.deleteSuccess'));
               that.refresh();
             },
           });
@@ -615,7 +677,7 @@ export default {
     // 批量设置前缀后缀
     batchSetPrefixSuffixBtn() {
       if (that.table1.multipleSelection.length === 0) {
-        return vk.toast("请先选择要设置的卡密");
+        return vk.toast(that.$t('card.selectToSet'));
       }
       // 重置表单
       that.batchSetDialog.form = {
@@ -630,14 +692,14 @@ export default {
       
       // 如果前缀和后缀都为空，提示用户
       if (!prefix && !suffix) {
-        return vk.toast("请至少输入前缀或后缀");
+        return vk.toast(that.$t('card.needPrefixOrSuffix'));
       }
       
       vk.confirm(
-        `确定要为选中的 ${that.table1.multipleSelection.length} 条卡密设置前缀和后缀吗？`,
-        "提示",
-        "确定",
-        "取消",
+        that.$t('card.batchSetConfirm', { count: that.table1.multipleSelection.length }),
+        that.$t('card.tip'),
+        that.$t('card.confirm'),
+        that.$t('card.cancel'),
         (res) => {
           if (res.confirm) {
             // 计算新的卡密并逐个更新
@@ -659,12 +721,12 @@ export default {
             });
             
             Promise.all(updatePromises).then(() => {
-              vk.toast("设置成功");
+              vk.toast(that.$t('card.setSuccess'));
               that.batchSetDialog.visible = false;
               that.refresh();
             }).catch((err) => {
               console.error('批量设置失败：', err);
-              vk.toast("设置失败，请重试");
+              vk.toast(that.$t('card.setFailed'));
             });
           }
         }
@@ -673,7 +735,7 @@ export default {
     // 导出卡密
     exportBtn() {
       if (that.table1.multipleSelection.length === 0) {
-        return vk.toast("请先选择要导出的卡密");
+        return vk.toast(that.$t('card.selectToExport'));
       }
       // 处理导出数据：映射字段并转换格式
       const exportData = that.table1.multipleSelection.map(item => {
@@ -690,21 +752,21 @@ export default {
           );
           if (product && product.product_type) {
             // 转换产品类型：software -> 软件，plugin -> 插件
-            processedItem.product_type = product.product_type === "software" ? "软件" : "插件";
+            processedItem.product_type = that.formatProductType(product.product_type);
           } else {
-            processedItem.product_type = "插件"; // 默认值
+            processedItem.product_type = that.$t('card.productType.plugin'); // 默认值
           }
         } else if (item.product_type !== undefined) {
           // 如果数据中已有 product_type，直接转换
-          processedItem.product_type = item.product_type === "software" ? "软件" : "插件";
+          processedItem.product_type = that.formatProductType(item.product_type);
         } else {
-          processedItem.product_type = "插件"; // 默认值
+          processedItem.product_type = that.$t('card.productType.plugin'); // 默认值
         }
         return processedItem;
       });
       that.$refs.table1.exportExcel({
-        fileName: "卡密列表",
-        title: "正在导出选中的卡密数据...",
+        fileName: that.$t('card.exportFileName'),
+        title: that.$t('card.exporting'),
         data: exportData,
       });
     },
@@ -713,16 +775,16 @@ export default {
       // 去除前后空格
       const trimmedCode = code ? String(code).trim() : '';
       if (!trimmedCode) {
-        return vk.toast("卡密为空");
+        return vk.toast(that.$t('card.codeEmpty'));
       }
       uni.setClipboardData({
         data: trimmedCode,
-        success: () => vk.toast("复制成功"),
+        success: () => vk.toast(that.$t('card.copySuccess')),
       });
     },
     // 购买/续费成功回调
     onPurchaseSuccess(formType) {
-      vk.toast(formType === 'renew' ? '续费成功' : '操作成功');
+      vk.toast(formType === 'renew' ? that.$t('card.renewSuccess') : that.$t('card.actionSuccess'));
       that.refresh();
     },
     // 编辑保存回调
@@ -735,7 +797,7 @@ export default {
             const columnOrder = columns.map(col => col.key);
             uni.setStorageSync('card_columns_order', columnOrder);
             that.table1.columns = JSON.parse(JSON.stringify(columns));
-            vk.toast('保存成功');
+            vk.toast(that.$t('card.saveSuccess'));
             that.editDialog.visible = false;
             that.refresh();
           }
@@ -744,7 +806,7 @@ export default {
         const columnOrder = columns.map(col => col.key);
         uni.setStorageSync('card_columns_order', columnOrder);
         that.table1.columns = JSON.parse(JSON.stringify(columns));
-        vk.toast('字段顺序已保存');
+        vk.toast(that.$t('card.columnsOrderSaved'));
         that.editDialog.visible = false;
       }
     },
@@ -773,7 +835,7 @@ export default {
 	.code-text {
 		font-family: 'Courier New', monospace;
 		font-weight: 500;
-		color: #409EFF;
+		color: var(--vk-primary, #409eff);
 		cursor: pointer;
 		user-select: all;
 		padding: 4px 8px;
@@ -781,17 +843,17 @@ export default {
 		transition: all 0.3s;
 
 		&:hover {
-			background: #ecf5ff;
-			color: #66b1ff;
+			background: var(--vk-primary-light, #ecf5ff);
+			color: var(--vk-primary-hover, #66b1ff);
 		}
 
 		&:active {
-			background: #d9ecff;
+			background: var(--vk-primary-soft, #d9ecff);
 		}
 	}
 
 	.copy-icon {
-		color: #909399;
+		color: var(--vk-text-secondary, #64748b);
 		font-size: 16px;
 		cursor: pointer;
 		transition: all 0.3s;
@@ -799,8 +861,8 @@ export default {
 		border-radius: 4px;
 
 		&:hover {
-			color: #409EFF;
-			background: #ecf5ff;
+			color: var(--vk-primary, #409eff);
+			background: var(--vk-primary-light, #ecf5ff);
 			transform: scale(1.1);
 		}
 
@@ -817,11 +879,11 @@ export default {
 		align-items: center;
 		gap: 8px;
 		padding: 12px 16px;
-		background: #ecf5ff;
-		border: 1px solid #b3d8ff;
+		background: var(--vk-primary-light, #ecf5ff);
+		border: 1px solid var(--vk-primary-border, #b3d8ff);
 		border-radius: 4px;
 		margin-bottom: 20px;
-		color: #409EFF;
+		color: var(--vk-primary, #409eff);
 		font-size: 14px;
 
 		i {
@@ -830,7 +892,7 @@ export default {
 	}
 
 	.form-tip {
-		color: #909399;
+		color: var(--vk-text-secondary, #64748b);
 		font-size: 12px;
 		margin-top: 6px;
 		line-height: 1.5;
@@ -838,12 +900,12 @@ export default {
 
 	.preview-box {
 		padding: 12px 16px;
-		background: #f5f7fa;
+		background: var(--vk-bg-muted, #f1f5f9);
 		border-radius: 4px;
-		border: 1px solid #e4e7ed;
+		border: 1px solid var(--vk-border, #e2e8f0);
 
 		.preview-label {
-			color: #606266;
+			color: var(--vk-text, #1e293b);
 			font-size: 13px;
 			margin-bottom: 8px;
 		}
@@ -861,7 +923,7 @@ export default {
 			}
 
 			.preview-original {
-				color: #409EFF;
+				color: var(--vk-primary, #409eff);
 				font-weight: 500;
 			}
 

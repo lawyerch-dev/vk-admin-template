@@ -54,10 +54,10 @@
 		</view>
 
 		<view class="field" v-if="inviteCode || inviterInfo">
-			<text class="label">邀请人</text>
+			<text class="label">{{ $t('login.inviter') }}</text>
 			<view v-if="inviterInfo" class="inviter">
-				<text>{{ inviterInfo.nickname || inviterInfo.username || '用户' }}</text>
-				<text class="badge">已绑定</text>
+				<text>{{ inviterInfo.nickname || inviterInfo.username || $t('user.fallback') }}</text>
+				<text class="badge">{{ $t('login.inviterBound') }}</text>
 			</view>
 			<text v-else class="inviter-code">{{ inviteCode }}</text>
 		</view>
@@ -71,7 +71,7 @@
 		</view>
 
 		<view class="btn-primary" @click="handleSubmit">
-			<text class="btn-text">{{ loading ? '注册中...' : '注 册' }}</text>
+			<text class="btn-text">{{ loading ? $t('login.registering') : $t('login.registerSubmit') }}</text>
 		</view>
 	</view>
 </template>
@@ -121,41 +121,41 @@ export default {
 			const { agreement, username, email, password, password2, captcha } = this.form;
 			
 			if (!agreement) {
-				vk.toast("请同意用户协议", "none");
+				vk.toast(this.$t("login.err.agree"), "none");
 				return;
 			}
 			if (!username || username.trim() === "") {
-				vk.toast("请输入用户名", "none");
+				vk.toast(this.$t("login.err.username"), "none");
 				return;
 			}
 			const usernameRegex = /^[\u4e00-\u9fa5a-zA-Z0-9_]{3,32}$/;
 			if (!usernameRegex.test(username)) {
-				vk.toast("用户名格式不正确", "none");
+				vk.toast(this.$t("login.err.usernameFormat"), "none");
 				return;
 			}
 			if (!email || email.trim() === "") {
-				vk.toast("请输入QQ邮箱", "none");
+				vk.toast(this.$t("login.err.email"), "none");
 				return;
 			}
 			const emailRegex = /^[1-9]\d{4,10}@qq\.com$/;
 			if (!emailRegex.test(email)) {
-				vk.toast("请输入正确的QQ邮箱", "none");
+				vk.toast(this.$t("login.err.emailFormat"), "none");
 				return;
 			}
 			if (!vk.pubfn.test(password, "pwd")) {
-				vk.toast("密码以字母开头，6-18位", "none");
+				vk.toast(this.$t("login.err.pwdFormat"), "none");
 				return;
 			}
 			if (!vk.pubfn.test(password2, "pwd")) {
-				vk.toast("密码以字母开头，6-18位", "none");
+				vk.toast(this.$t("login.err.pwdFormat"), "none");
 				return;
 			}
 			if (password != password2) {
-				vk.toast("两次密码不一致", "none");
+				vk.toast(this.$t("login.err.pwdMismatch"), "none");
 				return;
 			}
 			if (!captcha || captcha.trim() === "") {
-				vk.toast("请输入验证码", "none");
+				vk.toast(this.$t("login.err.captcha"), "none");
 				return;
 			}
 
@@ -171,7 +171,7 @@ export default {
 				},
 				success: (data) => {
 					this.loading = false;
-					vk.toast("注册成功，正在自动登录...", "success");
+					vk.toast(this.$t("login.toast.registerSuccess"), "success");
 					// 注册成功后自动登录
 					vk.userCenter.login({
 						data: {
@@ -189,7 +189,7 @@ export default {
 				},
 				fail: (err) => {
 					this.loading = false;
-					vk.toast(err.msg || err.message || "注册失败", "none");
+					vk.toast(err.msg || err.message || this.$t("login.err.registerFailed"), "none");
 				}
 			});
 		}

@@ -1,12 +1,12 @@
 <template>
   <view class="stats-cards">
     <el-card v-for="item in items" :key="item.key" class="stats-card">
-      <div class="stats-item">
-        <div class="stats-label">{{ item.label }}</div>
-        <div class="stats-value" :style="{ color: item.color }">
+      <view class="stats-item">
+        <view class="stats-label">{{ item.label }}</view>
+        <view class="stats-value" :style="{ color: item.color }">
           {{ stats[item.key] }}{{ item.suffix || '' }}
-        </div>
-      </div>
+        </view>
+      </view>
     </el-card>
   </view>
 </template>
@@ -48,14 +48,14 @@ export default {
 
       .stats-label {
         font-size: 14px;
-        color: #909399;
+        color: var(--vk-text-secondary, #64748b);
         margin-bottom: 8px;
       }
 
       .stats-value {
         font-size: 28px;
         font-weight: bold;
-        color: #303133;
+        color: var(--vk-text, #1e293b);
       }
     }
   }

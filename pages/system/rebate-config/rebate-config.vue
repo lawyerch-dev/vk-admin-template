@@ -2,35 +2,35 @@
   <view class="rebate-config">
     <el-card>
       <div slot="header" class="card-header">
-        <span>返利阶梯配置</span>
-        <el-switch v-model="config.enabled" active-text="启用" inactive-text="禁用" @change="saveConfig"></el-switch>
+        <span>{{ $t('admin.rebate.title') }}</span>
+        <el-switch v-model="config.enabled" :active-text="$t('admin.common.enable')" :inactive-text="$t('admin.common.disable')" @change="saveConfig"></el-switch>
       </div>
-      
+
       <!-- 阶梯配置表格 -->
       <el-table :data="config.tiers" style="width: 100%" border>
-        <el-table-column prop="level" label="阶梯等级" width="100" align="center">
+        <el-table-column prop="level" :label="$t('admin.rebate.colLevel')" width="100" align="center">
           <template slot-scope="{ row }">
             <el-tag type="primary">Tier {{ row.level }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="threshold" label="累计消费门槛（积分）" width="220" align="center">
+        <el-table-column prop="threshold" :label="$t('admin.rebate.colThreshold')" width="220" align="center">
           <template slot-scope="{ row }">
-            <el-input-number 
-              v-model="row.threshold" 
-              :min="0" 
+            <el-input-number
+              v-model="row.threshold"
+              :min="0"
               :max="999999"
               :step="100"
               size="small"
               @change="onTierChange"
             ></el-input-number>
-            <span style="margin-left: 5px;">积分</span>
+            <span style="margin-left: 5px;">{{ $t('admin.common.points') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="rate" label="返利比例" width="200" align="center">
+        <el-table-column prop="rate" :label="$t('admin.rebate.colRate')" width="200" align="center">
           <template slot-scope="{ row }">
-            <el-input-number 
-              v-model="row.rate" 
-              :min="0" 
+            <el-input-number
+              v-model="row.rate"
+              :min="0"
               :max="100"
               size="small"
               @change="onTierChange"
@@ -38,12 +38,12 @@
             <span style="margin-left: 5px;">%</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120" align="center">
+        <el-table-column :label="$t('admin.common.action')" width="120" align="center">
           <template slot-scope="{ $index }">
-            <el-button 
-              type="danger" 
-              icon="el-icon-delete" 
-              size="mini" 
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
               circle
               @click="removeTier($index)"
               :disabled="config.tiers.length <= 1"
@@ -51,28 +51,28 @@
           </template>
         </el-table-column>
       </el-table>
-      
+
       <!-- 操作按钮 -->
       <div class="action-bar">
         <el-button type="primary" icon="el-icon-plus" size="small" @click="addTier">
-          添加阶梯
+          {{ $t('admin.rebate.addTier') }}
         </el-button>
         <el-button type="success" icon="el-icon-check" size="small" @click="saveConfig" :loading="saving">
-          保存配置
+          {{ $t('admin.rebate.saveConfig') }}
         </el-button>
         <el-button type="info" icon="el-icon-refresh" size="small" @click="resetConfig">
-          恢复默认
+          {{ $t('admin.rebate.resetDefault') }}
         </el-button>
       </div>
-      
+
       <!-- 配置说明 -->
       <div class="config-tips">
-        <el-alert title="配置说明" type="info" :closable="false" show-icon>
+        <el-alert :title="$t('admin.common.configTips')" type="info" :closable="false" show-icon>
           <ul>
-            <li>累计消费门槛：被邀请人累计消费积分达到该门槛后，邀请人享受对应的返利比例</li>
-            <li>返利比例：被邀请人消费时，邀请人获得的积分比例（基于消费积分）</li>
-            <li>阶梯规则：系统会自动按门槛升序排列，返利比例应随门槛递增</li>
-            <li>防刷机制：按实际消费积分计算，避免虚假注册刷返利</li>
+            <li>{{ $t('admin.rebate.tipThreshold') }}</li>
+            <li>{{ $t('admin.rebate.tipRate') }}</li>
+            <li>{{ $t('admin.rebate.tipRule') }}</li>
+            <li>{{ $t('admin.rebate.tipAntiFraud') }}</li>
           </ul>
         </el-alert>
       </div>
@@ -119,7 +119,7 @@ export default {
         },
         fail: (err) => {
           console.error('加载配置失败：', err);
-          vk.toast('加载配置失败');
+          vk.toast(err.msg || err.message || that.$t('admin.common.loadFailed'), 'none');
         }
       });
     },
@@ -136,7 +136,7 @@ export default {
     // 删除阶梯
     removeTier(index) {
       if (that.config.tiers.length <= 1) {
-        vk.toast('至少保留一个阶梯');
+        vk.toast(that.$t('admin.rebate.keepOneTier'));
         return;
       }
       that.config.tiers.splice(index, 1);
@@ -159,29 +159,29 @@ export default {
       const thresholds = new Set();
       for (const tier of that.config.tiers) {
         if (tier.threshold < 0) {
-          vk.toast('累计消费门槛不能为负数');
+          vk.toast(that.$t('admin.rebate.thresholdNegative'));
           return;
         }
         if (tier.rate < 0 || tier.rate > 100) {
-          vk.toast('返利比例必须在0-100之间');
+          vk.toast(that.$t('admin.rebate.rateRange'));
           return;
         }
         if (thresholds.has(tier.threshold)) {
-          vk.toast('累计消费门槛不能重复');
+          vk.toast(that.$t('admin.rebate.thresholdDuplicate'));
           return;
         }
         thresholds.add(tier.threshold);
       }
-      
+
       // 检查返利比例是否递增
       const sortedTiers = [...that.config.tiers].sort((a, b) => a.threshold - b.threshold);
       for (let i = 1; i < sortedTiers.length; i++) {
         if (sortedTiers[i].rate < sortedTiers[i - 1].rate) {
-          vk.toast('返利比例应随消费门槛递增');
+          vk.toast(that.$t('admin.rebate.rateIncrease'));
           return;
         }
       }
-      
+
       that.saving = true;
       vk.callFunction({
         url: 'admin/rebate/sys/updateConfig',
@@ -190,11 +190,11 @@ export default {
           tiers: that.config.tiers
         },
         success: () => {
-          vk.toast('保存成功');
+          vk.toast(that.$t('admin.common.saved'));
           that.loadConfig();
         },
         fail: (err) => {
-          vk.toast(err.msg || '保存失败');
+          vk.toast(err.msg || err.message || that.$t('admin.common.saveFailed'), 'none');
         },
         complete: () => {
           that.saving = false;
@@ -203,9 +203,9 @@ export default {
     },
     // 恢复默认配置
     resetConfig() {
-      that.$confirm('确定要恢复默认配置吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      that.$confirm(that.$t('admin.rebate.resetConfirm'), that.$t('admin.common.confirm'), {
+        confirmButtonText: that.$t('admin.common.ok'),
+        cancelButtonText: that.$t('admin.common.cancel'),
         type: 'warning'
       }).then(() => {
         that.config.tiers = [...that.defaultTiers];
@@ -235,14 +235,14 @@ export default {
 
 .config-tips {
   margin-top: 20px;
-  
+
   ul {
     margin: 10px 0 0 0;
     padding-left: 20px;
-    
+
     li {
       line-height: 1.8;
-      color: #606266;
+      color: var(--vk-text);
     }
   }
 }

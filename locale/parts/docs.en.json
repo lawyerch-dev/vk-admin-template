@@ -1,0 +1,13 @@
+{
+	"docs.help.title": "Help",
+	"docs.software.title": "Software",
+	"docs.table.title": "Tables",
+	"docs.crx.title": "Browser extensions",
+	"docs.loading": "Loading...",
+	"docs.loadFailed": "Failed to load. Please try again.",
+	"docs.retry": "Retry",
+	"home.muteTodayToast": "This dialog will stay hidden today",
+	"home.developing": "Coming soon...",
+	"home.defaultTitle": "Welcome to the AI Business Customization System!",
+	"home.defaultSubtitle": "Internal beta only. Public release coming soon."
+}

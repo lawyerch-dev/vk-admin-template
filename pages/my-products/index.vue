@@ -3,7 +3,7 @@
     <!-- 表格搜索组件 -->
     <vk-data-table-query
       v-model="queryForm1.formData"
-      :columns="queryForm1.columns"
+      :columns="queryColumns"
       @search="search"
     >
     </vk-data-table-query>
@@ -12,18 +12,18 @@
     <view class="tabs-wrapper">
       <el-tabs v-model="activeTab" @tab-click="handleTabChange">
         <el-tab-pane name="unpurchased">
-          <span slot="label" class="tab-label">
+          <view slot="label" class="tab-label">
             <i class="el-icon-star-on"></i>
-            全部产品
+            <text>{{ $t('myProducts.tabAll') }}</text>
             <el-badge :value="unpurchasedProducts.length" :max="99" class="tab-badge" />
-          </span>
+          </view>
         </el-tab-pane>
         <el-tab-pane name="purchased">
-          <span slot="label" class="tab-label">
+          <view slot="label" class="tab-label">
             <i class="el-icon-shopping-bag-2"></i>
-            我的产品
+            <text>{{ $t('myProducts.tabMine') }}</text>
             <el-badge :value="purchasedProducts.length" :max="99" class="tab-badge" type="success" />
-          </span>
+          </view>
         </el-tab-pane>
       </el-tabs>
     </view>
@@ -57,8 +57,8 @@
     <!-- 未购买产品空状态 -->
     <view v-if="activeTab === 'unpurchased' && unpurchasedProducts.length === 0" class="empty-state">
       <i class="el-icon-star-off"></i>
-      <p>暂无可购买的产品</p>
-      <p class="empty-tip">所有公开产品都已购买或暂无公开产品</p>
+      <text class="empty-text">{{ $t('myProducts.emptyUnpurchased') }}</text>
+      <text class="empty-tip">{{ $t('myProducts.emptyUnpurchasedTip') }}</text>
     </view>
 
     <!-- 已购买产品列表 -->
@@ -90,8 +90,8 @@
     <!-- 已购买产品空状态 -->
     <view v-if="activeTab === 'purchased' && purchasedProducts.length === 0" class="empty-state">
       <i class="el-icon-shopping-bag-1"></i>
-      <p>暂无已购买的产品</p>
-      <p class="empty-tip">去精选产品看看吧</p>
+      <text class="empty-text">{{ $t('myProducts.emptyPurchased') }}</text>
+      <text class="empty-tip">{{ $t('myProducts.emptyPurchasedTip') }}</text>
     </view>
 
     <!-- 版本日志弹窗 -->
@@ -100,31 +100,31 @@
       :title="versionDialog.title"
       width="700px"
     >
-      <div class="version-logs">
-        <div
+      <view class="version-logs">
+        <view
           v-for="(log, index) in versionDialog.logs"
           :key="index"
           class="version-log-item"
         >
-          <div class="version-header">
-            <el-tag type="primary" size="small">版本 {{ log.version }}</el-tag>
-            <span class="version-date">{{ formatDate(log.date) }}</span>
-          </div>
-          <div class="version-content">
-            <pre>{{ log.log }}</pre>
-          </div>
-          <div v-if="log.download_url" class="version-download">
+          <view class="version-header">
+            <el-tag type="primary" size="small">{{ $t('myProducts.versionLabel', { n: log.version }) }}</el-tag>
+            <text class="version-date">{{ formatDate(log.date) }}</text>
+          </view>
+          <view class="version-content">
+            <text class="version-log-text">{{ log.log }}</text>
+          </view>
+          <view v-if="log.download_url" class="version-download">
             <el-link
               :href="log.download_url"
               target="_blank"
               type="primary"
               icon="el-icon-download"
             >
-              下载此版本
+              {{ $t('myProducts.downloadVersion') }}
             </el-link>
-          </div>
-        </div>
-      </div>
+          </view>
+        </view>
+      </view>
     </el-dialog>
 
     <!-- 客服二维码弹窗 -->
@@ -150,26 +150,9 @@ export default {
       purchasedCurrentPage: 1, // 已购买产品当前页码
       pageSize: 9, // 每页显示数量
       loading: false,
+      categoryOptions: [], // 产品分类选项（从数据库动态加载）
       queryForm1: {
         formData: {},
-        columns: [
-          {
-            key: "product_name",
-            type: "text",
-            title: "产品名称",
-            placeholder: "请输入产品名称",
-            mode: "%%",
-            col: { span: 6 },
-          },
-          {
-            key: "product_type",
-            type: "select",
-            title: "产品类型",
-            placeholder: "选择类型",
-            data: [], // 从数据库动态加载
-            col: { span: 5 },
-          },
-        ],
       },
       versionDialog: {
         show: false,
@@ -184,6 +167,27 @@ export default {
   },
   computed: {
     allProducts() { return this.$store.state.$user.productList || []; },
+    // 搜索列（随语言切换响应式更新）
+    queryColumns() {
+      return [
+        {
+          key: "product_name",
+          type: "text",
+          title: this.$t('myProducts.fieldName'),
+          placeholder: this.$t('myProducts.fieldNamePlaceholder'),
+          mode: "%%",
+          col: { span: 6 },
+        },
+        {
+          key: "product_type",
+          type: "select",
+          title: this.$t('myProducts.fieldType'),
+          placeholder: this.$t('myProducts.fieldTypePlaceholder'),
+          data: this.categoryOptions,
+          col: { span: 5 },
+        },
+      ];
+    },
     // 未购买的产品列表（现在显示所有公开产品，包括已购买的）
     unpurchasedProducts() {
       const products = this.productList.filter(product => {
@@ -257,6 +261,9 @@ export default {
         url: "user/kh/getMyUserInfo",
         success: (data) => {
           that.userInfo = data.userInfo || {};
+        },
+        fail: (err) => {
+          vk.toast(err.msg || that.$t('myProducts.loadUserFailed'), "none");
         }
       });
     },
@@ -267,18 +274,14 @@ export default {
         data: {},
         success: (res) => {
           if (res.data && Array.isArray(res.data)) {
-            // 更新 queryForm1 中的 product_type data
-            const categoryColumn = that.queryForm1.columns.find(col => col.key === 'product_type');
-            if (categoryColumn) {
-              categoryColumn.data = res.data.map(item => ({
-                value: item.value,
-                label: item.label
-              }));
-            }
+            that.categoryOptions = res.data.map(item => ({
+              value: item.value,
+              label: item.label
+            }));
           }
         },
         fail: (err) => {
-          console.error('加载产品分类失败：', err);
+          vk.toast(err.msg || that.$t('myProducts.loadCategoryFailed'), "none");
         }
       });
     },
@@ -289,7 +292,7 @@ export default {
         await that.$store.dispatch('$user/loadProductList', { force: true });
         that.productList = [...that.allProducts];
       } catch (err) {
-        vk.toast(err.msg || "加载失败");
+        vk.toast(err.msg || that.$t('myProducts.loadFailed'));
       } finally {
         that.loading = false;
       }
@@ -355,10 +358,13 @@ export default {
     // 购买产品
     buyProduct(product) {
       vk.confirm(
-        `确认购买【${product.product_name}】吗？\n需要支付 ${product.buy_price} 积分`,
-        "购买确认",
-        "确定",
-        "取消",
+        that.$t('myProducts.buyConfirmMsg', {
+          name: product.product_name,
+          n: product.buy_price
+        }),
+        that.$t('myProducts.buyConfirmTitle'),
+        that.$t('common.ok'),
+        that.$t('common.cancel'),
         (res) => {
           if (res.confirm) {
             vk.callFunction({
@@ -367,14 +373,14 @@ export default {
                 product_id: product.product_id,
                 product_name: product.product_name,
               },
-              title: "购买中...",
+              title: that.$t('myProducts.buying'),
               success: (data) => {
-                vk.toast("购买成功！");
+                vk.toast(that.$t('myProducts.buySuccess'));
                 // 刷新产品列表
                 that.loadProducts();
               },
               fail: (err) => {
-                vk.toast(err.msg || "购买失败");
+                vk.toast(err.msg || that.$t('myProducts.buyFailed'));
               },
             });
           }
@@ -395,7 +401,7 @@ export default {
         uni.setClipboardData({
           data: product.download_url,
           success: () => {
-            vk.toast('下载地址已复制到剪贴板');
+            vk.toast(that.$t('myProducts.downloadCopied'));
           }
         });
         // #endif
@@ -405,12 +411,14 @@ export default {
     copyCode(text) {
       uni.setClipboardData({
         data: text,
-        success: () => vk.toast("复制成功")
+        success: () => vk.toast(that.$t('myProducts.copySuccess'))
       });
     },
     // 显示版本日志
     showVersionLogs(product) {
-      that.versionDialog.title = product.product_name + " - 版本更新日志";
+      that.versionDialog.title = that.$t('myProducts.versionLogsTitle', {
+        name: product.product_name
+      });
       that.versionDialog.logs = product.version_logs || [];
       that.versionDialog.show = true;
     },
@@ -418,7 +426,8 @@ export default {
     formatDate(timestamp) {
       if (!timestamp) return "";
       const date = new Date(timestamp);
-      return date.toLocaleDateString("zh-CN", {
+      const locale = (this.$getLocale && this.$getLocale() === 'en') ? 'en-US' : 'zh-CN';
+      return date.toLocaleDateString(locale, {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -449,25 +458,25 @@ export default {
 <style lang="scss" scoped>
 .page-body {
   padding: 24px;
-  background: #f9fafb;
+  background: var(--vk-bg, #f9fafb);
   min-height: 100vh;
 }
 
 // 搜索区域样式
 .search-section {
   margin-bottom: 20px;
-  background: #ffffff;
+  background: var(--vk-card, #ffffff);
   border-radius: 8px;
   padding: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--vk-border, #e5e7eb);
 }
 
 // 标签页样式
 .tabs-wrapper {
   margin-bottom: 24px;
-  background: #ffffff;
+  background: var(--vk-card, #ffffff);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--vk-border, #e5e7eb);
   padding: 0 20px;
 
   ::v-deep .el-tabs__header {
@@ -476,7 +485,7 @@ export default {
 
   ::v-deep .el-tabs__nav-wrap::after {
     height: 1px;
-    background-color: #e5e7eb;
+    background-color: var(--vk-border, #e5e7eb);
   }
 
   ::v-deep .el-tabs__nav {
@@ -494,21 +503,21 @@ export default {
     padding: 0 24px;
     height: 48px;
     line-height: 48px;
-    color: #6b7280;
+    color: var(--vk-text-secondary, #6b7280);
     transition: color 0.15s ease;
 
     &.is-active {
-      color: #111827;
+      color: var(--vk-text, #111827);
       font-weight: 600;
     }
 
     &:hover {
-      color: #111827;
+      color: var(--vk-text, #111827);
     }
   }
 
   ::v-deep .el-tabs__active-bar {
-    background-color: #111827;
+    background-color: var(--vk-primary, #111827);
     height: 2px;
   }
 
@@ -559,25 +568,27 @@ export default {
 .empty-state {
   text-align: center;
   padding: 64px 24px;
-  background: #ffffff;
+  background: var(--vk-card, #ffffff);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--vk-border, #e5e7eb);
 
   i {
     font-size: 48px;
-    color: #d1d5db;
+    color: var(--vk-text-muted, #d1d5db);
     margin-bottom: 16px;
   }
 
-  p {
+  .empty-text {
+    display: block;
     margin: 6px 0;
     font-size: 15px;
-    color: #374151;
+    color: var(--vk-text, #374151);
   }
 
   .empty-tip {
+    display: block;
     font-size: 13px;
-    color: #9ca3af;
+    color: var(--vk-text-secondary, #9ca3af);
     margin-top: 4px;
   }
 }
@@ -587,9 +598,9 @@ export default {
   display: flex;
   justify-content: center;
   padding: 16px;
-  background: #ffffff;
+  background: var(--vk-card, #ffffff);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--vk-border, #e5e7eb);
 }
 
 // 版本日志样式
@@ -597,9 +608,9 @@ export default {
   .version-log-item {
     margin-bottom: 12px;
     padding: 16px;
-    background: #f9fafb;
+    background: var(--vk-bg-muted, #f9fafb);
     border-radius: 8px;
-    border-left: 3px solid #111827;
+    border-left: 3px solid var(--vk-primary, #111827);
 
     &:last-child {
       margin-bottom: 0;
@@ -611,20 +622,21 @@ export default {
       justify-content: space-between;
       margin-bottom: 12px;
       padding-bottom: 10px;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--vk-border, #e5e7eb);
 
       .version-date {
         font-size: 12px;
-        color: #9ca3af;
+        color: var(--vk-text-secondary, #9ca3af);
       }
     }
 
     .version-content {
-      pre {
+      .version-log-text {
+        display: block;
         margin: 0;
         font-family: inherit;
         font-size: 13px;
-        color: #6b7280;
+        color: var(--vk-text-secondary, #6b7280);
         line-height: 1.6;
         white-space: pre-wrap;
         word-wrap: break-word;
@@ -634,10 +646,9 @@ export default {
     .version-download {
       margin-top: 12px;
       padding-top: 10px;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid var(--vk-border, #e5e7eb);
     }
   }
 }
 
 </style>
-

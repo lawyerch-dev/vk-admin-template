@@ -18,7 +18,7 @@
     <!-- 页面标题 -->
     <view class="page-header">
       <text class="page-header__title">{{ $t('products.title') }}</text>
-      <text class="page-header__sub">选择适合您的产品，提升工作效率</text>
+      <text class="page-header__sub">{{ $t('products.pageSubtitle') }}</text>
     </view>
 
     <!-- 产品分类筛选 -->
@@ -29,7 +29,7 @@
           :class="{ 'filter-tag--active': activeCategory === '' }"
           @click="activeCategory = ''"
         >
-          全部
+          {{ $t('products.all') }}
         </view>
         <view
           v-for="cat in categories"
@@ -47,13 +47,13 @@
     <view class="products-section">
       <view v-if="loading" class="loading-state">
         <i class="el-icon-loading"></i>
-        <text>加载中...</text>
+        <text>{{ $t('products.loading') }}</text>
       </view>
 
       <view v-else-if="filteredProducts.length === 0" class="empty-state">
         <i class="el-icon-goods"></i>
-        <text class="empty-state__text">暂无产品</text>
-        <text class="empty-state__tip">敬请期待</text>
+        <text class="empty-state__text">{{ $t('products.empty') }}</text>
+        <text class="empty-state__tip">{{ $t('products.emptyTip') }}</text>
       </view>
 
       <view v-else class="product-grid">
@@ -89,17 +89,17 @@
             <view class="product-card__pricing">
               <view class="pricing-item">
                 <text class="pricing-value">{{ product.price_points }}</text>
-                <text class="pricing-label">积分</text>
+                <text class="pricing-label">{{ $t('products.points') }}</text>
               </view>
               <text class="pricing-sep">×</text>
               <view class="pricing-item">
                 <text class="pricing-value">{{ product.price_months }}</text>
-                <text class="pricing-label">月</text>
+                <text class="pricing-label">{{ $t('products.month') }}</text>
               </view>
               <text class="pricing-sep">×</text>
               <view class="pricing-item">
                 <text class="pricing-value">{{ product.price_machines }}</text>
-                <text class="pricing-label">机器</text>
+                <text class="pricing-label">{{ $t('products.machine') }}</text>
               </view>
             </view>
 
@@ -111,7 +111,7 @@
                 @click="openDetail(product.detail_url)"
               >
                 <i class="el-icon-document"></i>
-                <text>查看详情</text>
+                <text>{{ $t('products.viewDetail') }}</text>
               </view>
               <view
                 class="action-btn action-btn--buy"
@@ -128,7 +128,7 @@
 
     <!-- 底部 -->
     <view class="footer">
-      <text class="footer__text">© 2024 AI 商务定制化平台</text>
+      <text class="footer__text">{{ $t('products.footer') }}</text>
     </view>
   </view>
 </template>
@@ -216,7 +216,7 @@ export default {
     // 获取类型标签
     getTypeLabel(type) {
       const found = this.categories.find(c => c.value === type);
-      return found ? found.label : type || $t('products.fallback');
+      return found ? found.label : type || this.$t('products.fallback');
     },
 
     // 打开详情文档
@@ -277,7 +277,7 @@ export default {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--vk-nav);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--vk-border);
 
@@ -596,12 +596,12 @@ export default {
   }
 
   &--detail {
-    background: #f0f9ff;
+    background: var(--vk-primary-soft);
     color: var(--vk-primary);
-    border: 1px solid #bfdbfe;
+    border: 1px solid var(--vk-primary-border);
 
     &:hover {
-      background: #dbeafe;
+      background: var(--vk-primary-light);
     }
   }
 

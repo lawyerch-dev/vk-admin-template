@@ -131,19 +131,19 @@ export default {
 		},
 		handleSubmit() {
 			if (!this.form.agreement) {
-				vk.toast('请同意用户协议', 'none');
+				vk.toast(this.$t('login.err.agree'), 'none');
 				return;
 			}
 			if (!this.form.username || this.form.username.trim() === '') {
-				vk.toast('请输入用户名', 'none');
+				vk.toast(this.$t('login.err.username'), 'none');
 				return;
 			}
 			if (!this.form.password || this.form.password.trim() === '') {
-				vk.toast('请输入密码', 'none');
+				vk.toast(this.$t('login.err.password'), 'none');
 				return;
 			}
 			if (!this.form.captcha || this.form.captcha.trim() === '') {
-				vk.toast('请输入验证码', 'none');
+				vk.toast(this.$t('login.err.captcha'), 'none');
 				return;
 			}
 
@@ -161,7 +161,7 @@ export default {
 					this.$emit('success', data);
 				},
 				fail: err => {
-					vk.toast(err.msg || err.message || "登录失败", "none");
+					vk.toast(err.msg || err.message || this.$t("login.err.loginFailed"), "none");
 				}
 			});
 		}

@@ -8,41 +8,41 @@
 	>
 		<!-- 卡密列 -->
 		<template v-slot:card_code="{ row }">
-			<div class="card-code-cell">
-				<span class="code-text">{{ row.card_code }}</span>
+			<view class="card-code-cell">
+				<text class="code-text">{{ row.card_code }}</text>
 				<el-button
 					type="text"
 					icon="el-icon-copy-document"
 					size="mini"
 					@click="$emit('copy', row.card_code)"
 					style="margin-left: 8px;"
-				>复制</el-button>
-			</div>
+				>{{ $t('userCenter.copy') }}</el-button>
+			</view>
 		</template>
 
 		<!-- 状态列 -->
 		<template v-slot:status="{ row }">
 			<el-tag :type="statusTypeMap[row.status] || 'info'" size="small">
-				{{ statusTextMap[row.status] || '未知' }}
+				{{ statusText(row.status) }}
 			</el-tag>
 		</template>
 
 		<!-- 产品类型列 -->
 		<template v-slot:product_type="{ row }">
 			<el-tag :type="row.product_type === 'software' ? 'primary' : 'success'" size="small">
-				{{ productTypeMap[row.product_type] || row.product_type }}
+				{{ productTypeText(row.product_type) }}
 			</el-tag>
 		</template>
 
 		<!-- 下载地址列 -->
 		<template v-slot:download_url="{ row }">
-			<div class="download-url-cell">
-				<div v-if="row.download_url" style="display: flex; gap: 5px;">
-					<el-button type="text" icon="el-icon-download" size="mini" @click="$emit('download', row.download_url)">下载</el-button>
-					<el-button type="text" icon="el-icon-copy-document" size="mini" @click="$emit('copy', row.download_url)">复制链接</el-button>
-				</div>
-				<span v-else style="color: #909399;">-</span>
-				<div v-if="row.latest_version" style="margin-top: 5px;">
+			<view class="download-url-cell">
+				<view v-if="row.download_url" class="download-actions">
+					<el-button type="text" icon="el-icon-download" size="mini" @click="$emit('download', row.download_url)">{{ $t('userCenter.download') }}</el-button>
+					<el-button type="text" icon="el-icon-copy-document" size="mini" @click="$emit('copy', row.download_url)">{{ $t('userCenter.copyLink') }}</el-button>
+				</view>
+				<text v-else class="empty-dash">-</text>
+				<view v-if="row.latest_version" class="version-row">
 					<el-tag size="mini" type="success">{{ row.latest_version }}</el-tag>
 					<el-button
 						v-if="row.version_logs && row.version_logs.length > 0"
@@ -50,29 +50,47 @@
 						size="mini"
 						@click="$emit('show-version-logs', row)"
 						style="padding: 0 5px;"
-					>查看更新</el-button>
-				</div>
-			</div>
+					>{{ $t('userCenter.viewUpdates') }}</el-button>
+				</view>
+			</view>
 		</template>
 	</vk-data-table>
 </template>
 
 <script>
-import { cardsTableColumns, statusTypeMap, statusTextMap, productTypeMap } from '../user-center-config.js';
+import {
+	cardsTableColumns,
+	statusTypeMap,
+	statusTextKeyMap,
+	productTypeKeyMap
+} from '../user-center-config.js';
 
 export default {
 	data() {
 		return {
 			action: "admin/card/kh/getMyCards",
-			columns: cardsTableColumns,
-			statusTypeMap,
-			statusTextMap,
-			productTypeMap
+			statusTypeMap
 		};
+	},
+	computed: {
+		columns() {
+			return cardsTableColumns.map(col => ({
+				...col,
+				title: this.$t(col.titleKey)
+			}));
+		}
 	},
 	methods: {
 		refresh() {
 			this.$refs.table && this.$refs.table.refresh();
+		},
+		statusText(status) {
+			const key = statusTextKeyMap[status];
+			return key ? this.$t(key) : this.$t('userCenter.unknown');
+		},
+		productTypeText(type) {
+			const key = productTypeKeyMap[type];
+			return key ? this.$t(key) : (type || this.$t('userCenter.unknown'));
 		}
 	}
 };
@@ -85,13 +103,26 @@ export default {
 	gap: 5px;
 }
 
+.download-actions {
+	display: flex;
+	gap: 5px;
+}
+
+.empty-dash {
+	color: var(--vk-text-secondary, #64748b);
+}
+
+.version-row {
+	margin-top: 5px;
+}
+
 .card-code-cell {
 	display: flex;
 	align-items: center;
 
 	.code-text {
 		font-family: 'Courier New', monospace;
-		color: #303133;
+		color: var(--vk-text, #1e293b);
 	}
 }
 </style>

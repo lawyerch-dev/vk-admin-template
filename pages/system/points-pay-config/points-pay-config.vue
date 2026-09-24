@@ -2,15 +2,15 @@
 	<view class="points-pay-config">
 		<!-- 配置说明 -->
 		<div class="config-tips">
-			<el-alert title="配置说明" type="info" :closable="false" show-icon>
+			<el-alert :title="$t('admin.common.configTips')" type="info" :closable="false" show-icon>
 				<ul>
-					<li>默认预设「链动小店」（pay.ldxp.cn），新增店铺以此为模板</li>
-					<li>选中哪个店铺，购买积分页与自助修复就使用哪个店铺的网关和套餐</li>
-					<li>每个店铺自带一套套餐（含该平台商品key），店铺之间相互独立</li>
-					<li>店铺列表点「选择」→ 该店铺成为当前店铺，下方显示其网关与套餐供编辑</li>
-					<li>接口路径一般保持默认（同套软件），换不同平台接口才需要修改</li>
-					<li>商户API账号/密码仅用于「自助修复」查单，不会暴露给前端用户</li>
-					<li>保存后立即生效，无需改代码</li>
+					<li>{{ $t('admin.pointsPay.tip1') }}</li>
+					<li>{{ $t('admin.pointsPay.tip2') }}</li>
+					<li>{{ $t('admin.pointsPay.tip3') }}</li>
+					<li>{{ $t('admin.pointsPay.tip4') }}</li>
+					<li>{{ $t('admin.pointsPay.tip5') }}</li>
+					<li>{{ $t('admin.pointsPay.tip6') }}</li>
+					<li>{{ $t('admin.pointsPay.tip7') }}</li>
 				</ul>
 			</el-alert>
 		</div>
@@ -18,8 +18,8 @@
 		<!-- 店铺列表 -->
 		<el-card class="config-card">
 			<div slot="header" class="card-header">
-				<span>店铺列表</span>
-				<el-button type="primary" icon="el-icon-plus" size="small" @click="addStore">新增店铺</el-button>
+				<span>{{ $t('admin.pointsPay.storeList') }}</span>
+				<el-button type="primary" icon="el-icon-plus" size="small" @click="addStore">{{ $t('admin.pointsPay.addStore') }}</el-button>
 			</div>
 			<el-table
 				:data="stores"
@@ -29,20 +29,20 @@
 				:row-class-name="rowClassName"
 				@row-click="selectStore"
 			>
-				<el-table-column prop="name" label="店铺名称" min-width="160">
+				<el-table-column prop="name" :label="$t('admin.pointsPay.colStoreName')" min-width="160">
 					<template slot-scope="{ row }">
 						{{ row.name }}
-						<el-tag v-if="row.store_id === selected_store_id" type="success" size="mini" style="margin-left: 6px">当前</el-tag>
+						<el-tag v-if="row.store_id === selected_store_id" type="success" size="mini" style="margin-left: 6px">{{ $t('admin.pointsPay.currentTag') }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="base_url" label="网关地址" min-width="220"></el-table-column>
-				<el-table-column label="操作" width="180" align="center">
+				<el-table-column prop="base_url" :label="$t('admin.pointsPay.colGateway')" min-width="220"></el-table-column>
+				<el-table-column :label="$t('admin.common.action')" width="180" align="center">
 					<template slot-scope="{ row }">
 						<el-button
 							size="mini"
 							:type="row.store_id === selected_store_id ? 'primary' : 'default'"
 							@click.stop="selectStore(row)"
-						>{{ row.store_id === selected_store_id ? '已选择' : '选择' }}</el-button>
+						>{{ row.store_id === selected_store_id ? $t('admin.pointsPay.selected') : $t('admin.pointsPay.select') }}</el-button>
 						<el-button
 							size="mini"
 							type="danger"
@@ -53,102 +53,102 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<div class="tip-line">点击店铺行或「选择」按钮会弹出二次确认，确认后切换当前店铺；下方显示该店铺的网关与套餐，编辑后点「保存配置」生效。</div>
+			<div class="tip-line">{{ $t('admin.pointsPay.storeTipLine') }}</div>
 		</el-card>
 
 		<!-- 当前选中店铺的完整配置 -->
 		<el-card class="config-card" v-if="selectedStore">
 			<div slot="header" class="card-header">
-				<span>当前店铺：{{ selectedStore.name }}</span>
+				<span>{{ $t('admin.pointsPay.currentStore', { name: selectedStore.name }) }}</span>
 			</div>
 			<el-form :model="selectedStore" label-width="150px" label-position="right">
-				<el-form-item label="店铺名称">
-					<el-input v-model="selectedStore.name" placeholder="店铺显示名"></el-input>
+				<el-form-item :label="$t('admin.pointsPay.colStoreName')">
+					<el-input v-model="selectedStore.name" :placeholder="$t('admin.pointsPay.namePlaceholder')"></el-input>
 				</el-form-item>
-				<el-form-item label="支付网关地址">
-					<el-input v-model="selectedStore.base_url" placeholder="如 https://yunxiangit.com.cn"></el-input>
+				<el-form-item :label="$t('admin.pointsPay.fieldGateway')">
+					<el-input v-model="selectedStore.base_url" :placeholder="$t('admin.pointsPay.gatewayPlaceholder')"></el-input>
 				</el-form-item>
-				<el-form-item label="支付通道ID">
+				<el-form-item :label="$t('admin.pointsPay.fieldChannel')">
 					<el-input-number v-model="selectedStore.channel_id" :min="1" :max="999" size="small"></el-input-number>
-					<span style="margin-left: 8px; color: #909399; font-size: 12px;">创建订单时传给网关的 channel_id</span>
+					<span style="margin-left: 8px; color: var(--vk-text-secondary, #64748b); font-size: 12px;">{{ $t('admin.pointsPay.channelTip') }}</span>
 				</el-form-item>
-				<el-form-item label="查询密码">
-					<el-input v-model="selectedStore.query_password" placeholder="按需填写，通常留空"></el-input>
+				<el-form-item :label="$t('admin.pointsPay.fieldQueryPassword')">
+					<el-input v-model="selectedStore.query_password" :placeholder="$t('admin.pointsPay.queryPasswordPlaceholder')"></el-input>
 				</el-form-item>
 			</el-form>
 
 			<el-card class="inner-card">
-				<div slot="header">接口路径（一般保持默认）</div>
+				<div slot="header">{{ $t('admin.pointsPay.apiPathsHeader') }}</div>
 				<el-form :model="selectedStore" label-width="150px" label-position="right">
-					<el-form-item label="创建订单接口">
+					<el-form-item :label="$t('admin.pointsPay.fieldPayOrder')">
 						<el-input v-model="selectedStore.pay_order_path" placeholder="/shopApi/Pay/order"></el-input>
 					</el-form-item>
-					<el-form-item label="查询订单接口">
+					<el-form-item :label="$t('admin.pointsPay.fieldPayQuery')">
 						<el-input v-model="selectedStore.pay_query_path" placeholder="/shopApi/Pay/query"></el-input>
 					</el-form-item>
-					<el-form-item label="商户登录接口">
+					<el-form-item :label="$t('admin.pointsPay.fieldMerchantLogin')">
 						<el-input v-model="selectedStore.merchant_login_path" placeholder="/merchantApi/user/login"></el-input>
 					</el-form-item>
-					<el-form-item label="商户订单详情接口">
+					<el-form-item :label="$t('admin.pointsPay.fieldMerchantOrder')">
 						<el-input v-model="selectedStore.merchant_order_info_path" placeholder="/merchantApi/Order/orderInfo"></el-input>
 					</el-form-item>
 				</el-form>
 			</el-card>
 
 			<el-card class="inner-card">
-				<div slot="header">商户凭证（自助修复查单用）</div>
+				<div slot="header">{{ $t('admin.pointsPay.merchantCredsHeader') }}</div>
 				<el-form :model="selectedStore" label-width="150px" label-position="right">
-					<el-form-item label="商户API账号">
-						<el-input v-model="selectedStore.merchant_user" placeholder="必填，自助修复查单用"></el-input>
+					<el-form-item :label="$t('admin.pointsPay.fieldMerchantUser')">
+						<el-input v-model="selectedStore.merchant_user" :placeholder="$t('admin.pointsPay.merchantUserPlaceholder')"></el-input>
 					</el-form-item>
-					<el-form-item label="商户API密码">
-						<el-input v-model="selectedStore.merchant_pass" type="password" show-password placeholder="必填，自助修复查单用"></el-input>
+					<el-form-item :label="$t('admin.pointsPay.fieldMerchantPass')">
+						<el-input v-model="selectedStore.merchant_pass" type="password" show-password :placeholder="$t('admin.pointsPay.merchantPassPlaceholder')"></el-input>
 					</el-form-item>
 				</el-form>
 			</el-card>
 
 			<!-- 该店铺自己的套餐（含商品key） -->
 			<div class="sub-header">
-				<span>本店铺套餐</span>
-				<el-button type="primary" icon="el-icon-plus" size="small" @click="addPackage">新增套餐</el-button>
+				<span>{{ $t('admin.pointsPay.packagesHeader') }}</span>
+				<el-button type="primary" icon="el-icon-plus" size="small" @click="addPackage">{{ $t('admin.pointsPay.addPackage') }}</el-button>
 			</div>
 			<el-table :data="selectedStore.packages" style="width: 100%" border>
-				<el-table-column label="套餐名称" min-width="150">
+				<el-table-column :label="$t('admin.pointsPay.colPackageName')" min-width="150">
 					<template slot-scope="{ row }">
-						<el-input v-model="row.name" size="small" placeholder="如 体验套餐（10积分）"></el-input>
+						<el-input v-model="row.name" size="small" :placeholder="$t('admin.pointsPay.packageNamePlaceholder')"></el-input>
 					</template>
 				</el-table-column>
-				<el-table-column label="积分" width="95" align="center">
+				<el-table-column :label="$t('admin.pointsPay.colPoints')" width="95" align="center">
 					<template slot-scope="{ row }">
 						<el-input-number v-model="row.points" :min="1" size="small"></el-input-number>
 					</template>
 				</el-table-column>
-				<el-table-column label="价格(¥)" width="105" align="center">
+				<el-table-column :label="$t('admin.pointsPay.colPrice')" width="105" align="center">
 					<template slot-scope="{ row }">
 						<el-input-number v-model="row.price" :min="0" size="small"></el-input-number>
 					</template>
 				</el-table-column>
-				<el-table-column label="折扣" width="100">
+				<el-table-column :label="$t('admin.pointsPay.colDiscount')" width="100">
 					<template slot-scope="{ row }">
-						<el-input v-model="row.discount" size="small" placeholder="省5元"></el-input>
+						<el-input v-model="row.discount" size="small" :placeholder="$t('admin.pointsPay.discountPlaceholder')"></el-input>
 					</template>
 				</el-table-column>
-				<el-table-column label="推荐" width="75" align="center">
+				<el-table-column :label="$t('admin.pointsPay.colRecommended')" width="75" align="center">
 					<template slot-scope="{ row }">
 						<el-switch v-model="row.recommended"></el-switch>
 					</template>
 				</el-table-column>
-				<el-table-column label="说明" min-width="120">
+				<el-table-column :label="$t('admin.pointsPay.colDesc')" min-width="120">
 					<template slot-scope="{ row }">
-						<el-input v-model="row.description" size="small" placeholder="套餐说明"></el-input>
+						<el-input v-model="row.description" size="small" :placeholder="$t('admin.pointsPay.descPlaceholder')"></el-input>
 					</template>
 				</el-table-column>
-				<el-table-column label="商品key" min-width="140" align="center">
+				<el-table-column :label="$t('admin.pointsPay.colGoodsKey')" min-width="140" align="center">
 					<template slot-scope="{ row }">
-						<el-input v-model="row.goods_key" size="small" placeholder="如 t1hw3w"></el-input>
+						<el-input v-model="row.goods_key" size="small" :placeholder="$t('admin.pointsPay.goodsKeyPlaceholder')"></el-input>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="80" align="center">
+				<el-table-column :label="$t('admin.common.action')" width="80" align="center">
 					<template slot-scope="{ $index }">
 						<el-button size="mini" type="danger" icon="el-icon-delete" circle :disabled="selectedStore.packages.length <= 1" @click="removePackage($index)"></el-button>
 					</template>
@@ -159,7 +159,7 @@
 		<!-- 操作按钮 -->
 		<div class="action-bar">
 			<el-button type="primary" icon="el-icon-check" size="small" @click="saveConfig" :loading="saving">
-				保存配置
+				{{ $t('admin.pointsPay.saveConfig') }}
 			</el-button>
 		</div>
 	</view>
@@ -198,7 +198,7 @@ export default {
 				},
 				fail: (err) => {
 					console.error('加载支付配置失败：', err);
-					vk.toast('加载配置失败');
+					vk.toast(err.msg || err.message || that.$t('admin.common.loadFailed'), 'none');
 				}
 			});
 		},
@@ -208,17 +208,17 @@ export default {
 			// 如果点击的是当前店铺，不需要切换
 			if (store.store_id === that.selected_store_id) return;
 			that.$confirm(
-				`确定切换到店铺「${store.name}」吗？\n切换后前端购买积分和自助修复将使用该店铺的网关。`,
-				'切换店铺确认',
+				that.$t('admin.pointsPay.switchConfirm', { name: store.name }),
+				that.$t('admin.pointsPay.switchTitle'),
 				{
-					confirmButtonText: '确定切换',
-					cancelButtonText: '取消',
+					confirmButtonText: that.$t('admin.pointsPay.switchOk'),
+					cancelButtonText: that.$t('admin.common.cancel'),
 					type: 'warning'
 				}
 			).then(() => {
 				that.selected_store_id = store.store_id;
 				that.selectedStore = that.stores.find(s => s.store_id === store.store_id) || null;
-				vk.toast('已切换，记得保存配置生效');
+				vk.toast(that.$t('admin.pointsPay.switchedToast'));
 			}).catch(() => {});
 		},
 		// 行高亮当前店铺
@@ -230,16 +230,16 @@ export default {
 			const store_id = 'store_' + Date.now();
 			// 链动小店预设套餐模板
 			const ldxpPackages = [
-				{ id: 1, name: '体验卡（10积分）', points: 10, price: 10, discount: '', description: '适合新手体验', recommended: false, goods_key: '1eoood' },
-				{ id: 2, name: '基础套餐（50积分）', points: 50, price: 45, discount: '省5元', description: '性价比之选', recommended: false, goods_key: '3x529g' },
-				{ id: 3, name: '超值套餐（100积分）', points: 100, price: 90, discount: '省10元', description: '最受欢迎', recommended: true, goods_key: '5jrm9q' },
-				{ id: 4, name: '豪华套餐（300积分）', points: 300, price: 270, discount: '省30元', description: '超值优惠', recommended: false, goods_key: 'ici991' },
-				{ id: 5, name: '至尊套餐（500积分）', points: 500, price: 450, discount: '省50元', description: '刚需必选', recommended: false, goods_key: '2d0h8p' },
-				{ id: 6, name: '终极套餐（1000积分）', points: 1000, price: 900, discount: '省100元', description: '土豪专属', recommended: false, goods_key: 'et8wmn' }
+				{ id: 1, name: that.$t('admin.pointsPay.pkgTrial'), points: 10, price: 10, discount: '', description: that.$t('admin.pointsPay.pkgTrialDesc'), recommended: false, goods_key: '1eoood' },
+				{ id: 2, name: that.$t('admin.pointsPay.pkgBasic'), points: 50, price: 45, discount: that.$t('admin.pointsPay.pkgBasicDiscount'), description: that.$t('admin.pointsPay.pkgBasicDesc'), recommended: false, goods_key: '3x529g' },
+				{ id: 3, name: that.$t('admin.pointsPay.pkgValue'), points: 100, price: 90, discount: that.$t('admin.pointsPay.pkgValueDiscount'), description: that.$t('admin.pointsPay.pkgValueDesc'), recommended: true, goods_key: '5jrm9q' },
+				{ id: 4, name: that.$t('admin.pointsPay.pkgDeluxe'), points: 300, price: 270, discount: that.$t('admin.pointsPay.pkgDeluxeDiscount'), description: that.$t('admin.pointsPay.pkgDeluxeDesc'), recommended: false, goods_key: 'ici991' },
+				{ id: 5, name: that.$t('admin.pointsPay.pkgPremium'), points: 500, price: 450, discount: that.$t('admin.pointsPay.pkgPremiumDiscount'), description: that.$t('admin.pointsPay.pkgPremiumDesc'), recommended: false, goods_key: '2d0h8p' },
+				{ id: 6, name: that.$t('admin.pointsPay.pkgUltimate'), points: 1000, price: 900, discount: that.$t('admin.pointsPay.pkgUltimateDiscount'), description: that.$t('admin.pointsPay.pkgUltimateDesc'), recommended: false, goods_key: 'et8wmn' }
 			];
 			that.stores.push({
 				store_id,
-				name: '新店铺',
+				name: that.$t('admin.pointsPay.newStoreName'),
 				base_url: 'https://pay.ldxp.cn',  // 链动小店
 				channel_id: 4,                    // 链动小店默认通道
 				query_password: '',
@@ -256,18 +256,22 @@ export default {
 		// 删除店铺
 		removeStore(store_id) {
 			const store = that.stores.find(s => s.store_id === store_id);
-			that.$confirm(`确定删除店铺「${store ? store.name : ''}」吗？`, '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
+			that.$confirm(
+				that.$t('admin.pointsPay.removeStoreConfirm', { name: store ? store.name : '' }),
+				that.$t('admin.common.confirm'),
+				{
+					confirmButtonText: that.$t('admin.common.ok'),
+					cancelButtonText: that.$t('admin.common.cancel'),
+					type: 'warning'
+				}
+			).then(() => {
 				const idx = that.stores.findIndex(s => s.store_id === store_id);
 				if (idx > -1) that.stores.splice(idx, 1);
 				if (that.selected_store_id === store_id) {
 					if (that.stores.length) {
 						that.selected_store_id = that.stores[0].store_id;
 						that.selectedStore = that.stores[0];
-						vk.toast(`已自动切换到「${that.stores[0].name}」`);
+						vk.toast(that.$t('admin.pointsPay.autoSwitched', { name: that.stores[0].name }));
 					} else {
 						that.selected_store_id = '';
 						that.selectedStore = null;
@@ -280,7 +284,7 @@ export default {
 			const nextId = that.selectedStore.packages.reduce((max, p) => Math.max(max, p.id || 0), 0) + 1;
 			that.selectedStore.packages.push({
 				id: nextId,
-				name: '新套餐',
+				name: that.$t('admin.pointsPay.newPackageName'),
 				points: 0,
 				price: 0,
 				discount: '',
@@ -292,7 +296,7 @@ export default {
 		// 删除套餐
 		removePackage(index) {
 			if (that.selectedStore.packages.length <= 1) {
-				vk.toast('至少保留一个套餐');
+				vk.toast(that.$t('admin.pointsPay.keepOnePackage'));
 				return;
 			}
 			that.selectedStore.packages.splice(index, 1);
@@ -300,55 +304,55 @@ export default {
 		// 保存配置
 		saveConfig() {
 			if (!that.stores.length) {
-				vk.toast('请至少保留一个店铺');
+				vk.toast(that.$t('admin.pointsPay.keepOneStore'));
 				return;
 			}
 			if (!that.selected_store_id || !that.stores.some(s => s.store_id === that.selected_store_id)) {
-				vk.toast('当前店铺无效');
+				vk.toast(that.$t('admin.pointsPay.invalidStore'));
 				return;
 			}
 			for (const s of that.stores) {
 				if (!s.base_url || !/^https?:\/\//.test(s.base_url)) {
-					vk.toast(`店铺「${s.name}」的网关地址必须以 http(s):// 开头`);
+					vk.toast(that.$t('admin.pointsPay.errGateway', { name: s.name }));
 					return;
 				}
 				if (!s.channel_id || s.channel_id <= 0) {
-					vk.toast(`店铺「${s.name}」的支付通道ID必须是正整数`);
+					vk.toast(that.$t('admin.pointsPay.errChannel', { name: s.name }));
 					return;
 				}
 				if (!s.merchant_user || !String(s.merchant_user).trim()) {
-					vk.toast(`店铺「${s.name}」的商户API账号不能为空`);
+					vk.toast(that.$t('admin.pointsPay.errMerchantUser', { name: s.name }));
 					return;
 				}
 				if (!s.merchant_pass || !String(s.merchant_pass).trim()) {
-					vk.toast(`店铺「${s.name}」的商户API密码不能为空`);
+					vk.toast(that.$t('admin.pointsPay.errMerchantPass', { name: s.name }));
 					return;
 				}
 				if (!s.packages || !s.packages.length) {
-					vk.toast(`店铺「${s.name}」至少需要一个套餐`);
+					vk.toast(that.$t('admin.pointsPay.errNeedPackage', { name: s.name }));
 					return;
 				}
 				const ids = new Set();
 				for (const p of s.packages) {
 					if (!p.id || ids.has(p.id)) {
-						vk.toast(`店铺「${s.name}」的套餐标识重复或为空`);
+						vk.toast(that.$t('admin.pointsPay.errPackageId', { name: s.name }));
 						return;
 					}
 					ids.add(p.id);
 					if (!p.name || !String(p.name).trim()) {
-						vk.toast(`店铺「${s.name}」套餐 ${p.id} 的名称不能为空`);
+						vk.toast(that.$t('admin.pointsPay.errPackageName', { name: s.name, id: p.id }));
 						return;
 					}
 					if (!p.points || Number(p.points) <= 0) {
-						vk.toast(`店铺「${s.name}」套餐「${p.name}」的积分必须为正数`);
+						vk.toast(that.$t('admin.pointsPay.errPackagePoints', { name: s.name, pkg: p.name }));
 						return;
 					}
 					if (Number(p.price) < 0) {
-						vk.toast(`店铺「${s.name}」套餐「${p.name}」的价格不能为负数`);
+						vk.toast(that.$t('admin.pointsPay.errPackagePrice', { name: s.name, pkg: p.name }));
 						return;
 					}
 					if (!p.goods_key || !String(p.goods_key).trim()) {
-						vk.toast(`店铺「${s.name}」套餐「${p.name}」的商品key不能为空`);
+						vk.toast(that.$t('admin.pointsPay.errGoodsKey', { name: s.name, pkg: p.name }));
 						return;
 					}
 				}
@@ -362,11 +366,11 @@ export default {
 					stores: that.stores
 				},
 				success: () => {
-					vk.toast('保存成功');
+					vk.toast(that.$t('admin.common.saved'));
 					that.loadConfig();
 				},
 				fail: (err) => {
-					vk.toast(err.msg || '保存失败');
+					vk.toast(err.msg || err.message || that.$t('admin.common.saveFailed'), 'none');
 				},
 				complete: () => {
 					that.saving = false;
@@ -402,18 +406,18 @@ export default {
 	align-items: center;
 	margin: 20px 0 10px 0;
 	font-weight: bold;
-	color: #303133;
+	color: var(--vk-text);
 }
 
 .tip-line {
 	margin-top: 8px;
-	color: #909399;
+	color: var(--vk-text-secondary, #64748b);
 	font-size: 12px;
 	line-height: 1.6;
 }
 
 .current-store-row {
-	background: #ecf5ff;
+	background: var(--vk-bg-secondary);
 }
 
 .action-bar {
@@ -427,7 +431,7 @@ export default {
 
 		li {
 			line-height: 1.8;
-			color: #606266;
+			color: var(--vk-text);
 		}
 	}
 }

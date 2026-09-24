@@ -1,0 +1,13 @@
+{
+	"docs.help.title": "使用帮助",
+	"docs.software.title": "定制软件",
+	"docs.table.title": "定制多维表",
+	"docs.crx.title": "浏览器插件",
+	"docs.loading": "加载中...",
+	"docs.loadFailed": "加载失败，请稍后重试",
+	"docs.retry": "重试",
+	"home.muteTodayToast": "今日将不再显示此弹窗",
+	"home.developing": "功能开发中...",
+	"home.defaultTitle": "欢迎来到AI自动化商务定制系统！",
+	"home.defaultSubtitle": "本系统仅用于定制用户内测使用，公开版敬请期待~"
+}

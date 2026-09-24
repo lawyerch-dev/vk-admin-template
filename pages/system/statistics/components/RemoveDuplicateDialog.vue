@@ -1,27 +1,27 @@
 <template>
   <el-dialog
-    title="清理重复卡密"
+    :title="$t('admin.stats.dedup.title')"
     :visible.sync="visible"
     width="800px"
     :close-on-click-modal="false"
   >
     <div style="margin-bottom: 20px;">
       <el-alert
-        title="此功能用于清理数据库中重复的卡密记录，只保留最新的一条"
+        :title="$t('admin.stats.dedup.alertTitle')"
         type="info"
         show-icon
         :closable="false"
       >
         <div style="margin-top: 5px;">
-          建议先使用预览模式查看重复情况，确认无误后再执行删除操作。
+          {{ $t('admin.stats.dedup.alertDesc') }}
         </div>
       </el-alert>
     </div>
 
     <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
       <el-radio-group v-model="dryRun" :disabled="loading || deleting">
-        <el-radio-button :label="true">预览模式</el-radio-button>
-        <el-radio-button :label="false">删除模式</el-radio-button>
+        <el-radio-button :label="true">{{ $t('admin.stats.dedup.previewMode') }}</el-radio-button>
+        <el-radio-button :label="false">{{ $t('admin.stats.dedup.deleteMode') }}</el-radio-button>
       </el-radio-group>
       <el-button
         type="primary"
@@ -29,27 +29,27 @@
         :loading="loading"
         :disabled="deleting"
       >
-        <i class="el-icon-search"></i> 开始扫描
+        <i class="el-icon-search"></i> {{ $t('admin.stats.dedup.startScan') }}
       </el-button>
     </div>
 
     <div v-if="loading" class="detail-loading">
-      <i class="el-icon-loading"></i> 正在扫描数据库...
+      <i class="el-icon-loading"></i> {{ $t('admin.stats.dedup.scanning') }}
     </div>
 
     <div v-else-if="result">
       <!-- 扫描结果摘要 -->
       <el-card shadow="never" style="margin-bottom: 15px;">
-        <div slot="header" style="font-weight: 500;">扫描结果</div>
+        <div slot="header" style="font-weight: 500;">{{ $t('admin.stats.dedup.scanResult') }}</div>
         <el-descriptions :column="3" border size="small">
-          <el-descriptions-item label="总记录数">{{ result.total }}</el-descriptions-item>
-          <el-descriptions-item label="唯一编码数">{{ result.unique_codes }}</el-descriptions-item>
-          <el-descriptions-item label="重复编码数">
+          <el-descriptions-item :label="$t('admin.stats.dedup.totalRecords')">{{ result.total }}</el-descriptions-item>
+          <el-descriptions-item :label="$t('admin.stats.dedup.uniqueCodes')">{{ result.unique_codes }}</el-descriptions-item>
+          <el-descriptions-item :label="$t('admin.stats.dedup.duplicateCodes')">
             <span :style="{ color: result.duplicates_count > 0 ? '#F56C6C' : '#67C23A', fontWeight: 'bold' }">
               {{ result.duplicates_count }}
             </span>
           </el-descriptions-item>
-          <el-descriptions-item label="待删除记录数" :span="3">
+          <el-descriptions-item :label="$t('admin.stats.dedup.toDelete')" :span="3">
             <span :style="{ color: result.to_delete_count > 0 ? '#F56C6C' : '#67C23A', fontWeight: 'bold' }">
               {{ result.to_delete_count }}
             </span>
@@ -59,27 +59,27 @@
 
       <!-- 重复详情列表 -->
       <el-card shadow="never" v-if="result.details && result.details.length > 0">
-        <div slot="header" style="font-weight: 500;">重复详情（前10条）</div>
+        <div slot="header" style="font-weight: 500;">{{ $t('admin.stats.dedup.detailHeader') }}</div>
         <el-table :data="result.details" border stripe size="small" max-height="300">
-          <el-table-column prop="card_code" label="卡密编码" width="200">
+          <el-table-column prop="card_code" :label="$t('admin.stats.dedup.colCode')" width="200">
             <template slot-scope="scope">
               <span style="font-family: monospace; font-weight: 500;">{{ scope.row.card_code }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="count" label="重复数量" width="100" align="center">
+          <el-table-column prop="count" :label="$t('admin.stats.dedup.colCount')" width="100" align="center">
             <template slot-scope="scope">
-              <el-tag type="danger" size="mini">{{ scope.row.count }} 条</el-tag>
+              <el-tag type="danger" size="mini">{{ $t('admin.stats.dedup.countUnit', { n: scope.row.count }) }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="保留记录" min-width="200">
+          <el-table-column :label="$t('admin.stats.dedup.colKeep')" min-width="200">
             <template slot-scope="scope">
               <div style="font-size: 12px;">
                 <div>ID: {{ scope.row.keep._id }}</div>
-                <div style="color: #909399;">时间: {{ formatTime(scope.row.keep._add_time) }}</div>
+                <div style="color: var(--vk-text-secondary, #64748b);">{{ $t('admin.stats.dedup.timeLabel') }} {{ formatTime(scope.row.keep._add_time) }}</div>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="待删除" min-width="200">
+          <el-table-column :label="$t('admin.stats.dedup.colDelete')" min-width="200">
             <template slot-scope="scope">
               <div style="font-size: 12px;">
                 <div v-for="(del, idx) in scope.row.delete_list" :key="idx" style="margin-bottom: 4px;">
@@ -99,18 +99,18 @@
           @click="executeRemoveDuplicateCards"
           :loading="deleting"
         >
-          <i class="el-icon-delete"></i> 确认删除 {{ result.to_delete_count }} 条重复记录
+          <i class="el-icon-delete"></i> {{ $t('admin.stats.dedup.confirmDelete', { n: result.to_delete_count }) }}
         </el-button>
       </div>
     </div>
 
-    <div v-else style="text-align: center; padding: 40px; color: #909399;">
+    <div v-else style="text-align: center; padding: 40px; color: var(--vk-text-secondary, #64748b);">
       <i class="el-icon-info" style="font-size: 48px; margin-bottom: 10px;"></i>
-      <div>请选择模式后点击"开始扫描"</div>
+      <div>{{ $t('admin.stats.dedup.selectModeHint') }}</div>
     </div>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">关 闭</el-button>
+      <el-button @click="visible = false">{{ $t('admin.common.close') }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -151,16 +151,16 @@ export default {
         if (res.code === 0) {
           this.result = res.data;
           if (this.dryRun) {
-            vk.toast(`预览完成，发现 ${res.data.duplicates_count || 0} 个重复编码`, 'info');
+            vk.toast(this.$t('admin.stats.dedup.previewDone', { n: res.data.duplicates_count || 0 }), 'info');
           } else {
             vk.toast(res.msg, 'success');
           }
         } else {
-          vk.toast(res.msg || '扫描失败');
+          vk.toast(res.msg || this.$t('admin.stats.dedup.scanFailed'), 'none');
         }
       } catch (err) {
         console.error('扫描重复卡密失败：', err);
-        vk.toast('扫描失败：' + (err.message || '未知错误'));
+        vk.toast(this.$t('admin.stats.dedup.scanFailed') + '：' + (err.message || this.$t('admin.common.unknownError')), 'none');
       } finally {
         this.loading = false;
       }
@@ -170,11 +170,11 @@ export default {
       if (toDeleteCount === 0) return;
       try {
         await this.$confirm(
-          `确定要删除 ${toDeleteCount} 条重复卡密记录吗？\n此操作不可恢复，请谨慎操作！`,
-          '确认删除',
+          this.$t('admin.stats.dedup.deleteConfirm', { n: toDeleteCount }),
+          this.$t('admin.stats.dedup.deleteTitle'),
           {
-            confirmButtonText: '确定删除',
-            cancelButtonText: '取消',
+            confirmButtonText: this.$t('admin.stats.dedup.deleteOk'),
+            cancelButtonText: this.$t('admin.common.cancel'),
             type: 'danger',
           }
         );
@@ -194,11 +194,11 @@ export default {
             this.scanDuplicateCards();
           }, 500);
         } else {
-          vk.toast(res.msg || '删除失败');
+          vk.toast(res.msg || this.$t('admin.stats.dedup.deleteFailed'), 'none');
         }
       } catch (err) {
         console.error('删除重复卡密失败：', err);
-        vk.toast('删除失败：' + (err.message || '未知错误'));
+        vk.toast(this.$t('admin.stats.dedup.deleteFailed') + '：' + (err.message || this.$t('admin.common.unknownError')), 'none');
       } finally {
         this.deleting = false;
       }
@@ -211,6 +211,6 @@ export default {
 .detail-loading {
   text-align: center;
   padding: 40px;
-  color: #909399;
+  color: var(--vk-text-secondary, #64748b);
 }
 </style>

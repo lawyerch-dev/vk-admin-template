@@ -54,7 +54,7 @@
     <!-- Footer -->
     <view class="footer">
       <view class="footer__inner">
-        <text class="footer__text">© 2024 AI 商务定制化平台. All rights reserved.</text>
+        <text class="footer__text">{{ $t('landing.footer') }}</text>
       </view>
     </view>
   </view>

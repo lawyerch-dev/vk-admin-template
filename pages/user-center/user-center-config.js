@@ -1,5 +1,6 @@
 /**
  * 个人中心页面配置常量
+ * 文案统一走 i18n key，由页面组件用 this.$t 解析
  */
 
 // 状态类型映射
@@ -10,12 +11,12 @@ export const statusTypeMap = {
 	3: "warning"   // 已禁用
 };
 
-// 状态文本映射
-export const statusTextMap = {
-	0: "未使用",
-	1: "已使用",
-	2: "已过期",
-	3: "已禁用"
+// 状态文本 i18n key
+export const statusTextKeyMap = {
+	0: "userCenter.status.unused",
+	1: "userCenter.status.used",
+	2: "userCenter.status.expired",
+	3: "userCenter.status.disabled"
 };
 
 // 来源类型映射
@@ -28,21 +29,21 @@ export const sourceTypeMap = {
 	'refund': 'info'
 };
 
-// 来源文本映射
-export const sourceTextMap = {
-	'recharge': '充值',
-	'card_buy': '购买卡密',
-	'card_renew': '续费卡密',
-	'buy_product': '购买产品',
-	'reward': '奖励',
-	'refund': '退款'
+// 来源文本 i18n key
+export const sourceTextKeyMap = {
+	'recharge': 'userCenter.source.recharge',
+	'card_buy': 'userCenter.source.card_buy',
+	'card_renew': 'userCenter.source.card_renew',
+	'buy_product': 'userCenter.source.buy_product',
+	'reward': 'userCenter.source.reward',
+	'refund': 'userCenter.source.refund'
 };
 
-// 产品类型映射
-export const productTypeMap = {
-	'software': '软件',
-	'plugin': '浏览器插件',
-	'normal': '通用'
+// 产品类型 i18n key
+export const productTypeKeyMap = {
+	'software': 'userCenter.productType.software',
+	'plugin': 'userCenter.productType.plugin',
+	'normal': 'userCenter.productType.normal'
 };
 
 // 格式化日期
@@ -89,24 +90,24 @@ export function formatLogPreview(log) {
 	}).join('');
 }
 
-// 积分流水表格列配置
+// 积分流水表格列配置（titleKey 由组件 $t 解析）
 export const pointsTableColumns = [
-	{ key: "type", title: "类型", type: "text", width: 100, slot: true },
-	{ key: "amount", title: "积分数量", type: "text", width: 120, slot: true },
-	{ key: "balance", title: "余额", type: "text", width: 120 },
-	{ key: "source", title: "来源", type: "text", width: 120, slot: true },
-	{ key: "remark", title: "说明", type: "text", minWidth: 200 },
-	{ key: "_add_time", title: "时间", type: "time", width: 180 }
+	{ key: "type", titleKey: "userCenter.col.type", type: "text", width: 100, slot: true },
+	{ key: "amount", titleKey: "userCenter.col.amount", type: "text", width: 120, slot: true },
+	{ key: "balance", titleKey: "userCenter.col.balance", type: "text", width: 120 },
+	{ key: "source", titleKey: "userCenter.col.source", type: "text", width: 120, slot: true },
+	{ key: "remark", titleKey: "userCenter.col.remark", type: "text", minWidth: 200 },
+	{ key: "_add_time", titleKey: "userCenter.col.time", type: "time", width: 180 }
 ];
 
-// 卡密表格列配置
+// 卡密表格列配置（titleKey 由组件 $t 解析）
 export const cardsTableColumns = [
-	{ key: "card_code", title: "卡密", type: "text", width: 250, slot: true },
-	{ key: "product_name", title: "产品名称", type: "text", width: 150 },
-	{ key: "product_type", title: "产品类型", type: "text", width: 120, slot: true },
-	{ key: "download_url", title: "下载地址", type: "text", width: 200, slot: true },
-	{ key: "status", title: "状态", type: "text", width: 100, slot: true },
-	{ key: "_add_time", title: "购买时间", type: "time", width: 180 },
-	{ key: "used_time", title: "开始使用时间", type: "time", width: 180, defaultValue: "-" },
-	{ key: "expire_time", title: "卡密过期时间", type: "time", width: 180, defaultValue: "-" }
+	{ key: "card_code", titleKey: "userCenter.col.cardCode", type: "text", width: 250, slot: true },
+	{ key: "product_name", titleKey: "userCenter.col.productName", type: "text", width: 150 },
+	{ key: "product_type", titleKey: "userCenter.col.productType", type: "text", width: 120, slot: true },
+	{ key: "download_url", titleKey: "userCenter.col.downloadUrl", type: "text", width: 200, slot: true },
+	{ key: "status", titleKey: "userCenter.col.status", type: "text", width: 100, slot: true },
+	{ key: "_add_time", titleKey: "userCenter.col.buyTime", type: "time", width: 180 },
+	{ key: "used_time", titleKey: "userCenter.col.usedTime", type: "time", width: 180, defaultValue: "-" },
+	{ key: "expire_time", titleKey: "userCenter.col.expireTime", type: "time", width: 180, defaultValue: "-" }
 ];

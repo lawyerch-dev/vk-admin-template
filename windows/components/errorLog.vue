@@ -10,7 +10,7 @@
 			<!-- 自定义按钮区域开始 -->
 			<view class="btns-box">
 				<el-row>
-					<el-button size="small" icon="el-icon-delete" @click="clearErrorLog">清空日志</el-button>
+					<el-button size="small" icon="el-icon-delete" @click="clearErrorLog">{{ $t('win.err.clear') }}</el-button>
 				</el-row>
 			</view>
 			<!-- 自定义按钮区域结束 -->
@@ -22,16 +22,7 @@
 				:columns="table1.columns"
 				:row-no="true"
 				:height="600"
-				:custom-right-btns="[
-					{
-						title: '百度',
-						icon: 'el-icon-document'
-					},
-					{
-						title: '谷歌',
-						icon: 'el-icon-document'
-					}
-				]"
+				:custom-right-btns="rightBtns"
 				@custom-right-btns="customRightBtns"
 			></vk-data-table>
 			<!-- 表格组件结束 -->
@@ -57,20 +48,21 @@ export default {
 	},
 	data: function() {
 		// 组件创建时，进行数据初始化
+		const t = this.$t.bind(this);
 		return {
 			page: {
-				title: "错误日志",
+				title: t("win.err.title"),
 				top: "7vh",
 				width: "1250px"
 			},
 			table1: {
 				show: false,
 				columns: [
-					{ key: "info", title: "类型", type: "text", width: 160 },
-					{ key: "route", title: "页面地址", type: "text", width: 240 },
-					{ key: "err", title: "错误信息", type: "text", minWidth: 260 },
-					{ key: "time", title: "距离现在", type: "dateDiff", width: 120 },
-					{ key: "timeStr", title: "发生时间", type: "text", width: 120 }
+					{ key: "info", title: t("win.err.colInfo"), type: "text", width: 160 },
+					{ key: "route", title: t("win.err.colRoute"), type: "text", width: 240 },
+					{ key: "err", title: t("win.err.colErr"), type: "text", minWidth: 260 },
+					{ key: "time", title: t("win.err.colTimeDiff"), type: "dateDiff", width: 120 },
+					{ key: "timeStr", title: t("win.err.colTime"), type: "text", width: 120 }
 				]
 			}
 		};
@@ -98,9 +90,10 @@ export default {
 		},
 		// 错误日志表格的右侧自定义按钮点击事件
 		customRightBtns(row, btn) {
-			if (btn.title === "百度") {
+			const key = btn.key || btn.title;
+			if (key === "baidu" || btn.title === this.$t("win.err.baidu")) {
 				window.open(`https://www.baidu.com/baidu?wd=${row.err}`);
-			} else if (btn.title === "谷歌") {
+			} else if (key === "google" || btn.title === this.$t("win.err.google")) {
 				window.open(`https://www.google.com/search?q=${row.err}`);
 			}
 		},
@@ -133,12 +126,29 @@ export default {
 					that.onClose();
 				}
 			}
+		},
+		"$i18n.locale"() {
+			const t = this.$t.bind(this);
+			this.page.title = t("win.err.title");
+			const cols = this.table1.columns;
+			cols[0].title = t("win.err.colInfo");
+			cols[1].title = t("win.err.colRoute");
+			cols[2].title = t("win.err.colErr");
+			cols[3].title = t("win.err.colTimeDiff");
+			cols[4].title = t("win.err.colTime");
 		}
 	},
 	// 过滤器
 	filters: {},
 	// 计算属性
-	computed: {}
+	computed: {
+		rightBtns() {
+			return [
+				{ key: "baidu", title: this.$t("win.err.baidu"), icon: "el-icon-document" },
+				{ key: "google", title: this.$t("win.err.google"), icon: "el-icon-document" }
+			];
+		}
+	}
 };
 </script>
 

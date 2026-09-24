@@ -13,12 +13,12 @@
 		<el-card class="tabs-card">
 			<el-tabs v-model="activeTab" @tab-click="handleTabClick">
 				<!-- 积分流水 -->
-				<el-tab-pane label="积分流水" name="points">
+				<el-tab-pane :label="$t('userCenter.tab.points')" name="points">
 					<points-table ref="pointsTable" />
 				</el-tab-pane>
 
 				<!-- 我的卡密 -->
-				<el-tab-pane label="我的卡密" name="cards">
+				<el-tab-pane :label="$t('userCenter.tab.cards')" name="cards">
 					<card-table
 						ref="cardTable"
 						@copy="copyCode"
@@ -28,10 +28,10 @@
 				</el-tab-pane>
 
 				<!-- 我的产品 -->
-				<el-tab-pane label="我的产品" name="products">
+				<el-tab-pane :label="$t('userCenter.tab.products')" name="products">
 					<view v-if="productList.length === 0" class="products-empty">
-						<i class="el-icon-box" style="font-size: 64px; color: #DCDFE6;"></i>
-						<p style="color: #909399; margin-top: 16px;">暂无可用产品</p>
+						<i class="el-icon-box empty-icon"></i>
+						<text class="empty-text">{{ $t('userCenter.emptyProducts') }}</text>
 					</view>
 					<view v-else class="products-grid">
 						<product-card
@@ -123,6 +123,9 @@ export default {
 				url: "user/kh/getMyUserInfo",
 				success: (data) => {
 					that.userInfo = data.userInfo || {};
+				},
+				fail: (err) => {
+					vk.toast(err.msg || err.message || that.$t('userCenter.loadUserFailed'), "none");
 				}
 			});
 		},
@@ -133,7 +136,7 @@ export default {
 				that.$store.dispatch('$user/loadPointsInfo', { force: true }),
 				that.$store.dispatch('$user/loadMachineStats', { force: true }),
 			]);
-			vk.toast("刷新成功");
+			vk.toast(that.$t('userCenter.refreshSuccess'));
 		},
 
 		// 标签页切换
@@ -151,14 +154,14 @@ export default {
 		copyCode(text) {
 			uni.setClipboardData({
 				data: text,
-				success: () => vk.toast("复制成功")
+				success: () => vk.toast(that.$t('userCenter.copySuccess'))
 			});
 		},
 
 		// 打开下载地址
 		openDownloadUrl(url) {
 			if (!url) {
-				vk.toast('下载地址为空');
+				vk.toast(that.$t('userCenter.downloadEmpty'));
 				return;
 			}
 			window.open(url, '_blank');
@@ -167,10 +170,10 @@ export default {
 		// 显示版本更新日志（产品）
 		showVersionLogs(product) {
 			if (!product.version_logs || product.version_logs.length === 0) {
-				vk.toast('暂无版本更新记录');
+				vk.toast(that.$t('userCenter.noVersionLogs'));
 				return;
 			}
-			that.versionLogDialog.title = `${product.product_name} - 更新历史`;
+			that.versionLogDialog.title = that.$t('userCenter.versionHistory', { name: product.product_name });
 			that.versionLogDialog.logs = product.version_logs;
 			that.versionLogDialog.show = true;
 		},
@@ -178,10 +181,10 @@ export default {
 		// 显示版本更新日志（卡密）
 		showCardVersionLogs(card) {
 			if (!card.version_logs || card.version_logs.length === 0) {
-				vk.toast('暂无版本更新记录');
+				vk.toast(that.$t('userCenter.noVersionLogs'));
 				return;
 			}
-			that.versionLogDialog.title = `${card.product_name} - 更新历史`;
+			that.versionLogDialog.title = that.$t('userCenter.versionHistory', { name: card.product_name });
 			that.versionLogDialog.logs = card.version_logs;
 			that.versionLogDialog.show = true;
 		}
@@ -254,5 +257,15 @@ export default {
 	align-items: center;
 	justify-content: center;
 	padding: 60px 20px;
+
+	.empty-icon {
+		font-size: 64px;
+		color: var(--vk-border, #dcdfe6);
+	}
+
+	.empty-text {
+		color: var(--vk-text-secondary, #64748b);
+		margin-top: 16px;
+	}
 }
 </style>

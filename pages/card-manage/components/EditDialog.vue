@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="编辑卡密"
+    :title="$t('card.editTitle')"
     :visible.sync="dialogVisible"
     width="700px"
     :close-on-click-modal="false"
@@ -9,12 +9,12 @@
     <div class="edit-dialog-content">
       <el-tabs v-model="activeTab">
         <!-- 备注设置 -->
-        <el-tab-pane label="备注设置" name="remark" v-if="cardId">
+        <el-tab-pane :label="$t('card.tab.remark')" name="remark" v-if="cardId">
           <el-input
             v-model="localRemark"
             type="textarea"
             :rows="5"
-            placeholder="请输入备注信息"
+            :placeholder="$t('card.remarkPlaceholder')"
             maxlength="500"
             show-word-limit
             style="margin-top: 20px;"
@@ -22,10 +22,10 @@
         </el-tab-pane>
 
         <!-- 字段顺序 -->
-        <el-tab-pane label="字段顺序" name="columns">
+        <el-tab-pane :label="$t('card.tab.columns')" name="columns">
           <div class="columns-tab-content">
             <div class="columns-tip">
-              拖拽或使用按钮调整字段显示顺序
+              {{ $t('card.columnsTip') }}
             </div>
             <div
               class="column-sort-list"
@@ -56,13 +56,13 @@
                     :disabled="index === 0"
                     @click="moveColumn(index, 'up')"
                     size="mini"
-                  >上移</el-button>
+                  >{{ $t('card.moveUp') }}</el-button>
                   <el-button
                     type="text"
                     :disabled="index === localColumns.length - 1"
                     @click="moveColumn(index, 'down')"
                     size="mini"
-                  >下移</el-button>
+                  >{{ $t('card.moveDown') }}</el-button>
                 </div>
               </div>
             </div>
@@ -72,8 +72,8 @@
     </div>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="handleSave">确 定</el-button>
+      <el-button @click="dialogVisible = false">{{ $t('card.cancel') }}</el-button>
+      <el-button type="primary" @click="handleSave">{{ $t('card.confirm') }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -225,7 +225,7 @@ export default {
 }
 
 .columns-tip {
-  color: #909399;
+  color: var(--vk-text-secondary, #64748b);
   font-size: 12px;
   margin-bottom: 10px;
   flex-shrink: 0;
@@ -244,12 +244,12 @@ export default {
 
   &::-webkit-scrollbar { width: 6px; }
   &::-webkit-scrollbar-thumb {
-    background: #dcdfe6;
+    background: var(--vk-border, #e2e8f0);
     border-radius: 3px;
-    &:hover { background: #c0c4cc; }
+    &:hover { background: var(--vk-text-muted, #94a3b8); }
   }
   &::-webkit-scrollbar-track {
-    background: #f5f7fa;
+    background: var(--vk-bg-muted, #f1f5f9);
     border-radius: 3px;
   }
 
@@ -258,8 +258,8 @@ export default {
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    background: #ffffff;
-    border: 1px solid #e4e7ed;
+    background: var(--vk-card, #ffffff);
+    border: 1px solid var(--vk-border, #e2e8f0);
     border-top: 2px solid transparent;
     border-radius: 6px;
     transition: all 0.2s;
@@ -267,33 +267,33 @@ export default {
     user-select: none;
 
     &:hover {
-      border-color: #409EFF;
-      background: #f0f9ff;
+      border-color: var(--vk-primary, #409eff);
+      background: var(--vk-primary-light, #ecf5ff);
       box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
     }
 
     &.drag-active {
       opacity: 0.5;
-      background: #f5f7fa;
+      background: var(--vk-bg-muted, #f1f5f9);
     }
 
     &.drag-over {
-      border-top: 2px solid #409EFF !important;
-      background: #ecf5ff;
+      border-top: 2px solid var(--vk-primary, #409eff) !important;
+      background: var(--vk-primary-light, #ecf5ff);
     }
 
     .drag-handle {
-      color: #909399;
+      color: var(--vk-text-secondary, #64748b);
       font-size: 18px;
       cursor: move;
       flex-shrink: 0;
-      &:hover { color: #409EFF; }
+      &:hover { color: var(--vk-primary, #409eff); }
     }
 
     .column-title {
       flex: 1;
       font-size: 14px;
-      color: #303133;
+      color: var(--vk-text, #1e293b);
       font-weight: 500;
     }
 

@@ -7,11 +7,11 @@
       <!-- 产品网格 -->
       <view v-if="loading" class="products-section__loading">
         <i class="el-icon-loading"></i>
-        <text>加载中...</text>
+        <text>{{ $t('landing.loading') }}</text>
       </view>
 
       <view v-else-if="products.length === 0" class="products-section__empty">
-        <text>暂无产品</text>
+        <text>{{ $t('landing.empty') }}</text>
       </view>
 
       <view v-else class="products-section__grid">
@@ -41,11 +41,11 @@
             <!-- 定价 -->
             <view class="product-item__pricing">
               <text class="pricing-value">{{ product.price_points }}</text>
-              <text class="pricing-label">积分/</text>
+              <text class="pricing-label">{{ $t('products.points') }}/</text>
               <text class="pricing-value">{{ product.price_months }}</text>
-              <text class="pricing-label">月/</text>
+              <text class="pricing-label">{{ $t('products.month') }}/</text>
               <text class="pricing-value">{{ product.price_machines }}</text>
-              <text class="pricing-label">机器</text>
+              <text class="pricing-label">{{ $t('products.machine') }}</text>
             </view>
 
             <!-- 操作 -->
@@ -54,8 +54,8 @@
                 v-if="product.detail_url"
                 class="action-btn action-btn--detail"
                 @click="openDetail(product.detail_url)"
-              >查看详情</text>
-              <text class="action-btn action-btn--buy" @click="showService">立即咨询</text>
+              >{{ $t('products.viewDetail') }}</text>
+              <text class="action-btn action-btn--buy" @click="showService">{{ $t('landing.consult') }}</text>
             </view>
           </view>
         </view>
@@ -63,7 +63,7 @@
 
       <!-- 查看更多 -->
       <view v-if="products.length > maxShow" class="products-section__more">
-        <text class="more-btn" @click="goProducts">查看全部产品 →</text>
+        <text class="more-btn" @click="goProducts">{{ $t('landing.viewAll') }}</text>
       </view>
     </view>
 
@@ -309,12 +309,12 @@ export default {
   cursor: pointer;
 
   &--detail {
-    background: #f0f9ff;
+    background: var(--vk-primary-soft);
     color: var(--vk-primary);
-    border: 1px solid #bfdbfe;
+    border: 1px solid var(--vk-primary-border);
 
     &:hover {
-      background: #dbeafe;
+      background: var(--vk-primary-light);
     }
   }
 

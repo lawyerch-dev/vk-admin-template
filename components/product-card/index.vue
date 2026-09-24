@@ -1,5 +1,5 @@
 <template>
-  <div
+  <view
     class="product-card-wrapper"
     :class="{
       'is-flipped': isFlipped,
@@ -9,143 +9,143 @@
     @click="mode === 'purchased' && toggleFlip()"
   >
     <!-- ==================== 正面 ==================== -->
-    <div class="card-face card-front">
+    <view class="card-face card-front">
       <!-- 图片区域 -->
-      <div class="card-visual">
-        <img
+      <view class="card-visual">
+        <image
           v-if="imageUrl"
           :src="imageUrl"
           class="product-image"
-          @error="$event.target.style.display = 'none'"
-        >
-        <div v-else class="image-placeholder">
+          mode="aspectFill"
+        ></image>
+        <view v-else class="image-placeholder">
           <i class="el-icon-picture-outline"></i>
-          <span>{{ product.product_name }}</span>
-        </div>
+          <text class="image-placeholder__name">{{ product.product_name }}</text>
+        </view>
 
         <!-- 浮动标签 -->
-        <div class="floating-badges">
-          <span class="type-badge" :class="product.product_type">
+        <view class="floating-badges">
+          <text class="type-badge" :class="product.product_type">
             {{ typeLabel }}
-          </span>
-          <span v-if="isCustom" class="custom-badge">
-            <i class="el-icon-star-on"></i> 定制
-          </span>
-          <span
+          </text>
+          <text v-if="isCustom" class="custom-badge">
+            <i class="el-icon-star-on"></i> {{ $t('comp.custom') }}
+          </text>
+          <text
             v-if="mode === 'unpurchased' && product.buy_price > 0"
             class="hot-badge"
           >
             <i class="el-icon-trophy"></i>
-          </span>
-        </div>
-      </div>
+          </text>
+        </view>
+      </view>
 
       <!-- 内容区域 -->
-      <div class="card-body">
-        <h3 class="product-name">{{ product.product_name }}</h3>
-        <p v-if="product.description" class="product-desc">{{ product.description }}</p>
+      <view class="card-body">
+        <text class="product-name">{{ product.product_name }}</text>
+        <text v-if="product.description" class="product-desc">{{ product.description }}</text>
 
         <!-- 定价栏 -->
-        <div class="pricing-bar">
-          <div class="pricing-item">
-            <span class="pricing-value">{{ product.price_points }}</span>
-            <span class="pricing-label">积分</span>
-          </div>
-          <span class="pricing-sep">×</span>
-          <div class="pricing-item">
-            <span class="pricing-value">{{ product.price_months }}</span>
-            <span class="pricing-label">月</span>
-          </div>
-          <span class="pricing-sep">×</span>
-          <div class="pricing-item">
-            <span class="pricing-value">{{ product.price_machines }}</span>
-            <span class="pricing-label">机器</span>
-          </div>
-        </div>
+        <view class="pricing-bar">
+          <view class="pricing-item">
+            <text class="pricing-value">{{ product.price_points }}</text>
+            <text class="pricing-label">{{ $t('products.points') }}</text>
+          </view>
+          <text class="pricing-sep">×</text>
+          <view class="pricing-item">
+            <text class="pricing-value">{{ product.price_months }}</text>
+            <text class="pricing-label">{{ $t('products.month') }}</text>
+          </view>
+          <text class="pricing-sep">×</text>
+          <view class="pricing-item">
+            <text class="pricing-value">{{ product.price_machines }}</text>
+            <text class="pricing-label">{{ $t('products.machine') }}</text>
+          </view>
+        </view>
 
         <!-- 未购买：购买操作区 -->
-        <div v-if="mode === 'unpurchased'" class="card-action">
-          <div v-if="product.is_purchased" class="purchased-block" @click.stop="$emit('go-purchased', product)">
+        <view v-if="mode === 'unpurchased'" class="card-action">
+          <view v-if="product.is_purchased" class="purchased-block" @click.stop="$emit('go-purchased', product)">
             <i class="el-icon-circle-check"></i>
-            <span>已购买</span>
+            <text>{{ $t('comp.purchased') }}</text>
             <i class="el-icon-arrow-right"></i>
-          </div>
-          <div v-else-if="product.user_buy_price > 0 || product.buy_price > 0" class="purchase-block">
-            <div class="price-tag">
-              <span class="price-amount">{{ product.user_buy_price || product.buy_price }}</span>
-              <span class="price-unit">积分</span>
-            </div>
+          </view>
+          <view v-else-if="product.user_buy_price > 0 || product.buy_price > 0" class="purchase-block">
+            <view class="price-tag">
+              <text class="price-amount">{{ product.user_buy_price || product.buy_price }}</text>
+              <text class="price-unit">{{ $t('products.points') }}</text>
+            </view>
             <el-button
               type="primary"
               class="action-btn primary-btn"
               @click.stop="$emit('buy', product)"
             >
               <i class="el-icon-shopping-cart-full"></i>
-              立即购买
+              {{ $t('comp.buyNow') }}
             </el-button>
-          </div>
-          <div v-else class="unavailable-block">
+          </view>
+          <view v-else class="unavailable-block">
             <i class="el-icon-lock"></i>
-            <span>暂不支持购买</span>
-          </div>
-        </div>
+            <text>{{ $t('comp.unavailable') }}</text>
+          </view>
+        </view>
 
         <!-- 已购买：翻转提示 -->
-        <div v-if="mode === 'purchased'" class="card-footer">
-          <div class="flip-hint">
+        <view v-if="mode === 'purchased'" class="card-footer">
+          <view class="flip-hint">
             <i class="el-icon-refresh-left"></i>
-            点击卡片查看更多
-          </div>
-        </div>
-      </div>
-    </div>
+            <text>{{ $t('comp.flipMore') }}</text>
+          </view>
+        </view>
+      </view>
+    </view>
 
     <!-- ==================== 背面（仅 purchased 模式） ==================== -->
-    <div v-if="mode === 'purchased'" class="card-face card-back">
-      <div class="back-header">
-        <h3>{{ product.product_name }}</h3>
-        <div class="flip-hint-back" @click.stop="toggleFlip()">
+    <view v-if="mode === 'purchased'" class="card-face card-back">
+      <view class="back-header">
+        <text class="back-header__title">{{ product.product_name }}</text>
+        <view class="flip-hint-back" @click.stop="toggleFlip()">
           <i class="el-icon-refresh-right"></i>
-          点击返回
-        </div>
-      </div>
+          <text>{{ $t('comp.flipBack') }}</text>
+        </view>
+      </view>
 
-      <div class="back-body">
+      <view class="back-body">
         <!-- 版本更新日志 -->
-        <div v-if="hasVersionLogs" class="back-section">
-          <div class="section-title">
+        <view v-if="hasVersionLogs" class="back-section">
+          <view class="section-title">
             <i class="el-icon-document"></i>
-            版本更新日志
-          </div>
-          <div class="version-list">
-            <div
+            <text>{{ $t('comp.versionLogs') }}</text>
+          </view>
+          <view class="version-list">
+            <view
               v-for="(log, index) in product.version_logs.slice(0, 3)"
               :key="index"
               class="version-item"
             >
-              <div class="version-head">
+              <view class="version-head">
                 <el-tag size="mini" :type="index === 0 ? 'success' : ''">{{ log.version }}</el-tag>
-                <span class="version-date">{{ formatDate(log.date) }}</span>
-              </div>
-              <div class="version-log" v-html="formatLogPreview(log.log)"></div>
-            </div>
+                <text class="version-date">{{ formatDate(log.date) }}</text>
+              </view>
+              <view class="version-log" v-html="formatLogPreview(log.log)"></view>
+            </view>
             <el-button
               v-if="product.version_logs.length > 3"
               type="text"
               size="small"
               @click.stop="$emit('show-version-logs', product)"
               style="margin-top: 10px;"
-            >查看全部 {{ product.version_logs.length }} 个版本 →</el-button>
-          </div>
-        </div>
+            >{{ $t('comp.viewAllVersions', { n: product.version_logs.length }) }}</el-button>
+          </view>
+        </view>
 
         <!-- 下载地址 -->
-        <div v-if="product.download_url" class="back-section">
-          <div class="section-title">
+        <view v-if="product.download_url" class="back-section">
+          <view class="section-title">
             <i class="el-icon-download"></i>
-            下载地址
-          </div>
-          <div class="download-area">
+            <text>{{ $t('comp.downloadUrl') }}</text>
+          </view>
+          <view class="download-area">
             <el-input
               :value="product.download_url"
               readonly
@@ -156,7 +156,7 @@
                 slot="append"
                 icon="el-icon-copy-document"
                 @click.stop="$emit('copy', product.download_url)"
-              >复制</el-button>
+              >{{ $t('comp.copy') }}</el-button>
             </el-input>
             <el-button
               type="primary"
@@ -164,27 +164,27 @@
               icon="el-icon-download"
               @click.stop="$emit('download', product.download_url)"
               style="margin-top: 10px; width: 100%;"
-            >立即下载</el-button>
-          </div>
-        </div>
+            >{{ $t('comp.downloadNow') }}</el-button>
+          </view>
+        </view>
 
         <!-- 空状态 -->
-        <div v-if="!hasVersionLogs && !product.download_url" class="back-empty">
+        <view v-if="!hasVersionLogs && !product.download_url" class="back-empty">
           <i class="el-icon-info"></i>
-          <p>暂无更新日志和下载地址</p>
-        </div>
-      </div>
-    </div>
-  </div>
+          <text class="back-empty__text">{{ $t('comp.emptyBack') }}</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
 import { formatDate, formatLogPreview } from '@/pages/user-center/user-center-config.js';
 
-const TYPE_LABELS = {
-  software: '软件',
-  plugin: '浏览器插件',
-  normal: '通用',
+const TYPE_KEYS = {
+  software: 'comp.type.software',
+  plugin: 'comp.type.plugin',
+  normal: 'comp.type.normal',
 };
 
 export default {
@@ -216,7 +216,8 @@ export default {
     },
 
     typeLabel() {
-      return TYPE_LABELS[this.product.product_type] || this.product.product_type;
+      const key = TYPE_KEYS[this.product.product_type];
+      return key ? this.$t(key) : this.product.product_type;
     },
 
     isCustom() {
@@ -260,9 +261,9 @@ export default {
 .card-face {
   position: absolute;
   inset: 0;
-  background: #fff;
+  background: var(--vk-card, #ffffff);
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--vk-border, #e2e8f0);
   overflow: hidden;
   backface-visibility: hidden;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -301,7 +302,7 @@ export default {
   .card-front:not(.is-flipped *) {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    border-color: #d1d5db;
+    border-color: var(--vk-border, #e2e8f0);
   }
 }
 
@@ -310,13 +311,12 @@ export default {
   position: relative;
   height: 160px;
   overflow: hidden;
-  background: #f3f4f6;
+  background: var(--vk-bg-muted);
   flex-shrink: 0;
 
   .product-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 
   .image-placeholder {
@@ -335,7 +335,7 @@ export default {
       margin-bottom: 8px;
     }
 
-    span {
+    .image-placeholder__name {
       font-size: 14px;
       opacity: 0.85;
     }
@@ -398,7 +398,7 @@ export default {
   margin: 0 0 8px;
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--vk-text, #1e293b);
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -408,7 +408,7 @@ export default {
 .product-desc {
   margin: 0 0 12px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--vk-text-secondary, #64748b);
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -423,7 +423,7 @@ export default {
   justify-content: center;
   gap: 8px;
   padding: 10px;
-  background: #f9fafb;
+  background: var(--vk-bg-muted);
   border-radius: 8px;
   margin-bottom: 12px;
   flex-shrink: 0;
@@ -435,18 +435,18 @@ export default {
       display: block;
       font-size: 18px;
       font-weight: 700;
-      color: #111827;
+      color: var(--vk-text, #1e293b);
     }
 
     .pricing-label {
       font-size: 11px;
-      color: #9ca3af;
+      color: var(--vk-text-secondary, #64748b);
     }
   }
 
   .pricing-sep {
     font-size: 14px;
-    color: #d1d5db;
+    color: var(--vk-border, #e2e8f0);
   }
 }
 
@@ -454,7 +454,7 @@ export default {
 .card-action {
   margin-top: auto;
   padding-top: 12px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--vk-border, #e2e8f0);
 
   .purchase-block {
     display: flex;
@@ -470,12 +470,12 @@ export default {
       .price-amount {
         font-size: 24px;
         font-weight: 700;
-        color: #111827;
+        color: var(--vk-text, #1e293b);
       }
 
       .price-unit {
         font-size: 13px;
-        color: #6b7280;
+        color: var(--vk-text-secondary, #64748b);
       }
     }
   }
@@ -486,16 +486,16 @@ export default {
     justify-content: center;
     gap: 6px;
     padding: 12px;
-    background: #f0f9eb;
+    background: var(--vk-primary-soft);
     border-radius: 8px;
-    color: #67c23a;
+    color: var(--vk-primary);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-      background: #e1f3d8;
+      background: var(--vk-primary-light);
     }
 
     i {
@@ -505,7 +505,6 @@ export default {
     .el-icon-arrow-right {
       margin-left: auto;
       font-size: 14px;
-      color: #95d475;
     }
   }
 
@@ -515,9 +514,9 @@ export default {
     justify-content: center;
     gap: 6px;
     padding: 12px;
-    background: #f9fafb;
+    background: var(--vk-bg-muted);
     border-radius: 8px;
-    color: #9ca3af;
+    color: var(--vk-text-secondary, #64748b);
     font-size: 13px;
   }
 }
@@ -536,13 +535,13 @@ export default {
 }
 
 .primary-btn {
-  background: #111827 !important;
-  border-color: #111827 !important;
+  background: var(--vk-primary) !important;
+  border-color: var(--vk-primary) !important;
   color: #fff !important;
 
   &:hover {
-    background: #1f2937 !important;
-    border-color: #1f2937 !important;
+    background: var(--vk-primary-hover) !important;
+    border-color: var(--vk-primary-hover) !important;
   }
 }
 
@@ -550,7 +549,7 @@ export default {
 .card-footer {
   margin-top: auto;
   padding-top: 12px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--vk-border, #e2e8f0);
   display: flex;
   justify-content: center;
 }
@@ -559,7 +558,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #909399;
+  color: var(--vk-text-secondary, #64748b);
   font-size: 13px;
 
   i { font-size: 16px; }
@@ -580,8 +579,7 @@ export default {
   color: #fff;
   flex-shrink: 0;
 
-  h3 {
-    margin: 0;
+  .back-header__title {
     font-size: 18px;
     font-weight: bold;
   }
@@ -615,13 +613,13 @@ export default {
   gap: 8px;
   font-size: 14px;
   font-weight: bold;
-  color: #303133;
+  color: var(--vk-text, #1e293b);
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #409EFF;
+  border-bottom: 2px solid var(--vk-primary);
 
   i {
-    color: #409EFF;
+    color: var(--vk-primary);
     font-size: 16px;
   }
 }
@@ -631,9 +629,9 @@ export default {
   .version-item {
     padding: 12px;
     margin-bottom: 10px;
-    background: #f5f7fa;
+    background: var(--vk-bg-muted);
     border-radius: 6px;
-    border-left: 3px solid #409EFF;
+    border-left: 3px solid var(--vk-primary);
 
     &:last-child { margin-bottom: 0; }
   }
@@ -646,13 +644,13 @@ export default {
 
     .version-date {
       font-size: 12px;
-      color: #909399;
+      color: var(--vk-text-secondary, #64748b);
     }
   }
 
   .version-log {
     font-size: 13px;
-    color: #606266;
+    color: var(--vk-text, #1e293b);
     line-height: 1.6;
   }
 }
@@ -669,15 +667,14 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #909399;
+  color: var(--vk-text-secondary, #64748b);
 
   i {
     font-size: 48px;
     margin-bottom: 12px;
   }
 
-  p {
-    margin: 0;
+  .back-empty__text {
     font-size: 14px;
   }
 }

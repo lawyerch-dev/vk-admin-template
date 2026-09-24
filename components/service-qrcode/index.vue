@@ -1,22 +1,22 @@
 <template>
   <vk-data-dialog
     v-model="visible"
-    title="联系客服"
+    :title="$t('comp.serviceTitle')"
     width="400px"
     :close-on-click-modal="true"
   >
     <view class="service-dialog-content">
-      <div class="qrcode-container">
-        <img :src="qrcodeImg" class="qrcode-img" />
-      </div>
-      <p class="service-tips">
+      <view class="qrcode-container">
+        <image :src="qrcodeImg" class="qrcode-img" mode="aspectFit"></image>
+      </view>
+      <view class="service-tips">
         <i class="el-icon-info"></i>
-        {{ tips }}
-      </p>
-      <p class="service-time">工作时间：{{ workTime }}</p>
+        <text>{{ tipsText }}</text>
+      </view>
+      <text class="service-time">{{ $t('comp.serviceTime', { n: workTime }) }}</text>
     </view>
     <template v-slot:footer="{ close }">
-      <el-button @click="close">关闭</el-button>
+      <el-button @click="close">{{ $t('comp.close') }}</el-button>
     </template>
   </vk-data-dialog>
 </template>
@@ -38,7 +38,7 @@ export default {
     },
     tips: {
       type: String,
-      default: '请使用QQ扫描二维码添加客服',
+      default: '',
     },
     workTime: {
       type: String,
@@ -57,6 +57,9 @@ export default {
     qrcodeImg() {
       return this.qrcodeSrc || defaultQrcode;
     },
+    tipsText() {
+      return this.tips || this.$t('comp.serviceTips');
+    },
   },
 };
 </script>
@@ -74,27 +77,30 @@ export default {
     .qrcode-img {
       width: 200px;
       height: 200px;
-      border: 1px solid #e4e7ed;
+      border: 1px solid var(--vk-border, #e2e8f0);
       border-radius: 8px;
       padding: 10px;
-      background: white;
+      background: var(--vk-card, #ffffff);
     }
   }
 
   .service-tips {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 14px;
-    color: #606266;
+    color: var(--vk-text, #1e293b);
     margin: 15px 0 10px;
 
     i {
-      color: #409eff;
+      color: var(--vk-primary);
       margin-right: 5px;
     }
   }
 
   .service-time {
     font-size: 13px;
-    color: #909399;
+    color: var(--vk-text-secondary, #64748b);
     margin: 5px 0;
   }
 }

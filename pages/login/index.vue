@@ -179,7 +179,7 @@ export default {
 		onLoginSuccess(data) {
 			let { userInfo = {} } = data;
 			if (!getApp().isAllowLoginBackground(userInfo)) {
-				vk.alert("您的账户无登陆权限");
+				vk.alert(this.$t("login.err.noPermission"));
 				return;
 			}
 			vk.setVuex("$app.inited", false);

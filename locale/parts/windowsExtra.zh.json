@@ -1,0 +1,23 @@
+{
+	"win.pwd.title": "修改密码",
+	"win.pwd.submit": "修改",
+	"win.pwd.cancel": "关闭",
+	"win.pwd.username": "账号",
+	"win.pwd.oldPassword": "原密码",
+	"win.pwd.newPassword": "新密码",
+	"win.pwd.newPassword2": "确认新密码",
+	"win.pwd.oldRequired": "原密码不能为空",
+	"win.pwd.newRequired": "新密码不能为空",
+	"win.pwd.confirmRequired": "请再次输入新密码",
+	"win.pwd.rule": "密码长度在6~18之间，只能包含字母、数字和下划线",
+	"win.pwd.mismatch": "两次密码不一样,请检查!",
+	"win.err.title": "错误日志",
+	"win.err.clear": "清空日志",
+	"win.err.baidu": "百度",
+	"win.err.google": "谷歌",
+	"win.err.colInfo": "类型",
+	"win.err.colRoute": "页面地址",
+	"win.err.colErr": "错误信息",
+	"win.err.colTimeDiff": "距离现在",
+	"win.err.colTime": "发生时间"
+}

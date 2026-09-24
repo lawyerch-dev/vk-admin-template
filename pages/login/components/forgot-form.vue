@@ -11,7 +11,7 @@
 		</view>
 
 		<view class="field">
-			<text class="label">验证码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.captcha') }} <text class="req">*</text></text>
 			<view class="code-row">
 				<input 
 					class="input code-input" 
@@ -65,12 +65,6 @@
 let vk = uni.vk;
 
 export default {
-	computed: {
-		primaryColor() {
-			const b = this.$brand ? this.$brand() : null;
-			return (b && b.primary) || '#3b82f6';
-		}
-	},
 	data() {
 		return {
 			form: {
@@ -79,24 +73,36 @@ export default {
 				password: "",
 				password2: ""
 			},
-			codeBtnText: "获取验证码",
-			codeBtnDisabled: false,
 			codeCountdown: 0,
 			showPassword: false
+		}
+	},
+	computed: {
+		primaryColor() {
+			const b = this.$brand ? this.$brand() : null;
+			return (b && b.primary) || '#3b82f6';
+		},
+		codeBtnDisabled() {
+			return this.codeCountdown > 0;
+		},
+		codeBtnText() {
+			if (this.codeCountdown > 0) return this.codeCountdown + 's';
+			return this.$t('login.getCode');
 		}
 	},
 	methods: {
 		sendCode() {
 			let { email } = this.form;
 			if (!email || email.trim() === '') {
-				vk.toast('请输入QQ邮箱', 'none');
+				vk.toast(this.$t('login.err.email'), 'none');
 				return;
 			}
 			const emailRegex = /^[1-9]\d{4,10}@qq\.com$/;
 			if (!emailRegex.test(email)) {
-				vk.toast('请输入正确的QQ邮箱', 'none');
+				vk.toast(this.$t('login.err.emailFormat'), 'none');
 				return;
 			}
+			if (this.codeBtnDisabled) return;
 			vk.callFunction({
 				url: 'user/pub/sendEmailCode',
 				data: {
@@ -107,26 +113,20 @@ export default {
 				},
 				loading: true,
 				success: (res) => {
-					vk.toast('验证码已发送', 'success');
+					vk.toast(this.$t('login.toast.codeSent'), 'success');
 					this.startCountdown();
 				},
 				fail: (err) => {
-					vk.toast(err.msg || err.message || "发送失败", "none");
+					vk.toast(err.msg || err.message || this.$t("login.err.sendFailed"), "none");
 				}
 			});
 		},
 		startCountdown() {
-			this.codeBtnDisabled = true;
 			this.codeCountdown = 60;
-			this.codeBtnText = this.codeCountdown + 's';
 			let timer = setInterval(() => {
 				this.codeCountdown--;
 				if (this.codeCountdown <= 0) {
 					clearInterval(timer);
-					this.codeBtnDisabled = false;
-					this.codeBtnText = '获取验证码';
-				} else {
-					this.codeBtnText = this.codeCountdown + 's';
 				}
 			}, 1000);
 		},
@@ -134,28 +134,28 @@ export default {
 			let { email, code, password, password2 } = this.form;
 			
 			if (!email || email.trim() === '') {
-				vk.toast('请输入QQ邮箱', 'none');
+				vk.toast(this.$t('login.err.email'), 'none');
 				return;
 			}
 			const emailRegex = /^[1-9]\d{4,10}@qq\.com$/;
 			if (!emailRegex.test(email)) {
-				vk.toast('请输入正确的QQ邮箱', 'none');
+				vk.toast(this.$t('login.err.emailFormat'), 'none');
 				return;
 			}
 			if (!code || code.trim() === '') {
-				vk.toast('请输入验证码', 'none');
+				vk.toast(this.$t('login.err.captcha'), 'none');
 				return;
 			}
 			if (!password || password.trim() === '') {
-				vk.toast('请输入新密码', 'none');
+				vk.toast(this.$t('login.err.newPassword'), 'none');
 				return;
 			}
 			if (password.length < 6) {
-				vk.toast('密码长度不能少于6位', 'none');
+				vk.toast(this.$t('login.err.pwdLength'), 'none');
 				return;
 			}
 			if (password !== password2) {
-				vk.toast('两次密码不一致', 'none');
+				vk.toast(this.$t('login.err.pwdMismatch'), 'none');
 				return;
 			}
 
@@ -168,7 +168,7 @@ export default {
 				},
 				loading: true,
 				success: (res) => {
-					vk.toast('密码重置成功', 'success');
+					vk.toast(this.$t('login.toast.resetSuccess'), 'success');
 					this.form = {
 						email: "",
 						code: "",
@@ -178,7 +178,7 @@ export default {
 					this.$emit('success');
 				},
 				fail: (err) => {
-					vk.toast(err.msg || err.message || "重置失败", "none");
+					vk.toast(err.msg || err.message || this.$t("login.err.resetFailed"), "none");
 				}
 			});
 		}

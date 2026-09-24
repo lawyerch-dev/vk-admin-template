@@ -3,61 +3,61 @@
     <!-- 公告管理 -->
     <el-card class="announcement-card">
       <div slot="header" class="card-header">
-        <span>📢 公告管理</span>
+        <span>📢 {{ $t('admin.announce.title') }}</span>
         <el-button type="primary" size="small" @click="saveAnnouncement" :loading="loading">
-          保存公告
+          {{ $t('admin.announce.save') }}
         </el-button>
       </div>
 
       <el-form label-width="100px">
-        <el-form-item label="公告标题">
-          <el-input v-model="form.title" placeholder="🎉 重大更新！新功能上线"></el-input>
+        <el-form-item :label="$t('admin.announce.fieldTitle')">
+          <el-input v-model="form.title" :placeholder="$t('admin.announce.fieldTitlePlaceholder')"></el-input>
         </el-form-item>
-        <el-form-item label="公告副标题">
-          <el-input v-model="form.subtitle" placeholder="简短描述本次更新亮点"></el-input>
+        <el-form-item :label="$t('admin.announce.fieldSubtitle')">
+          <el-input v-model="form.subtitle" :placeholder="$t('admin.announce.fieldSubtitlePlaceholder')"></el-input>
         </el-form-item>
-        <el-form-item label="是否启用">
-          <el-switch v-model="form.enabled" active-text="启用" inactive-text="禁用"></el-switch>
+        <el-form-item :label="$t('admin.announce.fieldEnabled')">
+          <el-switch v-model="form.enabled" :active-text="$t('admin.common.enable')" :inactive-text="$t('admin.common.disable')"></el-switch>
         </el-form-item>
       </el-form>
 
-      <el-divider>更新日志（右下角弹窗展示）</el-divider>
+      <el-divider>{{ $t('admin.announce.changelogDivider') }}</el-divider>
 
       <div class="changelog-editor">
         <div v-for="(log, index) in form.changelog" :key="index" class="changelog-item">
           <el-row :gutter="10" style="margin-bottom: 10px">
             <el-col :span="8">
-              <el-input v-model="log.product_name" placeholder="产品/功能名称（如：JD直播助手PLUS）"></el-input>
+              <el-input v-model="log.product_name" :placeholder="$t('admin.announce.logProductPlaceholder')"></el-input>
             </el-col>
             <el-col :span="5">
-              <el-input v-model="log.version" placeholder="版本号（可选）"></el-input>
+              <el-input v-model="log.version" :placeholder="$t('admin.announce.logVersionPlaceholder')"></el-input>
             </el-col>
             <el-col :span="6">
-              <el-date-picker v-model="log.date" type="date" placeholder="日期" value-format="yyyy-MM-dd" style="width: 100%"></el-date-picker>
+              <el-date-picker v-model="log.date" type="date" :placeholder="$t('admin.announce.logDate')" value-format="yyyy-MM-dd" style="width: 100%"></el-date-picker>
             </el-col>
             <el-col :span="5">
-              <el-button type="danger" icon="el-icon-delete" size="small" @click="removeLog(index)">删除</el-button>
+              <el-button type="danger" icon="el-icon-delete" size="small" @click="removeLog(index)">{{ $t('admin.common.delete') }}</el-button>
             </el-col>
           </el-row>
-          <el-input v-model="log.items" type="textarea" :rows="4" placeholder="更新内容，每行一条，如：&#10;✨ 全新上线xxx功能&#10;🎯 支持xxx操作&#10;📊 新增xxx分析&#10;🚀 优化xxx性能"></el-input>
+          <el-input v-model="log.items" type="textarea" :rows="4" :placeholder="$t('admin.announce.logItemsPlaceholder')"></el-input>
         </div>
 
         <el-button type="primary" icon="el-icon-plus" @click="addLog" style="margin-top: 15px">
-          添加更新日志
+          {{ $t('admin.announce.addLog') }}
         </el-button>
       </div>
 
       <!-- 预览区域 -->
-      <el-divider>预览效果</el-divider>
+      <el-divider>{{ $t('admin.announce.previewDivider') }}</el-divider>
       <div class="preview-section">
         <div class="preview-popup">
-          <div class="preview-header">🎉 系统公告</div>
+          <div class="preview-header">🎉 {{ $t('admin.announce.previewHeader') }}</div>
           <div class="preview-body">
-            <p class="preview-title">{{ form.title || '公告标题' }}</p>
-            <p class="preview-subtitle">{{ form.subtitle || '公告副标题' }}</p>
+            <p class="preview-title">{{ form.title || $t('admin.announce.previewTitleFallback') }}</p>
+            <p class="preview-subtitle">{{ form.subtitle || $t('admin.announce.previewSubtitleFallback') }}</p>
             <div v-for="(log, index) in form.changelog" :key="index" class="preview-log-item">
               <div class="preview-log-header">
-                <span class="preview-product">{{ log.product_name || '产品名称' }}</span>
+                <span class="preview-product">{{ log.product_name || $t('admin.announce.previewProductFallback') }}</span>
                 <span class="preview-version" v-if="log.version">v{{ log.version }}</span>
                 <span class="preview-date">{{ log.date }}</span>
               </div>
@@ -96,7 +96,7 @@ export default {
     loadAnnouncement() {
       vk.callFunction({
         url: 'client/pub/getAnnouncement',
-        title: '加载中',
+        title: this.$t('admin.common.loading'),
         success: (res) => {
           if (res.data) {
             this.form = res.data;
@@ -104,6 +104,9 @@ export default {
               this.form.changelog = [];
             }
           }
+        },
+        fail: (err) => {
+          vk.toast(err.msg || err.message || this.$t('admin.common.loadFailed'), 'none');
         }
       });
     },
@@ -117,7 +120,10 @@ export default {
           value: this.form
         },
         success: () => {
-          vk.toast('保存成功');
+          vk.toast(this.$t('admin.common.saved'));
+        },
+        fail: (err) => {
+          vk.toast(err.msg || err.message || this.$t('admin.common.saveFailed'), 'none');
         },
         complete: () => {
           this.loading = false;
@@ -155,11 +161,11 @@ export default {
   align-items: center;
 }
 .changelog-item {
-  background: #f5f7fa;
+  background: var(--vk-bg-muted, #f5f7fa);
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 15px;
-  border-left: 3px solid #409eff;
+  border-left: 3px solid var(--vk-primary, #409eff);
 }
 
 /* 预览区域样式 */
@@ -169,14 +175,14 @@ export default {
 }
 .preview-popup {
   width: 400px;
-  background: #fff;
+  background: var(--vk-card, #ffffff);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 .preview-header {
   padding: 14px 18px;
-  background: linear-gradient(135deg, #4facfe 55%, #e1e8f2 100%);
+  background: linear-gradient(135deg, #4facfe 55%, var(--vk-bg-secondary, #e1e8f2) 100%);
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -189,21 +195,21 @@ export default {
 .preview-title {
   font-size: 15px;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--vk-text);
   margin: 0 0 8px 0;
   line-height: 1.4;
 }
 .preview-subtitle {
   font-size: 13px;
-  color: #8492a6;
+  color: var(--vk-text-secondary, #64748b);
   margin: 0 0 16px 0;
 }
 .preview-log-item {
-  background: #f8f9fa;
+  background: var(--vk-bg-muted, #f8f9fa);
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
-  border-left: 3px solid #409eff;
+  border-left: 3px solid var(--vk-primary, #409eff);
   &:last-child {
     margin-bottom: 0;
   }
@@ -222,14 +228,14 @@ export default {
 }
 .preview-version {
   font-size: 12px;
-  color: #409eff;
+  color: var(--vk-primary, #409eff);
   background: rgba(64, 158, 255, 0.1);
   padding: 2px 8px;
   border-radius: 4px;
 }
 .preview-date {
   font-size: 12px;
-  color: #909399;
+  color: var(--vk-text-secondary, #64748b);
 }
 .preview-log-content {
   margin: 0;
@@ -237,7 +243,7 @@ export default {
   list-style: none;
   li {
     font-size: 13px;
-    color: #606266;
+    color: var(--vk-text);
     line-height: 1.6;
     margin-bottom: 4px;
     position: relative;
@@ -245,7 +251,7 @@ export default {
       content: '•';
       position: absolute;
       left: -12px;
-      color: #409eff;
+      color: var(--vk-primary, #409eff);
     }
     &:last-child {
       margin-bottom: 0;

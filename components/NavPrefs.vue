@@ -19,7 +19,7 @@
 				class="seg__item"
 				:class="{ active: mode === item.value }"
 				@click="switchMode(item.value)"
-			>{{ item.label }}</view>
+			>{{ item.labelKey ? $t(item.labelKey) : item.label }}</view>
 		</view>
 	</view>
 </template>
@@ -35,8 +35,8 @@ export default {
 				{ value: 'en', label: 'EN' }
 			],
 			modes: [
-				{ value: 'light', label: '浅色' },
-				{ value: 'dark', label: '深色' }
+				{ value: 'light', labelKey: 'nav.theme.light' },
+				{ value: 'dark', labelKey: 'nav.theme.dark' }
 			],
 			mode: 'light',
 			locale: 'zh-Hans'

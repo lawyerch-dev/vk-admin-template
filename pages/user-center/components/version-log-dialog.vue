@@ -6,33 +6,33 @@
 		class="version-log-dialog"
 		@close="dialogVisible = false"
 	>
-		<div class="version-timeline">
-			<div
+		<view class="version-timeline">
+			<view
 				v-for="(log, index) in logs"
 				:key="index"
 				class="version-item"
 				:class="{ 'is-latest': index === 0 }"
 			>
-				<div class="version-header">
-					<div class="version-info">
-						<span class="version-number">{{ log.version }}</span>
-						<el-tag v-if="index === 0" type="success" size="mini" effect="dark">最新版本</el-tag>
-					</div>
-					<div class="version-date">{{ formatDate(log.date) }}</div>
-				</div>
-				<div class="version-content">
-					<div class="update-log" v-html="formatLog(log.log)"></div>
-				</div>
-				<div v-if="log.download_url" class="version-download">
+				<view class="version-header">
+					<view class="version-info">
+						<text class="version-number">{{ log.version }}</text>
+						<el-tag v-if="index === 0" type="success" size="mini" effect="dark">{{ $t('userCenter.latestVersion') }}</el-tag>
+					</view>
+					<text class="version-date">{{ formatDate(log.date) }}</text>
+				</view>
+				<view class="version-content">
+					<view class="update-log" v-html="formatLog(log.log)"></view>
+				</view>
+				<view v-if="log.download_url" class="version-download">
 					<el-button
 						type="primary"
 						size="small"
 						icon="el-icon-download"
 						@click="$emit('download', log.download_url)"
-					>下载 {{ log.version }}</el-button>
-				</div>
-			</div>
-		</div>
+					>{{ $t('userCenter.downloadVersion', { version: log.version }) }}</el-button>
+				</view>
+			</view>
+		</view>
 	</el-dialog>
 </template>
 
@@ -72,13 +72,13 @@ export default {
 		position: relative;
 		padding: 20px;
 		margin-bottom: 20px;
-		background: #f5f7fa;
+		background: var(--vk-bg-muted, #f1f5f9);
 		border-radius: 8px;
-		border-left: 4px solid #DCDFE6;
+		border-left: 4px solid var(--vk-border, #dcdfe6);
 
 		&.is-latest {
-			background: linear-gradient(135deg, #f5f7fa 0%, #e8f4f8 100%);
-			border-left-color: #67C23A;
+			background: linear-gradient(135deg, var(--vk-bg-muted, #f1f5f9) 0%, var(--vk-primary-soft, #ecfeff) 100%);
+			border-left-color: var(--vk-success, #67c23a);
 		}
 
 		.version-header {
@@ -87,7 +87,7 @@ export default {
 			align-items: center;
 			margin-bottom: 15px;
 			padding-bottom: 10px;
-			border-bottom: 1px solid #E4E7ED;
+			border-bottom: 1px solid var(--vk-border, #e2e8f0);
 
 			.version-info {
 				display: flex;
@@ -97,13 +97,13 @@ export default {
 				.version-number {
 					font-size: 18px;
 					font-weight: bold;
-					color: #303133;
+					color: var(--vk-text, #1e293b);
 				}
 			}
 
 			.version-date {
 				font-size: 13px;
-				color: #909399;
+				color: var(--vk-text-secondary, #64748b);
 			}
 		}
 
@@ -119,23 +119,23 @@ export default {
 					li {
 						padding: 8px 0;
 						line-height: 1.6;
-						color: #606266;
+						color: var(--vk-text-secondary, #64748b);
 						font-size: 14px;
 
 						&.feature {
-							color: #409EFF;
+							color: var(--vk-primary, #3b82f6);
 						}
 
 						&.bugfix {
-							color: #F56C6C;
+							color: var(--vk-danger, #f56c6c);
 						}
 
 						&.optimization {
-							color: #E6A23C;
+							color: var(--vk-warning, #e6a23c);
 						}
 
 						&.deprecated {
-							color: #909399;
+							color: var(--vk-text-muted, #94a3b8);
 							text-decoration: line-through;
 						}
 					}
@@ -143,7 +143,7 @@ export default {
 					p {
 						margin: 8px 0;
 						line-height: 1.6;
-						color: #606266;
+						color: var(--vk-text-secondary, #64748b);
 					}
 				}
 			}

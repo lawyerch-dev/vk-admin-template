@@ -21,8 +21,8 @@
           @before-submit="handleBeforeSubmit"
         >
           <template v-slot:max_machine_count-tips>
-            <div style="color: #909399; font-size: 12px; line-height: 1.5">
-              月价 = 单价 × 机器数量
+            <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; line-height: 1.5">
+              {{ $t('card.calc.monthlyFormula') }}
             </div>
           </template>
         </vk-data-form>
@@ -33,59 +33,59 @@
         <div v-if="selectedProduct" class="points-cost-box">
           <div class="cost-header">
             <i class="el-icon-wallet"></i>
-            <span>积分扣费预览</span>
+            <span>{{ $t('card.calc.previewTitle') }}</span>
           </div>
           <div class="cost-content">
             <div class="cost-info-single">
               <div class="cost-line">
-                <span class="cost-label">产品：</span>
+                <span class="cost-label">{{ $t('card.calc.product') }}</span>
                 <strong>{{ selectedProduct.product_name }}</strong>
               </div>
               <div class="cost-line">
-                <span class="cost-label">机器数：</span>
-                <strong class="cost-scale">&nbsp;{{ pointsCalculation.machineCount }}</strong> &nbsp;机器
+                <span class="cost-label">{{ $t('card.calc.machineCount') }}</span>
+                <strong class="cost-scale">&nbsp;{{ pointsCalculation.machineCount }}</strong> &nbsp;{{ $t('card.calc.unitMachine') }}
               </div>
               <div class="cost-line">
-                <span class="cost-label">时长：</span>
-                <strong>&nbsp;{{ formData.limit_days || 30 }}</strong> &nbsp;天
-                <span class="cost-detail">&nbsp;（{{ pointsCalculation.months }}&nbsp;月）</span>
+                <span class="cost-label">{{ $t('card.calc.duration') }}</span>
+                <strong>&nbsp;{{ formData.limit_days || 30 }}</strong> &nbsp;{{ $t('card.calc.unitDays') }}
+                <span class="cost-detail">&nbsp;{{ $t('card.calc.monthsFmt', { months: pointsCalculation.months }) }}</span>
               </div>
               <div class="cost-line">
-                <span class="cost-label">月价：</span>
-                <strong class="cost-monthly">{{ pointsCalculation.monthlyPrice }}</strong> &nbsp;积分/月
+                <span class="cost-label">{{ $t('card.calc.monthlyPrice') }}</span>
+                <strong class="cost-monthly">{{ pointsCalculation.monthlyPrice }}</strong> &nbsp;{{ $t('card.calc.pointsPerMonth') }}
               </div>
               <div class="cost-line">
-                <span class="cost-label">单价：</span>
-                <strong class="cost-unit">&nbsp;{{ pointsCalculation.unitPrice }}</strong> &nbsp;积分/张
+                <span class="cost-label">{{ $t('card.calc.unitPrice') }}</span>
+                <strong class="cost-unit">&nbsp;{{ pointsCalculation.unitPrice }}</strong> &nbsp;{{ $t('card.calc.pointsPerCard') }}
                 <span class="cost-detail">（{{ pointsCalculation.monthlyPrice }} × {{ pointsCalculation.months }}）</span>
               </div>
               <div class="cost-line cost-line-total">
-                <span class="cost-label">合计：</span>
-                <strong class="cost-total">&nbsp;{{ pointsCalculation.totalCost }}&nbsp;</strong> 积分
-                <span class="cost-detail">（{{ pointsCalculation.count }}&nbsp;张）</span>
+                <span class="cost-label">{{ $t('card.calc.total') }}</span>
+                <strong class="cost-total">&nbsp;{{ pointsCalculation.totalCost }}&nbsp;</strong> {{ $t('card.calc.unitPoints') }}
+                <span class="cost-detail">{{ $t('card.calc.cardsFmt', { count: pointsCalculation.count }) }}</span>
               </div>
             </div>
 
             <div class="cost-balance-info">
               <div class="balance-row">
-                <span class="balance-label">买前：</span>
+                <span class="balance-label">{{ $t('card.calc.before') }}</span>
                 <strong class="available">{{ pointsCalculation.available }}</strong>
-                <span class="balance-unit">积分</span>
+                <span class="balance-unit">{{ $t('card.calc.unitPoints') }}</span>
               </div>
               <div class="balance-arrow">→</div>
               <div class="balance-row">
-                <span class="balance-label">买后：</span>
+                <span class="balance-label">{{ $t('card.calc.after') }}</span>
                 <strong :class="pointsCalculation.afterBalance < 0 ? 'insufficient' : 'balance'">
                   {{ pointsCalculation.afterBalance }}
                 </strong>
-                <span class="balance-unit">积分</span>
+                <span class="balance-unit">{{ $t('card.calc.unitPoints') }}</span>
               </div>
             </div>
 
             <div v-if="pointsCalculation.afterBalance < 0" class="cost-warning">
               <i class="el-icon-warning"></i>
-              <span>积分不足！还需 {{ Math.abs(pointsCalculation.afterBalance) }} 积分</span>
-              <el-button type="text" @click="$emit('go-to-points-shop')" class="buy-btn">去购买 →</el-button>
+              <span>{{ $t('card.pointsInsufficient', { points: Math.abs(pointsCalculation.afterBalance) }) }}</span>
+              <el-button type="text" @click="$emit('go-to-points-shop')" class="buy-btn">{{ $t('card.goBuy') }}</el-button>
             </div>
           </div>
         </div>
@@ -98,12 +98,12 @@
 let that;
 let vk = uni.vk;
 
-// 默认续费天数选项
+// 默认续费天数选项（label 走 i18n）
 const DEFAULT_RENEW_DAYS_OPTIONS = [
-  { days: 30, label: '月卡(30天)', discount: 1 },
-  { days: 90, label: '季卡(90天)', discount: 1 },
-  { days: 180, label: '半年卡(180天)', discount: 1 },
-  { days: 365, label: '年卡(365天)', discount: 1 },
+  { days: 30, labelKey: 'card.days.month30', discount: 1 },
+  { days: 90, labelKey: 'card.days.quarter90', discount: 1 },
+  { days: 180, labelKey: 'card.days.halfYear180', discount: 1 },
+  { days: 365, labelKey: 'card.days.year365', discount: 1 },
 ];
 
 export default {
@@ -126,70 +126,8 @@ export default {
       formType: '', // 'add' | 'renew'
       title: '',
       formData: {},
-      formRules: {
-        product_id: [{ required: true, message: '请选择产品', trigger: 'change' }],
-        limit_days: [{ required: true, message: '请选择购买类型', trigger: 'change' }],
-        renew_days: [{ required: true, message: '请选择续费天数', trigger: 'change' }],
-        max_machine_count: [
-          { required: true, message: '请输入机器数量', trigger: 'blur' },
-          { type: 'number', min: 1, max: 999, message: '机器数量必须在1-999之间', trigger: 'blur' },
-        ],
-        numKeys: [
-          { required: true, message: '请输入购买数量', trigger: 'blur' },
-          { type: 'number', min: 1, max: 100, message: '购买数量必须在1-100之间', trigger: 'blur' },
-        ],
-        keyLength: [
-          { required: true, message: '请输入密钥长度', trigger: 'blur' },
-          { type: 'number', min: 10, max: 64, message: '密钥长度必须在10-64之间', trigger: 'blur' },
-        ],
-      },
-      formColumns: [
-        { key: 'card_key', title: '卡密', type: 'text', placeholder: '', disabled: true, show: ['renew'] },
-        { key: 'current_expire_time', title: '当前到期时间', type: 'text', placeholder: '', disabled: true, show: ['renew'] },
-        {
-          key: 'product_id', title: '选择产品', type: 'select', data: [],
-          placeholder: '请选择产品', defaultValue: '',
-          disabled: () => that.formType === 'renew',
-          change: (val) => { that.onProductChange(val); that.$forceUpdate(); },
-        },
-        {
-          key: 'limit_days', title: '购买类型', type: 'select', data: [],
-          placeholder: '请选择购买类型', defaultValue: 30, show: ['add'],
-          change: () => that.$forceUpdate(),
-        },
-        {
-          key: 'renew_days', title: '续费天数', type: 'select', data: [],
-          placeholder: '请选择续费天数', defaultValue: 30, show: ['renew'],
-          change: () => that.$forceUpdate(),
-        },
-        {
-          key: 'max_machine_count', title: '机器数量', type: 'number',
-          placeholder: '请输入机器数量(1-999台)', defaultValue: 1, min: 1, max: 999, show: ['add'],
-          change: () => that.$forceUpdate(),
-        },
-        {
-          key: 'numKeys', title: '购买数量', type: 'number',
-          placeholder: '请输入购买数量', tips: '一次性购买的卡密数量',
-          defaultValue: 1, min: 1, max: 100, show: ['add'],
-          change: () => that.$forceUpdate(),
-        },
-        {
-          key: 'keyPrefix', title: '卡密前缀', type: 'text',
-          placeholder: '请输入卡密前缀（可选）', tips: '生成的卡密将以此前缀开头',
-          defaultValue: '', maxlength: 20, show: ['add'],
-        },
-        {
-          key: 'keySuffix', title: '卡密后缀', type: 'text',
-          placeholder: '请输入卡密后缀（可选）', tips: '生成的卡密将以此后缀结尾',
-          defaultValue: '', maxlength: 20, show: ['add'],
-        },
-        {
-          key: 'keyLength', title: '密钥长度', type: 'number',
-          placeholder: '请输入密钥长度(10-64位)', tips: '密钥字符串长度',
-          defaultValue: 32, min: 10, max: 64, show: [],
-        },
-        { key: 'remark', title: '备注', type: 'textarea', placeholder: '请输入备注信息' },
-      ],
+      formRules: {},
+      formColumns: [],
     };
   },
   computed: {
@@ -260,11 +198,96 @@ export default {
       };
     },
   },
-  created() { that = this; },
+  watch: {
+    '$i18n.locale'() {
+      this.applyI18n();
+    },
+  },
+  created() {
+    that = this;
+    this.applyI18n();
+  },
   methods: {
+    // 初始化多语言文案（校验规则、表单列）
+    applyI18n() {
+      const t = (key, values) => that.$t(key, values);
+      const prevData = {};
+      (that.formColumns || []).forEach((c) => {
+        if (c.data) prevData[c.key] = c.data;
+      });
+
+      that.formRules = {
+        product_id: [{ required: true, message: t('card.rule.selectProduct'), trigger: 'change' }],
+        limit_days: [{ required: true, message: t('card.rule.selectBuyType'), trigger: 'change' }],
+        renew_days: [{ required: true, message: t('card.rule.selectRenewDays'), trigger: 'change' }],
+        max_machine_count: [
+          { required: true, message: t('card.rule.inputMachines'), trigger: 'blur' },
+          { type: 'number', min: 1, max: 999, message: t('card.rule.machinesRange'), trigger: 'blur' },
+        ],
+        numKeys: [
+          { required: true, message: t('card.rule.inputCount'), trigger: 'blur' },
+          { type: 'number', min: 1, max: 100, message: t('card.rule.countRange'), trigger: 'blur' },
+        ],
+        keyLength: [
+          { required: true, message: t('card.rule.inputKeyLength'), trigger: 'blur' },
+          { type: 'number', min: 10, max: 64, message: t('card.rule.keyLengthRange'), trigger: 'blur' },
+        ],
+      };
+
+      that.formColumns = [
+        { key: 'card_key', title: t('card.table.cardCode'), type: 'text', placeholder: '', disabled: true, show: ['renew'] },
+        { key: 'current_expire_time', title: t('card.currentExpire'), type: 'text', placeholder: '', disabled: true, show: ['renew'] },
+        {
+          key: 'product_id', title: t('card.selectProduct'), type: 'select', data: prevData.product_id || [],
+          placeholder: t('card.rule.selectProduct'), defaultValue: '',
+          disabled: () => that.formType === 'renew',
+          change: (val) => { that.onProductChange(val); that.$forceUpdate(); },
+        },
+        {
+          key: 'limit_days', title: t('card.buyType'), type: 'select', data: prevData.limit_days || [],
+          placeholder: t('card.rule.selectBuyType'), defaultValue: 30, show: ['add'],
+          change: () => that.$forceUpdate(),
+        },
+        {
+          key: 'renew_days', title: t('card.renewDays'), type: 'select', data: prevData.renew_days || [],
+          placeholder: t('card.rule.selectRenewDays'), defaultValue: 30, show: ['renew'],
+          change: () => that.$forceUpdate(),
+        },
+        {
+          key: 'max_machine_count', title: t('card.machines'), type: 'number',
+          placeholder: t('card.machinesPlaceholder'), defaultValue: 1, min: 1, max: 999, show: ['add'],
+          change: () => that.$forceUpdate(),
+        },
+        {
+          key: 'numKeys', title: t('card.buyCount'), type: 'number',
+          placeholder: t('card.rule.inputCount'), tips: t('card.buyCountTip'),
+          defaultValue: 1, min: 1, max: 100, show: ['add'],
+          change: () => that.$forceUpdate(),
+        },
+        {
+          key: 'keyPrefix', title: t('card.field.prefix'), type: 'text',
+          placeholder: t('card.field.prefixPlaceholderShort'), tips: t('card.field.prefixTipShort'),
+          defaultValue: '', maxlength: 20, show: ['add'],
+        },
+        {
+          key: 'keySuffix', title: t('card.field.suffix'), type: 'text',
+          placeholder: t('card.field.suffixPlaceholderShort'), tips: t('card.field.suffixTipShort'),
+          defaultValue: '', maxlength: 20, show: ['add'],
+        },
+        {
+          key: 'keyLength', title: t('card.keyLength'), type: 'number',
+          placeholder: t('card.keyLengthPlaceholder'), tips: t('card.keyLengthTip'),
+          defaultValue: 32, min: 10, max: 64, show: [],
+        },
+        { key: 'remark', title: t('card.table.remark'), type: 'textarea', placeholder: t('card.remarkPlaceholder') },
+      ].map((c) => {
+        if (prevData[c.key]) c.data = prevData[c.key];
+        return c;
+      });
+    },
     getMachineScaleInfo(maxUseCount, productBasePrice = 5) {
       return {
-        level: `${maxUseCount}台`,
+        level: that.$t('card.calc.machineLevel', { count: maxUseCount }),
         monthlyPrice: productBasePrice * maxUseCount,
         machineCount: maxUseCount,
         unitPrice: productBasePrice,
@@ -317,7 +340,7 @@ export default {
     openAdd(defaultProduct, validDaysOptions) {
       that.action = 'admin/card/kh/add';
       that.formType = 'add';
-      that.title = '购买卡密';
+      that.title = that.$t('card.buy');
 
       const defaultProductValue = JSON.stringify({
         product_id: defaultProduct.product_id,
@@ -330,8 +353,8 @@ export default {
 
       const limitDaysCol = that.formColumns.find((c) => c.key === 'limit_days');
       if (limitDaysCol) {
-        limitDaysCol.title = '购买类型';
-        limitDaysCol.placeholder = '请选择购买类型';
+        limitDaysCol.title = that.$t('card.buyType');
+        limitDaysCol.placeholder = that.$t('card.rule.selectBuyType');
       }
 
       const validOpts = validDaysOptions || [];
@@ -354,22 +377,25 @@ export default {
 
     openRenew(item, product, renewOptions) {
       if (item.activate_time === 0) {
-        return vk.toast('该卡密尚未激活，无法续费');
+        return vk.toast(that.$t('card.cannotRenewInactive'));
       }
       if (item.limit_days === -1) {
-        return vk.toast('永久有效的卡密无需续费');
+        return vk.toast(that.$t('card.cannotRenewPermanent'));
       }
       if (!product) {
-        return vk.toast('产品不存在');
+        return vk.toast(that.$t('card.productNotFound'));
       }
 
       that.action = 'admin/card/kh/renew';
       that.formType = 'renew';
-      that.title = '续费卡密';
+      that.title = that.$t('card.renewTitle');
 
       let options = renewOptions;
       if (!options || options.length === 0) {
-        options = DEFAULT_RENEW_DAYS_OPTIONS.map((opt) => ({ value: opt.days, label: opt.label }));
+        options = DEFAULT_RENEW_DAYS_OPTIONS.map((opt) => ({
+          value: opt.days,
+          label: that.$t(opt.labelKey),
+        }));
       }
       that.updateFieldOptions('renew_days', options);
 
@@ -447,29 +473,28 @@ export default {
   .pricing-area {
     width: 350px;
     flex-shrink: 0;
-    background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
-    border: 1px solid #e4e7ed;
+    background: linear-gradient(135deg, var(--vk-bg-muted, #f1f5f9) 0%, var(--vk-card, #ffffff) 100%);
+    border: 1px solid var(--vk-border, #e2e8f0);
     border-radius: 8px;
     padding: 10px;
     overflow-y: auto;
 
     &::-webkit-scrollbar { width: 6px; }
     &::-webkit-scrollbar-thumb {
-      background: #dcdfe6;
+      background: var(--vk-border, #e2e8f0);
       border-radius: 3px;
-      &:hover { background: #c0c4cc; }
+      &:hover { background: var(--vk-text-muted, #94a3b8); }
     }
   }
 }
 
 .points-cost-box {
-  $primary-color: #409EFF;
   $warning-color: #E6A23C;
   $danger-color: #F56C6C;
   $success-color: #67C23A;
 
-  background: #ffffff;
-  border: 1px solid #e4e7ed;
+  background: var(--vk-card, #ffffff);
+  border: 1px solid var(--vk-border, #e2e8f0);
   border-radius: 8px;
   overflow: hidden;
   height: 100%;
@@ -480,11 +505,11 @@ export default {
     gap: 6px;
     font-size: 14px;
     font-weight: bold;
-    color: #303133;
+    color: var(--vk-text, #1e293b);
     padding: 10px 14px;
-    border-bottom: 2px solid $primary-color;
-    background: linear-gradient(135deg, #ecf5ff 0%, #ffffff 100%);
-    i { color: $primary-color; font-size: 15px; }
+    border-bottom: 2px solid var(--vk-primary, #409eff);
+    background: linear-gradient(135deg, var(--vk-primary-light, #ecf5ff) 0%, var(--vk-card, #ffffff) 100%);
+    i { color: var(--vk-primary, #409eff); font-size: 15px; }
   }
 
   .cost-content {
@@ -499,14 +524,14 @@ export default {
       line-height: 24px;
       font-size: 14px;
       padding: 6px 0;
-      border-bottom: 1px solid #f5f7fa;
+      border-bottom: 1px solid var(--vk-bg-muted, #f1f5f9);
       &:last-child { border-bottom: none; }
-      &.cost-line-total { margin-top: 6px; padding-top: 12px; border-top: 2px solid #e4e7ed; border-bottom: none; }
+      &.cost-line-total { margin-top: 6px; padding-top: 12px; border-top: 2px solid var(--vk-border, #e2e8f0); border-bottom: none; }
 
-      .cost-label { color: #606266; min-width: 60px; flex-shrink: 0; font-weight: 500; }
-      .cost-scale, .cost-monthly, .cost-unit { color: $primary-color; font-size: 15px; }
+      .cost-label { color: var(--vk-text, #1e293b); min-width: 60px; flex-shrink: 0; font-weight: 500; }
+      .cost-scale, .cost-monthly, .cost-unit { color: var(--vk-primary, #409eff); font-size: 15px; }
       .cost-total { color: $warning-color; font-size: 18px; font-weight: bold; }
-      .cost-detail { color: #909399; font-size: 12px; margin-left: 4px; }
+      .cost-detail { color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-left: 4px; }
       .cost-discount { color: $danger-color; font-weight: bold; margin-left: 6px; font-size: 12px; }
     }
 
@@ -517,9 +542,9 @@ export default {
       gap: 8px;
       margin-top: 12px;
       padding: 8px 12px;
-      background: #f0f9ff;
+      background: var(--vk-primary-light, #f0f9ff);
       border-radius: 6px;
-      border: 1px solid #b3d8ff;
+      border: 1px solid var(--vk-primary-border, #b3d8ff);
 
       .balance-row {
         display: flex;
@@ -528,15 +553,15 @@ export default {
         font-size: 12px;
         flex: 1;
         min-width: 0;
-        .balance-label { color: #606266; white-space: nowrap; flex-shrink: 0; }
+        .balance-label { color: var(--vk-text, #1e293b); white-space: nowrap; flex-shrink: 0; }
         &:last-child {
           justify-content: flex-end;
           .balance-label, .balance-unit, strong { color: #F56C6C; }
         }
-        .balance-unit { color: #909399; white-space: nowrap; flex-shrink: 0; }
+        .balance-unit { color: var(--vk-text-secondary, #64748b); white-space: nowrap; flex-shrink: 0; }
         strong { font-size: 14px; font-weight: 600; color: $success-color; min-width: 60px; text-align: right; }
       }
-      .balance-arrow { color: #409EFF; font-size: 16px; font-weight: bold; flex-shrink: 0; margin: 0 4px; }
+      .balance-arrow { color: var(--vk-primary, #409eff); font-size: 16px; font-weight: bold; flex-shrink: 0; margin: 0 4px; }
     }
 
     .cost-warning {
@@ -545,7 +570,7 @@ export default {
       justify-content: space-between;
       margin-top: 8px;
       padding: 8px 12px;
-      background: #fef0f0;
+      background: rgba(245, 108, 108, 0.12);
       border: 1px solid $danger-color;
       border-radius: 4px;
       color: $danger-color;

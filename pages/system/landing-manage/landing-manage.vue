@@ -3,13 +3,13 @@
     <!-- 顶部操作栏 -->
     <view class="top-bar">
       <view class="top-bar__left">
-        <text class="top-bar__title">落地页管理</text>
-        <text class="top-bar__desc">拖拽排序 · 开关控制 · 实时生效</text>
+        <text class="top-bar__title">{{ $t('admin.landing.title') }}</text>
+        <text class="top-bar__desc">{{ $t('admin.landing.desc') }}</text>
       </view>
       <view class="top-bar__right">
-        <el-button size="small" icon="el-icon-view" @click="previewPage">预览落地页</el-button>
-        <el-button size="small" icon="el-icon-download" @click="loadPresets" :loading="presetLoading">加载预设</el-button>
-        <el-button type="primary" size="small" icon="el-icon-check" @click="saveConfig" :loading="saving">保存配置</el-button>
+        <el-button size="small" icon="el-icon-view" @click="previewPage">{{ $t('admin.landing.preview') }}</el-button>
+        <el-button size="small" icon="el-icon-download" @click="loadPresets" :loading="presetLoading">{{ $t('admin.landing.loadPresets') }}</el-button>
+        <el-button type="primary" size="small" icon="el-icon-check" @click="saveConfig" :loading="saving">{{ $t('admin.landing.saveConfig') }}</el-button>
       </view>
     </view>
 
@@ -28,7 +28,7 @@
               {{ sectionIcons[section.type] }}
             </view>
             <view class="section-card__info">
-              <text class="section-card__name">{{ sectionTypeMap[section.type] || section.type }}</text>
+              <text class="section-card__name">{{ $t('admin.landing.type.' + section.type) }}</text>
               <text class="section-card__tag">{{ section.type }}</text>
             </view>
           </view>
@@ -47,38 +47,38 @@
           <!-- Hero -->
           <div v-if="section.type === 'hero'" class="editor-grid">
             <div class="editor-field editor-field--full">
-              <label>标题</label>
-              <el-input v-model="section.data.title" type="textarea" :rows="2" placeholder="支持 \n 换行" />
+              <label>{{ $t('admin.landing.fieldTitle') }}</label>
+              <el-input v-model="section.data.title" type="textarea" :rows="2" :placeholder="$t('admin.landing.titlePlaceholder')" />
             </div>
             <div class="editor-field editor-field--full">
-              <label>副标题</label>
-              <el-input v-model="section.data.subtitle" type="textarea" :rows="2" placeholder="支持 \n 换行" />
+              <label>{{ $t('admin.landing.fieldSubtitle') }}</label>
+              <el-input v-model="section.data.subtitle" type="textarea" :rows="2" :placeholder="$t('admin.landing.titlePlaceholder')" />
             </div>
             <div class="editor-field">
-              <label>背景色</label>
+              <label>{{ $t('admin.landing.fieldBgColor') }}</label>
               <div class="color-input">
                 <el-color-picker v-model="section.data.bg_color" size="small" />
                 <el-input v-model="section.data.bg_color" size="small" placeholder="#0a1628" />
               </div>
             </div>
             <div class="editor-field">
-              <label>主按钮</label>
-              <el-input v-model="section.data.btn_primary.text" size="small" placeholder="按钮文字" />
+              <label>{{ $t('admin.landing.fieldBtnPrimary') }}</label>
+              <el-input v-model="section.data.btn_primary.text" size="small" :placeholder="$t('admin.landing.btnPlaceholder')" />
             </div>
             <div class="editor-field">
-              <label>副按钮</label>
-              <el-input v-model="section.data.btn_ghost.text" size="small" placeholder="按钮文字" />
+              <label>{{ $t('admin.landing.fieldBtnGhost') }}</label>
+              <el-input v-model="section.data.btn_ghost.text" size="small" :placeholder="$t('admin.landing.btnPlaceholder')" />
             </div>
           </div>
 
           <!-- 统计 -->
           <div v-if="section.type === 'stats'" class="editor-grid">
             <div class="editor-field editor-field--full">
-              <label>统计项 <el-button size="mini" icon="el-icon-plus" @click="section.data.items.push({ num: '', label: '' })">添加</el-button></label>
+              <label>{{ $t('admin.landing.fieldStats') }} <el-button size="mini" icon="el-icon-plus" @click="section.data.items.push({ num: '', label: '' })">{{ $t('admin.landing.add') }}</el-button></label>
               <div class="stat-items">
                 <div class="stat-item" v-for="(item, i) in section.data.items" :key="i">
-                  <el-input v-model="item.num" size="small" placeholder="数字" style="width: 100px;" />
-                  <el-input v-model="item.label" size="small" placeholder="标签" style="width: 140px;" />
+                  <el-input v-model="item.num" size="small" :placeholder="$t('admin.landing.numPlaceholder')" style="width: 100px;" />
+                  <el-input v-model="item.label" size="small" :placeholder="$t('admin.landing.labelPlaceholder')" style="width: 140px;" />
                   <el-button size="mini" type="text" icon="el-icon-delete" @click="section.data.items.splice(i, 1)" />
                 </div>
               </div>
@@ -88,15 +88,15 @@
           <!-- 功能卡片 -->
           <div v-if="section.type === 'features'" class="editor-grid">
             <div class="editor-field">
-              <label>标题</label>
+              <label>{{ $t('admin.landing.fieldTitle') }}</label>
               <el-input v-model="section.data.title" size="small" />
             </div>
             <div class="editor-field">
-              <label>副标题</label>
+              <label>{{ $t('admin.landing.fieldSubtitle') }}</label>
               <el-input v-model="section.data.subtitle" size="small" />
             </div>
             <div class="editor-field">
-              <label>列数</label>
+              <label>{{ $t('admin.landing.fieldColumns') }}</label>
               <el-radio-group v-model="section.data.columns" size="small">
                 <el-radio-button :label="2">2</el-radio-button>
                 <el-radio-button :label="3">3</el-radio-button>
@@ -104,12 +104,12 @@
               </el-radio-group>
             </div>
             <div class="editor-field editor-field--full">
-              <label>卡片列表 <el-button size="mini" icon="el-icon-plus" @click="section.data.items.push({ icon: '', title: '', desc: '' })">添加</el-button></label>
+              <label>{{ $t('admin.landing.fieldFeatures') }} <el-button size="mini" icon="el-icon-plus" @click="section.data.items.push({ icon: '', title: '', desc: '' })">{{ $t('admin.landing.add') }}</el-button></label>
               <div class="feature-items">
                 <div class="feature-item" v-for="(item, i) in section.data.items" :key="i">
-                  <el-input v-model="item.icon" size="small" placeholder="图标" style="width: 56px;" />
-                  <el-input v-model="item.title" size="small" placeholder="标题" style="width: 120px;" />
-                  <el-input v-model="item.desc" size="small" placeholder="描述" style="flex: 1;" />
+                  <el-input v-model="item.icon" size="small" :placeholder="$t('admin.landing.iconPlaceholder')" style="width: 56px;" />
+                  <el-input v-model="item.title" size="small" :placeholder="$t('admin.landing.fieldTitle')" style="width: 120px;" />
+                  <el-input v-model="item.desc" size="small" :placeholder="$t('admin.landing.fieldDesc')" style="flex: 1;" />
                   <el-button size="mini" type="text" icon="el-icon-delete" @click="section.data.items.splice(i, 1)" />
                 </div>
               </div>
@@ -119,20 +119,20 @@
           <!-- 优势 -->
           <div v-if="section.type === 'advantages'" class="editor-grid">
             <div class="editor-field">
-              <label>标题</label>
+              <label>{{ $t('admin.landing.fieldTitle') }}</label>
               <el-input v-model="section.data.title" size="small" />
             </div>
             <div class="editor-field">
-              <label>副标题</label>
+              <label>{{ $t('admin.landing.fieldSubtitle') }}</label>
               <el-input v-model="section.data.subtitle" size="small" />
             </div>
             <div class="editor-field editor-field--full">
-              <label>优势列表 <el-button size="mini" icon="el-icon-plus" @click="section.data.items.push({ title: '', desc: '' })">添加</el-button></label>
+              <label>{{ $t('admin.landing.fieldAdvantages') }} <el-button size="mini" icon="el-icon-plus" @click="section.data.items.push({ title: '', desc: '' })">{{ $t('admin.landing.add') }}</el-button></label>
               <div class="advantage-items">
                 <div class="advantage-item" v-for="(item, i) in section.data.items" :key="i">
                   <span class="advantage-num">{{ String(i + 1).padStart(2, '0') }}</span>
-                  <el-input v-model="item.title" size="small" placeholder="标题" style="width: 200px;" />
-                  <el-input v-model="item.desc" size="small" placeholder="描述" style="flex: 1;" />
+                  <el-input v-model="item.title" size="small" :placeholder="$t('admin.landing.fieldTitle')" style="width: 200px;" />
+                  <el-input v-model="item.desc" size="small" :placeholder="$t('admin.landing.fieldDesc')" style="flex: 1;" />
                   <el-button size="mini" type="text" icon="el-icon-delete" @click="section.data.items.splice(i, 1)" />
                 </div>
               </div>
@@ -142,15 +142,15 @@
           <!-- 产品展示 -->
           <div v-if="section.type === 'products'" class="editor-grid">
             <div class="editor-field editor-field--full">
-              <label>标题</label>
-              <el-input v-model="section.data.title" size="small" placeholder="产品中心" />
+              <label>{{ $t('admin.landing.fieldTitle') }}</label>
+              <el-input v-model="section.data.title" size="small" :placeholder="$t('admin.landing.productsTitlePlaceholder')" />
             </div>
             <div class="editor-field editor-field--full">
-              <label>副标题</label>
-              <el-input v-model="section.data.subtitle" size="small" placeholder="选择适合您的产品" />
+              <label>{{ $t('admin.landing.fieldSubtitle') }}</label>
+              <el-input v-model="section.data.subtitle" size="small" :placeholder="$t('admin.landing.productsSubtitlePlaceholder')" />
             </div>
             <div class="editor-field">
-              <label>最多展示</label>
+              <label>{{ $t('admin.landing.fieldMaxShow') }}</label>
               <el-input-number v-model="section.data.max_show" :min="1" :max="12" size="small" />
             </div>
           </div>
@@ -158,15 +158,15 @@
           <!-- CTA -->
           <div v-if="section.type === 'cta'" class="editor-grid">
             <div class="editor-field editor-field--full">
-              <label>标题</label>
+              <label>{{ $t('admin.landing.fieldTitle') }}</label>
               <el-input v-model="section.data.title" size="small" />
             </div>
             <div class="editor-field editor-field--full">
-              <label>副标题</label>
+              <label>{{ $t('admin.landing.fieldSubtitle') }}</label>
               <el-input v-model="section.data.subtitle" size="small" />
             </div>
             <div class="editor-field">
-              <label>按钮文字</label>
+              <label>{{ $t('admin.landing.fieldBtnText') }}</label>
               <el-input v-model="section.data.btn_text" size="small" />
             </div>
           </div>
@@ -174,12 +174,12 @@
 
         <!-- 禁用遮罩 -->
         <view class="section-card__mask" v-if="!section.enable">
-          <text class="section-card__mask-text">已禁用</text>
+          <text class="section-card__mask-text">{{ $t('admin.landing.disabled') }}</text>
         </view>
       </view>
 
-      <el-empty v-if="!loading && sections.length === 0" description="暂无区块配置">
-        <el-button type="primary" icon="el-icon-download" @click="loadPresets">加载预设</el-button>
+      <el-empty v-if="!loading && sections.length === 0" :description="$t('admin.landing.empty')">
+        <el-button type="primary" icon="el-icon-download" @click="loadPresets">{{ $t('admin.landing.loadPresets') }}</el-button>
       </el-empty>
     </view>
   </view>
@@ -197,14 +197,6 @@ export default {
       configId: '',
       sections: [],
       expandedIndex: 0,
-      sectionTypeMap: {
-        hero: '首屏',
-        stats: '数据统计',
-        features: '功能卡片',
-        advantages: '优势',
-        products: '产品展示',
-        cta: '行动号召'
-      },
       sectionIcons: {
         hero: '🎯',
         stats: '📊',
@@ -241,7 +233,7 @@ export default {
           }
         },
         fail: (err) => {
-          vk.toast(err.msg || '加载失败', 'none');
+          vk.toast(err.msg || err.message || this.$t('admin.common.loadFailed'), 'none');
         },
         complete: () => {
           this.loading = false;
@@ -260,16 +252,16 @@ export default {
         },
         success: (res) => {
           if (res.code === 0) {
-            vk.toast('保存成功');
+            vk.toast(this.$t('admin.common.saved'));
             if (res.data && res.data._id) {
               this.configId = res.data._id;
             }
           } else {
-            vk.toast(res.msg || '保存失败', 'none');
+            vk.toast(res.msg || this.$t('admin.common.saveFailed'), 'none');
           }
         },
         fail: (err) => {
-          vk.toast(err.msg || '保存失败', 'none');
+          vk.toast(err.msg || err.message || this.$t('admin.common.saveFailed'), 'none');
         },
         complete: () => {
           this.saving = false;
@@ -279,9 +271,9 @@ export default {
 
     // 加载预设
     loadPresets() {
-      this.$confirm('加载预设将覆盖当前配置，确定继续？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('admin.landing.presetConfirm'), this.$t('admin.common.confirm'), {
+        confirmButtonText: this.$t('admin.common.ok'),
+        cancelButtonText: this.$t('admin.common.cancel'),
         type: 'warning'
       }).then(() => {
         this.presetLoading = true;
@@ -290,14 +282,14 @@ export default {
           data: {},
           success: (res) => {
             if (res.code === 0) {
-              vk.toast(res.msg || '加载成功');
+              vk.toast(res.msg || this.$t('admin.common.loadSuccess'));
               this.loadConfig();
             } else {
-              vk.toast(res.msg || '加载失败', 'none');
+              vk.toast(res.msg || this.$t('admin.common.loadFailed'), 'none');
             }
           },
           fail: (err) => {
-            vk.toast(err.msg || '加载失败', 'none');
+            vk.toast(err.msg || err.message || this.$t('admin.common.loadFailed'), 'none');
           },
           complete: () => {
             this.presetLoading = false;
@@ -340,7 +332,7 @@ export default {
 <style lang="scss" scoped>
 .page-body {
   padding: 24px;
-  background: #f0f2f5;
+  background: var(--vk-bg);
   min-height: 100vh;
 }
 
@@ -355,13 +347,13 @@ export default {
     display: block;
     font-size: 20px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--vk-text);
   }
 
   &__desc {
     display: block;
     font-size: 13px;
-    color: #94a3b8;
+    color: var(--vk-text-secondary, #64748b);
     margin-top: 4px;
   }
 
@@ -378,17 +370,17 @@ export default {
 
 .section-card {
   position: relative;
-  background: #ffffff;
+  background: var(--vk-card, #ffffff);
   border-radius: 12px;
   margin-bottom: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--vk-border);
   transition: all 0.2s;
   overflow: hidden;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    border-color: #d1d5db;
+    border-color: var(--vk-border);
   }
 
   &--disabled {
@@ -404,7 +396,7 @@ export default {
     user-select: none;
 
     &:hover {
-      background: #fafbfc;
+      background: var(--vk-bg-secondary);
     }
   }
 
@@ -434,13 +426,13 @@ export default {
   &__name {
     font-size: 15px;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--vk-text);
   }
 
   &__tag {
     font-size: 12px;
-    color: #94a3b8;
-    background: #f1f5f9;
+    color: var(--vk-text-secondary, #64748b);
+    background: var(--vk-bg-muted, #f1f5f9);
     padding: 2px 8px;
     border-radius: 4px;
     font-family: monospace;
@@ -459,8 +451,8 @@ export default {
 
   &__body {
     padding: 20px;
-    border-top: 1px solid #f1f5f9;
-    background: #fafbfc;
+    border-top: 1px solid var(--vk-border);
+    background: var(--vk-bg-secondary);
   }
 
   &__mask {
@@ -479,8 +471,8 @@ export default {
 
   &__mask-text {
     font-size: 13px;
-    color: #94a3b8;
-    background: #f1f5f9;
+    color: var(--vk-text-secondary, #64748b);
+    background: var(--vk-bg-muted, #f1f5f9);
     padding: 4px 12px;
     border-radius: 4px;
   }
@@ -493,7 +485,7 @@ export default {
 
 .expand-icon {
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--vk-text-secondary, #64748b);
   margin-left: 4px;
 }
 
@@ -512,7 +504,7 @@ export default {
   label {
     font-size: 13px;
     font-weight: 500;
-    color: #64748b;
+    color: var(--vk-text-secondary, #64748b);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -541,8 +533,8 @@ export default {
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--vk-card, #ffffff);
+  border: 1px solid var(--vk-border);
   border-radius: 8px;
 }
 
@@ -558,8 +550,8 @@ export default {
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--vk-card, #ffffff);
+  border: 1px solid var(--vk-border);
   border-radius: 8px;
 }
 
@@ -575,15 +567,15 @@ export default {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--vk-card, #ffffff);
+  border: 1px solid var(--vk-border);
   border-radius: 8px;
 }
 
 .advantage-num {
   font-size: 14px;
   font-weight: 700;
-  color: #3b82f6;
+  color: var(--vk-primary, #3b82f6);
   min-width: 28px;
 }
 </style>

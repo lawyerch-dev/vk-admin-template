@@ -17,7 +17,7 @@
 		<view class="quick-actions">
 			<h2 class="section-title">
 				<i class="el-icon-s-operation"></i>
-				快捷操作
+				{{ $t('home.quick') }}
 			</h2>
 			<view class="action-grid">
 				<view v-for="(action, index) in quickActions" :key="index" class="action-card ripple-effect"
@@ -43,12 +43,12 @@
 		<!-- 右下角公告弹窗开始 -->
 		<view class="announcement-popup" v-if="dialog.show">
 				<view class="popup-header">
-					<span class="popup-title">🎉 系统公告</span>
+					<span class="popup-title">🎉 {{ $t('home.notice') }}</span>
 					<i class="el-icon-close popup-close" @click="dialog.show = false"></i>
 				</view>
 				<view class="popup-body">
-					<p class="popup-main-title">{{ announcement.title }}</p>
-					<p class="popup-subtitle">{{ announcement.subtitle }}</p>
+					<p class="popup-main-title">{{ announcement.title || $t('home.defaultTitle') }}</p>
+					<p class="popup-subtitle">{{ announcement.subtitle || $t('home.defaultSubtitle') }}</p>
 
 					<view class="popup-changelog" v-if="changelog && changelog.length > 0">
 						<view v-for="(log, index) in changelog" :key="index" class="popup-log-item">
@@ -57,7 +57,7 @@
 								<span class="log-version" v-if="log.version">v{{ log.version }}</span>
 								<span class="log-date">{{ log.date }}</span>
 								<span class="log-detail-btn" @click="goToProductList">
-									<i class="el-icon-right"></i> 查看详情
+									<i class="el-icon-right"></i> {{ $t('home.detail') }}
 								</span>
 							</view>
 							<ul class="popup-log-content">
@@ -93,11 +93,11 @@ export default {
 			},
 			// 更新日志
 			changelog: [],
-			// 公告配置
+			// 公告配置（title/subtitle 为空时回退到 home.default* 文案）
 			announcement: {
 				enabled: true,
-				title: '欢迎来到AI自动化商务定制系统！',
-				subtitle: '本系统仅用于定制用户内测使用，公开版敬请期待~'
+				title: '',
+				subtitle: ''
 			},
 			// 快捷操作
 			quickActions: [
@@ -227,13 +227,13 @@ export default {
 		handleDontShowToday() {
 			const today = this.getTodayString();
 			uni.setStorageSync('welcome_dialog_dont_show_today', today);
-			vk.toast('今日将不再显示此弹窗');
+			vk.toast(this.$t('home.muteTodayToast'));
 			this.dialog.show = false;
 		},
 		// 快捷操作点击
 		handleQuickAction(path) {
 			if (!path || path === '#' || path === '') {
-				vk.toast('功能开发中...');
+				vk.toast(this.$t('home.developing'));
 				return;
 			}
 			// 判断是否为外部链接
@@ -331,7 +331,7 @@ export default {
 
 	i {
 		font-size: 24px;
-		color: #667eea;
+		color: var(--vk-primary);
 	}
 }
 
@@ -424,7 +424,7 @@ export default {
 
 .dialog-subtext {
 	font-size: 16px;
-	color: #8492a6;
+	color: var(--vk-text-secondary, #64748b);
 	margin: 0 0 20px 0;
 }
 
@@ -442,7 +442,7 @@ export default {
 	color: var(--vk-text);
 	margin: 0 0 15px 0;
 	padding-bottom: 10px;
-	border-bottom: 2px solid #e4e7ed;
+	border-bottom: 2px solid var(--vk-border);
 }
 
 .changelog-list {
@@ -455,7 +455,7 @@ export default {
 	background: var(--vk-bg-secondary);
 	border-radius: 8px;
 	padding: 15px;
-	border-left: 3px solid #409eff;
+	border-left: 3px solid var(--vk-primary);
 	transition: all 0.3s;
 
 	&:hover {
@@ -481,12 +481,12 @@ export default {
 .changelog-version {
 	font-size: 16px;
 	font-weight: 600;
-	color: #409eff;
+	color: var(--vk-primary);
 }
 
 .changelog-date {
 	font-size: 14px;
-	color: #909399;
+	color: var(--vk-text-secondary, #64748b);
 }
 
 .changelog-download {
@@ -510,7 +510,7 @@ export default {
 
 .changelog-item-text {
 	font-size: 15px;
-	color: #606266;
+	color: var(--vk-text);
 	line-height: 1.8;
 	margin-bottom: 8px;
 	position: relative;
@@ -519,7 +519,7 @@ export default {
 		content: '•';
 		position: absolute;
 		left: -15px;
-		color: #409eff;
+		color: var(--vk-primary);
 		font-weight: bold;
 	}
 
@@ -690,12 +690,12 @@ export default {
 
 .popup-subtitle {
 	font-size: 13px;
-	color: #8492a6;
+	color: var(--vk-text-secondary, #64748b);
 	margin: 0 0 16px 0;
 }
 
 .popup-changelog {
-	border-top: 1px solid #ebeef5;
+	border-top: 1px solid var(--vk-border);
 	padding-top: 12px;
 }
 
@@ -704,7 +704,7 @@ export default {
 	border-radius: 8px;
 	padding: 12px;
 	margin-bottom: 10px;
-	border-left: 3px solid #409eff;
+	border-left: 3px solid var(--vk-primary);
 	&:last-child {
 		margin-bottom: 0;
 	}
@@ -726,7 +726,7 @@ export default {
 
 .log-version {
 	font-size: 12px;
-	color: #409eff;
+	color: var(--vk-primary);
 	background: rgba(64, 158, 255, 0.1);
 	padding: 2px 8px;
 	border-radius: 4px;
@@ -734,7 +734,7 @@ export default {
 
 .log-date {
 	font-size: 12px;
-	color: #909399;
+	color: var(--vk-text-secondary, #64748b);
 }
 
 .log-detail-btn {
@@ -761,7 +761,7 @@ export default {
 	list-style: none;
 	li {
 		font-size: 13px;
-		color: #606266;
+		color: var(--vk-text);
 		line-height: 1.6;
 		margin-bottom: 4px;
 		position: relative;
@@ -769,7 +769,7 @@ export default {
 			content: '•';
 			position: absolute;
 			left: -12px;
-			color: #409eff;
+			color: var(--vk-primary);
 		}
 		&:last-child {
 			margin-bottom: 0;
@@ -779,7 +779,7 @@ export default {
 
 .popup-footer {
 	padding: 12px 18px;
-	border-top: 1px solid #ebeef5;
+	border-top: 1px solid var(--vk-border);
 	display: flex;
 	justify-content: flex-end;
 	gap: 10px;

@@ -1,0 +1,23 @@
+{
+	"win.pwd.title": "Change Password",
+	"win.pwd.submit": "Save",
+	"win.pwd.cancel": "Close",
+	"win.pwd.username": "Account",
+	"win.pwd.oldPassword": "Current password",
+	"win.pwd.newPassword": "New password",
+	"win.pwd.newPassword2": "Confirm password",
+	"win.pwd.oldRequired": "Current password is required",
+	"win.pwd.newRequired": "New password is required",
+	"win.pwd.confirmRequired": "Please confirm the new password",
+	"win.pwd.rule": "6-18 characters: letters, numbers, underscore",
+	"win.pwd.mismatch": "Passwords do not match",
+	"win.err.title": "Error Log",
+	"win.err.clear": "Clear log",
+	"win.err.baidu": "Baidu",
+	"win.err.google": "Google",
+	"win.err.colInfo": "Type",
+	"win.err.colRoute": "Route",
+	"win.err.colErr": "Error",
+	"win.err.colTimeDiff": "When",
+	"win.err.colTime": "Time"
+}

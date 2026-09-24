@@ -1,28 +1,28 @@
 <template>
   <el-dialog
-    title="手动充值积分"
+    :title="$t('admin.stats.recharge.title')"
     :visible.sync="visible"
     width="500px"
     :close-on-click-modal="false"
   >
     <el-form :model="form" label-width="100px">
-      <el-form-item label="用户">
+      <el-form-item :label="$t('admin.stats.recharge.user')">
         <span style="font-weight: 500;">{{ userName }}</span>
-        <span style="color: #909399; margin-left: 10px;">ID: {{ userId }}</span>
+        <span style="color: var(--vk-text-secondary, #64748b); margin-left: 10px;">ID: {{ userId }}</span>
       </el-form-item>
-      <el-form-item label="当前余额">
-        <span style="color: #409EFF; font-weight: 500;">{{ currentBalance }} 积分</span>
+      <el-form-item :label="$t('admin.stats.recharge.balance')">
+        <span style="color: var(--vk-primary, #409EFF); font-weight: 500;">{{ currentBalance }} {{ $t('admin.common.points') }}</span>
       </el-form-item>
-      <el-form-item label="订单号" required>
+      <el-form-item :label="$t('admin.stats.recharge.orderId')" required>
         <el-input
           v-model="form.order_id"
-          placeholder="请输入充值订单号（如：LD2512233FGCIK）"
+          :placeholder="$t('admin.stats.recharge.orderIdPlaceholder')"
           maxlength="50"
           style="width: 300px;"
         ></el-input>
-        <div style="font-size: 12px; color: #909399; margin-top: 4px;">订单号用于防止重复充值</div>
+        <div style="font-size: 12px; color: var(--vk-text-secondary, #64748b); margin-top: 4px;">{{ $t('admin.stats.recharge.orderIdTip') }}</div>
       </el-form-item>
-      <el-form-item label="充值积分" required>
+      <el-form-item :label="$t('admin.stats.recharge.amount')" required>
         <el-input-number
           v-model="form.amount"
           :min="1"
@@ -30,17 +30,17 @@
           style="width: 200px;"
         ></el-input-number>
       </el-form-item>
-      <el-form-item label="备注">
+      <el-form-item :label="$t('admin.stats.recharge.remark')">
         <el-input
           v-model="form.remark"
-          placeholder="请输入备注（可选）"
+          :placeholder="$t('admin.stats.recharge.remarkPlaceholder')"
           maxlength="200"
         ></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取 消</el-button>
-      <el-button type="primary" @click="submitRecharge" :loading="loading">确认充值</el-button>
+      <el-button @click="visible = false">{{ $t('admin.common.cancel') }}</el-button>
+      <el-button type="primary" @click="submitRecharge" :loading="loading">{{ $t('admin.stats.recharge.confirm') }}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -75,20 +75,24 @@ export default {
     async submitRecharge() {
       const orderId = (this.form.order_id || '').trim();
       if (!orderId) {
-        vk.toast('请输入订单号');
+        vk.toast(this.$t('admin.stats.recharge.errOrderRequired'), 'none');
         return;
       }
       if (!this.form.amount || this.form.amount <= 0) {
-        vk.toast('请输入有效的充值积分数量');
+        vk.toast(this.$t('admin.stats.recharge.errAmount'), 'none');
         return;
       }
       try {
         await this.$confirm(
-          `确定要给用户 ${this.userName} 充值 ${this.form.amount} 积分吗？\n订单号：${orderId}`,
-          '确认充值',
+          this.$t('admin.stats.recharge.confirmMsg', {
+            name: this.userName,
+            amount: this.form.amount,
+            orderId,
+          }),
+          this.$t('admin.stats.recharge.confirmTitle'),
           {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+            confirmButtonText: this.$t('admin.common.ok'),
+            cancelButtonText: this.$t('admin.common.cancel'),
             type: 'warning',
           }
         );
@@ -107,15 +111,15 @@ export default {
           },
         });
         if (res.code === 0) {
-          vk.toast('充值成功', 'success');
+          vk.toast(this.$t('admin.stats.recharge.success'), 'success');
           this.visible = false;
           this.$emit('refresh');
         } else {
-          vk.toast(res.msg || '充值失败');
+          vk.toast(res.msg || this.$t('admin.stats.recharge.failed'), 'none');
         }
       } catch (err) {
         console.error('充值失败：', err);
-        vk.toast('充值失败：' + (err.message || '未知错误'));
+        vk.toast(this.$t('admin.stats.recharge.failed') + '：' + (err.message || this.$t('admin.common.unknownError')), 'none');
       } finally {
         this.loading = false;
       }

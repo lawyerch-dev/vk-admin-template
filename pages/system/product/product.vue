@@ -12,7 +12,7 @@
           type="success"
           icon="el-icon-circle-plus-outline"
           @click="addBtn"
-          >新增产品</el-button
+          >{{ $t('admin.product.add') }}</el-button
         >
         <el-button
           v-if="isAdmin"
@@ -20,7 +20,7 @@
           icon="el-icon-edit"
           @click="batchEditBtn"
           :disabled="table1.multipleSelection.length === 0"
-          >批量修改</el-button
+          >{{ $t('admin.product.batchEdit') }}</el-button
         >
 
       </template>
@@ -65,8 +65,8 @@
           v-model="row.status"
           :active-value="1"
           :inactive-value="0"
-          active-text="上架"
-          inactive-text="下架"
+          :active-text="$t('admin.product.statusOn')"
+          :inactive-text="$t('admin.product.statusOff')"
           @change="changeStatus(row)"
         ></el-switch>
       </template>
@@ -86,33 +86,33 @@
             size="mini"
             style="flex: 1"
             :controls="false"
-            placeholder="积分"
+            :placeholder="$t('admin.product.phPoints')"
             @keyup.esc.native="cancelCellEdit"
             @blur="handlePriceStandardBlur(row)"
           ></el-input-number>
-          <span style="color: #909399; font-size: 12px;">积分 /</span>
+          <span style="color: var(--vk-text-secondary, #64748b); font-size: 12px;">{{ $t('admin.product.unitPoints') }} /</span>
           <el-input-number
             v-model="editingCell.priceData.price_months"
             :min="1"
             size="mini"
             style="flex: 1"
             :controls="false"
-            placeholder="月"
+            :placeholder="$t('admin.product.phMonths')"
             @keyup.esc.native="cancelCellEdit"
             @blur="handlePriceStandardBlur(row)"
           ></el-input-number>
-          <span style="color: #909399; font-size: 12px;">月 /</span>
+          <span style="color: var(--vk-text-secondary, #64748b); font-size: 12px;">{{ $t('admin.product.unitMonths') }} /</span>
           <el-input-number
             v-model="editingCell.priceData.price_machines"
             :min="1"
             size="mini"
             style="flex: 1"
             :controls="false"
-            placeholder="机器"
+            :placeholder="$t('admin.product.phMachines')"
             @keyup.esc.native="cancelCellEdit"
             @blur="handlePriceStandardBlur(row)"
           ></el-input-number>
-          <span style="color: #909399; font-size: 12px;">机器</span>
+          <span style="color: var(--vk-text-secondary, #64748b); font-size: 12px;">{{ $t('admin.product.unitMachines') }}</span>
           <el-button
             type="primary"
             size="mini"
@@ -131,14 +131,17 @@
           v-else
           @dblclick="startPriceStandardEdit(row)"
           style="cursor: pointer; min-height: 40px;"
-          :title="isAdmin ? '双击编辑' : ''"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : ''"
         >
           <div style="color: #e6a23c; font-weight: bold">
-            {{ row.price_points }}积分 / {{ row.price_months }}月 /
-            {{ row.price_machines }} 机器
+            {{ $t('admin.product.priceStandardText', {
+              points: row.price_points,
+              months: row.price_months,
+              machines: row.price_machines
+            }) }}
           </div>
-          <div style="color: #909399; font-size: 12px; margin-top: 4px;">
-            单价：{{ calculateBasePrice(row) }}积分/月/机器
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 4px;">
+            {{ $t('admin.product.unitPrice', { price: calculateBasePrice(row) }) }}
           </div>
         </div>
       </template>
@@ -163,7 +166,7 @@
           v-else
           @dblclick="startCellEdit(row, 'product_name', row.product_name)"
           style="cursor: pointer; min-height: 20px;"
-          :title="isAdmin ? '双击编辑' : ''"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : ''"
         >
           {{ row.product_name }}
         </div>
@@ -191,7 +194,7 @@
           v-else
           @dblclick="startCellEdit(row, 'description', row.description || '')"
           style="cursor: pointer; min-height: 20px; word-break: break-word;"
-          :title="isAdmin ? '双击编辑' : (row.description || '')"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : (row.description || '')"
         >
           {{ row.description || '-' }}
         </div>
@@ -217,7 +220,7 @@
           v-else
           @dblclick="startCellEdit(row, 'download_url', row.download_url || '')"
           style="cursor: pointer; min-height: 20px; word-break: break-all;"
-          :title="isAdmin ? '双击编辑' : (row.download_url || '')"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : (row.download_url || '')"
         >
           {{ row.download_url || '-' }}
         </div>
@@ -233,7 +236,7 @@
           <el-input
             v-model="editingCell.value"
             size="mini"
-            placeholder="飞书文档链接"
+            :placeholder="$t('admin.product.phDocLink')"
             @blur="handleBlur(row, 'detail_url')"
             @keyup.enter.native="saveCellEdit(row)"
             @keyup.esc.native="cancelCellEdit"
@@ -244,7 +247,7 @@
           v-else
           @dblclick="startCellEdit(row, 'detail_url', row.detail_url || '')"
           style="cursor: pointer; min-height: 20px; word-break: break-all;"
-          :title="isAdmin ? '双击编辑' : (row.detail_url || '')"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : (row.detail_url || '')"
         >
           <el-link
             v-if="row.detail_url"
@@ -253,9 +256,9 @@
             type="primary"
             icon="el-icon-document"
           >
-            查看文档
+            {{ $t('admin.product.viewDoc') }}
           </el-link>
-          <span v-else style="color: #909399;">-</span>
+          <span v-else style="color: var(--vk-text-secondary, #64748b);">-</span>
         </div>
       </template>
 
@@ -282,13 +285,13 @@
           v-else
           @dblclick="startCellEdit(row, 'buy_price', row.buy_price || 0)"
           style="cursor: pointer; min-height: 20px;"
-          :title="isAdmin ? '双击编辑' : ''"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : ''"
         >
           <div v-if="row.buy_price && row.buy_price > 0" style="color: #67C23A; font-weight: bold">
-            {{ row.buy_price }} 积分
+            {{ $t('admin.product.buyPriceText', { n: row.buy_price }) }}
           </div>
-          <div v-else style="color: #909399; font-size: 12px;">
-            不可购买
+          <div v-else style="color: var(--vk-text-secondary, #64748b); font-size: 12px;">
+            {{ $t('admin.product.notPurchasable') }}
           </div>
         </div>
       </template>
@@ -304,7 +307,7 @@
             v-model="editingCell.value"
             multiple
             filterable
-            placeholder="请选择可见用户"
+            :placeholder="$t('admin.product.phSelectUsers')"
             size="mini"
             style="width: 100%"
             @visible-change="(visible) => !visible && handleSelectBlur(row, 'custom_user_ids')"
@@ -312,14 +315,14 @@
           >
             <el-option
               key="all"
-              label="🌐 所有人（公开）"
+              :label="$t('admin.product.optionAllPublic')"
               value="all"
             >
               <span style="float: left; font-weight: bold; color: #67C23A;">
-                <i class="el-icon-user"></i> 所有人（公开）
+                <i class="el-icon-user"></i> {{ $t('admin.product.optionAllPublic') }}
               </span>
             </el-option>
-            <el-option disabled value="">───────── 指定用户 ─────────</el-option>
+            <el-option disabled value="">{{ $t('admin.product.optionSpecifiedUsers') }}</el-option>
             <el-option
               v-for="user in userList"
               :key="user._id"
@@ -329,7 +332,7 @@
               <span style="float: left">{{
                 user.nickname || user.username
               }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
+              <span style="float: right; color: var(--vk-text-secondary, #64748b); font-size: 13px">{{
                 user.username
               }}</span>
             </el-option>
@@ -339,24 +342,24 @@
           v-else
           @dblclick="startCellEdit(row, 'custom_user_ids', row.custom_user_ids || [])"
           style="cursor: pointer; min-height: 20px;"
-          :title="isAdmin ? '双击编辑' : ''"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : ''"
         >
           <el-tag
             v-if="!row.custom_user_ids || row.custom_user_ids.length === 0"
             type="info"
             size="small"
           >
-            所有人不可见
+            {{ $t('admin.product.invisibleAll') }}
           </el-tag>
           <el-tag
             v-else-if="row.custom_user_ids.includes('all')"
             type="success"
             size="small"
           >
-            公开
+            {{ $t('admin.product.public') }}
           </el-tag>
           <el-tag v-else type="warning" size="small">
-            指定用户({{ row.custom_user_ids.length }}人)
+            {{ $t('admin.product.specifiedUsers', { n: row.custom_user_ids.length }) }}
           </el-tag>
         </div>
       </template>
@@ -372,13 +375,13 @@
             v-model="editingCell.value"
             multiple
             filterable
-            placeholder="请选择特殊价格用户"
+            :placeholder="$t('admin.product.phSelectSpecialUsers')"
             size="mini"
             style="width: 100%"
             @visible-change="(visible) => !visible && handleSelectBlur(row, 'special_price_user_ids')"
             @keyup.esc.native="cancelCellEdit"
           >
-            <el-option disabled value="">───────── 特殊价格用户 ─────────</el-option>
+            <el-option disabled value="">{{ $t('admin.product.optionSpecialUsers') }}</el-option>
             <el-option
               v-for="user in userList"
               :key="user._id"
@@ -388,7 +391,7 @@
               <span style="float: left">{{
                 user.nickname || user.username
               }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
+              <span style="float: right; color: var(--vk-text-secondary, #64748b); font-size: 13px">{{
                 user.username
               }}</span>
             </el-option>
@@ -398,17 +401,20 @@
           v-else
           @dblclick="startCellEdit(row, 'special_price_user_ids', row.special_price_user_ids || [])"
           style="cursor: pointer; min-height: 20px;"
-          :title="isAdmin ? '双击编辑' : ''"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : ''"
         >
           <el-tag
             v-if="!row.special_price_user_ids || row.special_price_user_ids.length === 0"
             type="info"
             size="small"
           >
-            无
+            {{ $t('admin.common.none') }}
           </el-tag>
           <el-tag v-else type="success" size="small">
-            {{ row.special_price || 1 }}积分({{ row.special_price_user_ids.length }}人)
+            {{ $t('admin.product.specialPriceUsers', {
+              price: row.special_price || 1,
+              n: row.special_price_user_ids.length
+            }) }}
           </el-tag>
         </div>
       </template>
@@ -439,10 +445,10 @@
           v-else
           @dblclick="startCellEdit(row, 'special_price', row.special_price || 1)"
           style="cursor: pointer; min-height: 20px;"
-          :title="isAdmin ? '双击编辑' : ''"
+          :title="isAdmin ? $t('admin.product.dblClickEdit') : ''"
         >
           <span style="color: #67C23A; font-weight: bold">{{ row.special_price || 1 }}</span>
-          <span style="color: #909399; font-size: 12px;"> 积分/月/机器</span>
+          <span style="color: var(--vk-text-secondary, #64748b); font-size: 12px;"> {{ $t('admin.product.specialPriceUnit') }}</span>
         </div>
       </template>
     </vk-data-table>
@@ -472,7 +478,7 @@
              filterable
              allow-create
              default-first-option
-             placeholder="请选择或输入产品类型"
+             :placeholder="$t('admin.product.phSelectType')"
              style="width: 100%"
            >
              <el-option
@@ -490,20 +496,20 @@
             v-model="form1.data.custom_user_ids"
             multiple
             filterable
-            placeholder="请选择可见用户（可多选）"
+            :placeholder="$t('admin.product.phSelectUsersMulti')"
             style="width: 100%"
           >
             <!-- 所有人选项 -->
             <el-option
               key="all"
-              label="🌐 所有人（公开）"
+              :label="$t('admin.product.optionAllPublic')"
               value="all"
             >
               <span style="float: left; font-weight: bold; color: #67C23A;">
-                <i class="el-icon-user"></i> 所有人（公开）
+                <i class="el-icon-user"></i> {{ $t('admin.product.optionAllPublic') }}
               </span>
             </el-option>
-            <el-option disabled value="">───────── 指定用户 ─────────</el-option>
+            <el-option disabled value="">{{ $t('admin.product.optionSpecifiedUsers') }}</el-option>
             <!-- 用户列表 -->
             <el-option
               v-for="user in userList"
@@ -514,21 +520,21 @@
               <span style="float: left">{{
                 user.nickname || user.username
               }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
+              <span style="float: right; color: var(--vk-text-secondary, #64748b); font-size: 13px">{{
                 user.username
               }}</span>
             </el-option>
           </el-select>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
             <i class="el-icon-info"></i>
             <span v-if="!form1.data.custom_user_ids || form1.data.custom_user_ids.length === 0" style="color: #F56C6C;">
-              未选择=产品不可见
+              {{ $t('admin.product.visibilityNone') }}
             </span>
             <span v-else-if="form1.data.custom_user_ids.includes('all')" style="color: #67C23A;">
-              已选择"所有人"=公开可见（原价）
+              {{ $t('admin.product.visibilityPublic') }}
             </span>
             <span v-else style="color: #E6A23C;">
-              已选择{{ form1.data.custom_user_ids.length }}位用户=仅他们可见且享受3折优惠
+              {{ $t('admin.product.visibilityUsers', { n: form1.data.custom_user_ids.length }) }}
             </span>
           </div>
         </template>
@@ -538,27 +544,27 @@
             <el-input-number
               v-model="form1.data.price_points"
               :min="1"
-              placeholder="积分"
+              :placeholder="$t('admin.product.phPoints')"
               style="flex: 1"
             ></el-input-number>
-            <span style="color: #909399">积分 /</span>
+            <span style="color: var(--vk-text-secondary, #64748b)">{{ $t('admin.product.unitPoints') }} /</span>
             <el-input-number
               v-model="form1.data.price_months"
               :min="1"
-              placeholder="月数"
+              :placeholder="$t('admin.product.phMonthCount')"
               style="flex: 1"
             ></el-input-number>
-            <span style="color: #909399">月 /</span>
+            <span style="color: var(--vk-text-secondary, #64748b)">{{ $t('admin.product.unitMonths') }} /</span>
             <el-input-number
               v-model="form1.data.price_machines"
               :min="1"
-              placeholder="机器数"
+              :placeholder="$t('admin.product.phMachineCount')"
               style="flex: 1"
             ></el-input-number>
-            <span style="color: #909399">机器数</span>
+            <span style="color: var(--vk-text-secondary, #64748b)">{{ $t('admin.product.unitMachines') }}</span>
           </div>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
-            <i class="el-icon-info"></i> 收费标准：积分数 / 月数 / 机器数
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
+            <i class="el-icon-info"></i> {{ $t('admin.product.priceStandardTip') }}
           </div>
         </template>
 
@@ -571,7 +577,7 @@
               class="config-item"
             >
               <div class="config-header">
-                <span class="config-title">配置 {{ index + 1 }}</span>
+                <span class="config-title">{{ $t('admin.product.configIndex', { n: index + 1 }) }}</span>
                 <el-button
                   type="danger"
                   icon="el-icon-delete"
@@ -585,7 +591,7 @@
                   v-model="config.user_ids"
                   multiple
                   filterable
-                  placeholder="选择用户"
+                  :placeholder="$t('admin.product.phSelectUser')"
                   style="width: 100%; margin-bottom: 10px;"
                 >
                   <el-option
@@ -595,28 +601,28 @@
                     :value="user._id"
                   >
                     <span style="float: left">{{ user.nickname || user.username }}</span>
-                    <span style="float: right; color: #8492a6; font-size: 13px">{{ user.username }}</span>
+                    <span style="float: right; color: var(--vk-text-secondary, #64748b); font-size: 13px">{{ user.username }}</span>
                   </el-option>
                 </el-select>
                 <div style="display: flex; gap: 10px;">
                   <div style="flex: 1;">
-                    <div style="font-size: 12px; color: #909399; margin-bottom: 4px;">购买价格（积分）</div>
+                    <div style="font-size: 12px; color: var(--vk-text-secondary, #64748b); margin-bottom: 4px;">{{ $t('admin.product.buyPriceLabel') }}</div>
                     <el-input-number
                       v-model="config.buy_price"
                       :min="0"
                       :precision="0"
-                      placeholder="购买价格"
+                      :placeholder="$t('admin.product.phBuyPrice')"
                       style="width: 100%;"
                     ></el-input-number>
                   </div>
                   <div style="flex: 1;">
-                    <div style="font-size: 12px; color: #909399; margin-bottom: 4px;">积分扣除（积分/月/机器）</div>
+                    <div style="font-size: 12px; color: var(--vk-text-secondary, #64748b); margin-bottom: 4px;">{{ $t('admin.product.pointsDeductLabel') }}</div>
                     <el-input-number
                       v-model="config.points_price"
                       :min="0.1"
                       :precision="2"
                       :step="0.1"
-                      placeholder="积分价格"
+                      :placeholder="$t('admin.product.phPointsPrice')"
                       style="width: 100%;"
                     ></el-input-number>
                   </div>
@@ -629,12 +635,12 @@
               style="width: 100%; margin-top: 10px;"
               @click="addSpecialPriceConfig"
             >
-              添加特殊价格配置
+              {{ $t('admin.product.addSpecialConfig') }}
             </el-button>
           </div>
-          <div style="color: #909399; font-size: 12px; margin-top: 10px;">
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 10px;">
             <i class="el-icon-info"></i>
-            为不同用户配置独立的购买价格和积分扣除价格，未配置的用户使用默认价格
+            {{ $t('admin.product.specialConfigTip') }}
           </div>
         </template>
 
@@ -644,10 +650,10 @@
             v-model="form1.data.purchased_user_ids"
             multiple
             filterable
-            placeholder="请选择已购买用户（可多选）"
+            :placeholder="$t('admin.product.phSelectPurchased')"
             style="width: 100%"
           >
-            <el-option disabled value="">───────── 已购买用户 ─────────</el-option>
+            <el-option disabled value="">{{ $t('admin.product.optionPurchasedUsers') }}</el-option>
             <!-- 用户列表 -->
             <el-option
               v-for="user in userList"
@@ -658,18 +664,18 @@
               <span style="float: left">{{
                 user.nickname || user.username
               }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
+              <span style="float: right; color: var(--vk-text-secondary, #64748b); font-size: 13px">{{
                 user.username
               }}</span>
             </el-option>
           </el-select>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
             <i class="el-icon-info"></i>
-            <span v-if="!form1.data.purchased_user_ids || form1.data.purchased_user_ids.length === 0" style="color: #909399;">
-              未选择=无已购买用户（用户购买后会自动添加）
+            <span v-if="!form1.data.purchased_user_ids || form1.data.purchased_user_ids.length === 0" style="color: var(--vk-text-secondary, #64748b);">
+              {{ $t('admin.product.purchasedNone') }}
             </span>
             <span v-else style="color: #67C23A;">
-              已选择{{ form1.data.purchased_user_ids.length }}位用户=这些用户已拥有该产品
+              {{ $t('admin.product.purchasedSome', { n: form1.data.purchased_user_ids.length }) }}
             </span>
           </div>
         </template>
@@ -679,10 +685,10 @@
           <div class="valid-days-options">
             <!-- 表头 -->
             <div class="option-header">
-              <span class="header-item" style="width: 120px;">有效期（天）</span>
-              <span class="header-item" style="width: 150px; margin-left: 10px;">显示名称</span>
-              <span class="header-item" style="width: 120px; margin-left: 10px;">折扣系数</span>
-              <span class="header-item" style="width: 50px; margin-left: 10px;">操作</span>
+              <span class="header-item" style="width: 120px;">{{ $t('admin.product.colValidDays') }}</span>
+              <span class="header-item" style="width: 150px; margin-left: 10px;">{{ $t('admin.product.colDisplayName') }}</span>
+              <span class="header-item" style="width: 120px; margin-left: 10px;">{{ $t('admin.product.colDiscount') }}</span>
+              <span class="header-item" style="width: 50px; margin-left: 10px;">{{ $t('admin.common.action') }}</span>
             </div>
             <div
               v-for="(option, index) in form1.data.valid_days_options"
@@ -693,12 +699,12 @@
                 v-model="option.days"
                 :min="1"
                 :max="9999"
-                placeholder="天数"
+                :placeholder="$t('admin.product.phDays')"
                 style="width: 120px"
               ></el-input-number>
               <el-input
                 v-model="option.label"
-                placeholder="如：月卡、季卡"
+                :placeholder="$t('admin.product.phCardLabel')"
                 style="width: 150px; margin-left: 10px"
               ></el-input>
               <el-input-number
@@ -707,10 +713,10 @@
                 :max="1"
                 :step="0.1"
                 :precision="2"
-                placeholder="折扣"
+                :placeholder="$t('admin.product.phDiscount')"
                 style="width: 120px; margin-left: 10px"
               ></el-input-number>
-              <span style="margin-left: 5px; color: #909399">折</span>
+              <span style="margin-left: 5px; color: var(--vk-text-secondary, #64748b)">{{ $t('admin.product.discountUnit') }}</span>
               <el-button
                 type="danger"
                 icon="el-icon-delete"
@@ -727,11 +733,11 @@
               @click="addOption"
               style="margin-top: 10px"
             >
-              添加卡密选项
+              {{ $t('admin.product.addCardOption') }}
             </el-button>
-            <div style="color: #909399; font-size: 12px; margin-top: 10px;">
+            <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 10px;">
               <i class="el-icon-info"></i>
-              示例：30天=月卡(1折)，90天=季卡(0.9折)，365天=年卡(0.8折)
+              {{ $t('admin.product.cardOptionTip') }}
             </div>
           </div>
         </template>
@@ -745,7 +751,7 @@
               class="version-log-item"
             >
               <div class="version-log-header">
-                <span class="version-tag">版本 {{ index + 1 }}</span>
+                <span class="version-tag">{{ $t('admin.product.versionIndex', { n: index + 1 }) }}</span>
                 <el-button
                   type="danger"
                   icon="el-icon-delete"
@@ -758,21 +764,21 @@
                 <el-row :gutter="10">
                   <el-col :span="12">
                     <div class="form-item">
-                      <label>版本号</label>
+                      <label>{{ $t('admin.product.fieldVersion') }}</label>
                       <el-input
                         v-model="versionLog.version"
-                        placeholder="如: 1.2.0"
+                        placeholder="1.2.0"
                         clearable
                       ></el-input>
                     </div>
                   </el-col>
                   <el-col :span="12">
                     <div class="form-item">
-                      <label>发布时间</label>
+                      <label>{{ $t('admin.product.fieldPublishTime') }}</label>
                       <el-date-picker
                         v-model="versionLog.date"
                         type="datetime"
-                        placeholder="选择发布时间"
+                        :placeholder="$t('admin.product.phPublishTime')"
                         value-format="timestamp"
                         style="width: 100%"
                       ></el-date-picker>
@@ -780,22 +786,22 @@
                   </el-col>
                 </el-row>
                 <div class="form-item">
-                  <label>更新内容</label>
+                  <label>{{ $t('admin.product.fieldChangelog') }}</label>
                   <el-input
                     v-model="versionLog.log"
                     type="textarea"
                     :rows="4"
-                    placeholder="请输入更新内容，每行一条更新记录&#10;如：&#10;• 新增批量导出功能&#10;• 修复导入编码问题&#10;• 优化加载速度"
+                    :placeholder="$t('admin.product.phChangelog')"
                   ></el-input>
-                  <div style="color: #909399; font-size: 12px; margin-top: 5px">
-                    <i class="el-icon-info"></i> 建议使用 "• " 或 "- " 开头，每行一条更新记录
+                  <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
+                    <i class="el-icon-info"></i> {{ $t('admin.product.changelogTip') }}
                   </div>
                 </div>
                 <div class="form-item">
-                  <label>下载地址（可选）</label>
+                  <label>{{ $t('admin.product.fieldDownloadUrl') }}</label>
                   <el-input
                     v-model="versionLog.download_url"
-                    placeholder="留空则使用产品默认下载地址"
+                    :placeholder="$t('admin.product.phDownloadUrl')"
                     clearable
                   >
                     <template slot="prepend">
@@ -812,11 +818,11 @@
               @click="addVersionLog"
               style="margin-top: 10px"
             >
-              添加新版本
+              {{ $t('admin.product.addVersion') }}
             </el-button>
-            <div v-if="!form1.data.version_logs || form1.data.version_logs.length === 0" 
-                 style="color: #909399; text-align: center; padding: 20px;">
-              <i class="el-icon-info"></i> 暂无版本记录，点击上方按钮添加
+            <div v-if="!form1.data.version_logs || form1.data.version_logs.length === 0"
+                 style="color: var(--vk-text-secondary, #64748b); text-align: center; padding: 20px;">
+              <i class="el-icon-info"></i> {{ $t('admin.product.noVersionLogs') }}
             </div>
           </div>
         </template>
@@ -826,89 +832,89 @@
 
     <!-- 批量修改弹窗 -->
     <el-dialog
-      title="批量修改产品"
+      :title="$t('admin.product.batchEditTitle')"
       :visible.sync="batchEditDialog.show"
       width="700px"
       :close-on-click-modal="false"
     >
       <el-form :model="batchEditDialog.form" label-width="140px">
-        <el-form-item label="已选择产品">
+        <el-form-item :label="$t('admin.product.selectedProducts')">
           <el-tag type="info" size="small" style="margin-right: 5px">
-            {{ table1.multipleSelection.length }} 个产品
+            {{ $t('admin.product.selectedCount', { n: table1.multipleSelection.length }) }}
           </el-tag>
         </el-form-item>
-        
+
         <el-divider></el-divider>
-        
-        <el-form-item label="收费标准">
+
+        <el-form-item :label="$t('admin.product.colPriceStandard')">
           <div style="display: flex; gap: 10px; align-items: center; width: 100%">
             <el-input-number
               v-model="batchEditDialog.form.price_points"
               :min="1"
-              placeholder="积分"
+              :placeholder="$t('admin.product.phPoints')"
               style="flex: 1"
               :controls="false"
               @change="batchEditDialog.modifiedFields.price_points = true"
             ></el-input-number>
-            <span style="color: #909399">积分 /</span>
+            <span style="color: var(--vk-text-secondary, #64748b)">{{ $t('admin.product.unitPoints') }} /</span>
             <el-input-number
               v-model="batchEditDialog.form.price_months"
               :min="1"
-              placeholder="月数"
+              :placeholder="$t('admin.product.phMonthCount')"
               style="flex: 1"
               :controls="false"
               @change="batchEditDialog.modifiedFields.price_months = true"
             ></el-input-number>
-            <span style="color: #909399">月 /</span>
+            <span style="color: var(--vk-text-secondary, #64748b)">{{ $t('admin.product.unitMonths') }} /</span>
             <el-input-number
               v-model="batchEditDialog.form.price_machines"
               :min="1"
-              placeholder="机器数"
+              :placeholder="$t('admin.product.phMachineCount')"
               style="flex: 1"
               :controls="false"
               @change="batchEditDialog.modifiedFields.price_machines = true"
             ></el-input-number>
-            <span style="color: #909399">机器</span>
+            <span style="color: var(--vk-text-secondary, #64748b)">{{ $t('admin.product.unitMachines') }}</span>
           </div>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
-            <i class="el-icon-info"></i> 留空则不修改该字段，可只修改其中一项或多项
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
+            <i class="el-icon-info"></i> {{ $t('admin.product.batchPriceTip') }}
           </div>
         </el-form-item>
-        
-        <el-form-item label="购买价格">
+
+        <el-form-item :label="$t('admin.product.colBuyPrice')">
           <el-input-number
             v-model="batchEditDialog.form.buy_price"
             :min="0"
-            placeholder="购买价格（积分）"
+            :placeholder="$t('admin.product.phBuyPricePoints')"
             style="width: 100%"
             :controls="false"
             @change="batchEditDialog.modifiedFields.buy_price = true"
           ></el-input-number>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
-            <i class="el-icon-info"></i> 留空则不修改该字段，0表示不可购买
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
+            <i class="el-icon-info"></i> {{ $t('admin.product.batchBuyTip') }}
           </div>
         </el-form-item>
-        
-        <el-form-item label="可见范围">
+
+        <el-form-item :label="$t('admin.product.colVisibility')">
           <el-select
             v-model="batchEditDialog.form.custom_user_ids"
             multiple
             filterable
-            placeholder="请选择可见用户（可多选）"
+            :placeholder="$t('admin.product.phSelectUsersMulti')"
             style="width: 100%"
             clearable
             @change="batchEditDialog.modifiedFields.custom_user_ids = true"
           >
             <el-option
               key="all"
-              label="🌐 所有人（公开）"
+              :label="$t('admin.product.optionAllPublic')"
               value="all"
             >
               <span style="float: left; font-weight: bold; color: #67C23A;">
-                <i class="el-icon-user"></i> 所有人（公开）
+                <i class="el-icon-user"></i> {{ $t('admin.product.optionAllPublic') }}
               </span>
             </el-option>
-            <el-option disabled value="">───────── 指定用户 ─────────</el-option>
+            <el-option disabled value="">{{ $t('admin.product.optionSpecifiedUsers') }}</el-option>
             <el-option
               v-for="user in userList"
               :key="user._id"
@@ -918,44 +924,44 @@
               <span style="float: left">{{
                 user.nickname || user.username
               }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
+              <span style="float: right; color: var(--vk-text-secondary, #64748b); font-size: 13px">{{
                 user.username
               }}</span>
             </el-option>
           </el-select>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
-            <i class="el-icon-info"></i> 留空则不修改该字段
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
+            <i class="el-icon-info"></i> {{ $t('admin.common.leaveBlankKeep') }}
           </div>
         </el-form-item>
-        
-        <el-form-item label="特殊价格">
+
+        <el-form-item :label="$t('admin.product.colSpecialPrice')">
           <el-input-number
             v-model="batchEditDialog.form.special_price"
             :min="0.1"
             :max="999999"
             :precision="2"
             :step="0.1"
-            placeholder="特殊价格（积分/月/机器）"
+            :placeholder="$t('admin.product.phSpecialPrice')"
             style="width: 100%"
             :controls="false"
             @change="batchEditDialog.modifiedFields.special_price = true"
           ></el-input-number>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
-            <i class="el-icon-info"></i> 留空则不修改该字段
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
+            <i class="el-icon-info"></i> {{ $t('admin.common.leaveBlankKeep') }}
           </div>
         </el-form-item>
-        
-        <el-form-item label="特殊价格用户">
+
+        <el-form-item :label="$t('admin.product.colSpecialUsers')">
           <el-select
             v-model="batchEditDialog.form.special_price_user_ids"
             multiple
             filterable
-            placeholder="请选择特殊价格用户（可多选）"
+            :placeholder="$t('admin.product.phSelectSpecialUsersMulti')"
             style="width: 100%"
             clearable
             @change="batchEditDialog.modifiedFields.special_price_user_ids = true"
           >
-            <el-option disabled value="">───────── 特殊价格用户 ─────────</el-option>
+            <el-option disabled value="">{{ $t('admin.product.optionSpecialUsers') }}</el-option>
             <el-option
               v-for="user in userList"
               :key="user._id"
@@ -965,21 +971,21 @@
               <span style="float: left">{{
                 user.nickname || user.username
               }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
+              <span style="float: right; color: var(--vk-text-secondary, #64748b); font-size: 13px">{{
                 user.username
               }}</span>
             </el-option>
           </el-select>
-          <div style="color: #909399; font-size: 12px; margin-top: 5px">
-            <i class="el-icon-info"></i> 留空则不修改该字段
+          <div style="color: var(--vk-text-secondary, #64748b); font-size: 12px; margin-top: 5px">
+            <i class="el-icon-info"></i> {{ $t('admin.common.leaveBlankKeep') }}
           </div>
         </el-form-item>
       </el-form>
-      
+
       <div slot="footer" class="dialog-footer">
-        <el-button @click="batchEditDialog.show = false">取消</el-button>
+        <el-button @click="batchEditDialog.show = false">{{ $t('admin.common.cancel') }}</el-button>
         <el-button type="primary" @click="batchEditSubmit" :loading="batchEditDialog.loading">
-          确定修改
+          {{ $t('admin.product.batchConfirm') }}
         </el-button>
       </div>
     </el-dialog>
@@ -991,14 +997,13 @@ let that;
 let vk = uni.vk;
 let originalForms = {};
 
-// 状态数据
-const statusData = [
-  { value: 0, label: "下架" },
-  { value: 1, label: "上架" },
-];
-
 export default {
   data() {
+    // 状态数据
+    const statusData = [
+      { value: 0, label: this.$t('admin.product.statusOff') },
+      { value: 1, label: this.$t('admin.product.statusOn') },
+    ];
     return {
       isAdmin: false, // 是否是管理员
       productTypeData: [], // 产品类型选项（从数据库加载）
@@ -1050,59 +1055,59 @@ export default {
         action: "admin/product/sys/getList",
         multipleSelection: [], // 多选列表
         columns: [
-          { key: "_add_time", title: "创建时间", type: "time", width: 180 },
+          { key: "_add_time", title: this.$t('admin.product.colCreateTime'), type: "time", width: 180 },
           {
             key: "product_image",
-            title: "产品图",
+            title: this.$t('admin.product.colImage'),
             type: "text",
             width: 120,
             slot: true,
           },
-          { key: "product_id", title: "产品ID", type: "text", width: 180 },
-          { key: "product_name", title: "产品名称", type: "text", width: 150, slot: true },
-          { key: "description", title: "产品描述", type: "text", width: 200, slot: true },
-          { key: "product_type", title: "产品类型", type: "text", width: 120 },
-          { key: "download_url", title: "下载地址", type: "text", width: 250, slot: true },
-          { key: "detail_url", title: "详情文档", type: "text", width: 200, slot: true },
+          { key: "product_id", title: this.$t('admin.product.colProductId'), type: "text", width: 180 },
+          { key: "product_name", title: this.$t('admin.product.colProductName'), type: "text", width: 150, slot: true },
+          { key: "description", title: this.$t('admin.product.colDescription'), type: "text", width: 200, slot: true },
+          { key: "product_type", title: this.$t('admin.product.colProductType'), type: "text", width: 120 },
+          { key: "download_url", title: this.$t('admin.product.colDownloadUrl'), type: "text", width: 250, slot: true },
+          { key: "detail_url", title: this.$t('admin.product.colDetailUrl'), type: "text", width: 200, slot: true },
           {
             key: "price_standard",
-            title: "收费标准",
+            title: this.$t('admin.product.colPriceStandard'),
             type: "text",
             width: 200,
             slot: true,
           },
           {
             key: "buy_price",
-            title: "购买价格",
+            title: this.$t('admin.product.colBuyPrice'),
             type: "text",
             width: 120,
             slot: true,
           },
           {
             key: "custom_user_ids",
-            title: "可见范围",
+            title: this.$t('admin.product.colVisibility'),
             type: "text",
             width: 120,
             slot: true,
           },
           {
             key: "special_price_user_ids",
-            title: "特殊价格用户",
+            title: this.$t('admin.product.colSpecialUsers'),
             type: "text",
             width: 150,
             slot: true,
           },
           {
             key: "special_price",
-            title: "特殊价格",
+            title: this.$t('admin.product.colSpecialPrice'),
             type: "text",
             width: 120,
             slot: true,
           },
-          { key: "remark", title: "备注", type: "text", width: 200 },
+          { key: "remark", title: this.$t('admin.product.colRemark'), type: "text", width: 200 },
           {
             key: "status",
-            title: "状态",
+            title: this.$t('admin.product.colStatus'),
             type: "text",
             width: 150,
             slot: true,
@@ -1115,16 +1120,16 @@ export default {
           {
             key: "product_name",
             type: "text",
-            title: "产品名称",
-            placeholder: "请输入产品名称",
+            title: this.$t('admin.product.colProductName'),
+            placeholder: this.$t('admin.product.phProductName'),
             mode: "%%",
             col: { span: 5 },
           },
           {
             key: "product_type",
             type: "select",
-            title: "产品类型",
-            placeholder: "选择类型",
+            title: this.$t('admin.product.colProductType'),
+            placeholder: this.$t('admin.product.phSelectType'),
             data: [], // 从数据库动态加载
             col: { span: 4 },
             mode: "=",
@@ -1132,8 +1137,8 @@ export default {
           {
             key: "status",
             type: "select",
-            title: "状态",
-            placeholder: "选择状态",
+            title: this.$t('admin.product.colStatus'),
+            placeholder: this.$t('admin.product.phSelectStatus'),
             data: statusData,
             col: { span: 3 },
             mode: "=",
@@ -1146,156 +1151,156 @@ export default {
           action: "",
           columns: [
             // ========== 基本信息 ==========
-            { key: "", title: "基本信息", type: "bar-title" },
+            { key: "", title: this.$t('admin.product.sectionBasic'), type: "bar-title" },
             {
               key: "product_id",
-              title: "产品ID",
+              title: this.$t('admin.product.colProductId'),
               type: "text",
-              placeholder: "请输入产品唯一标识（英文）",
-              tips: "产品唯一标识，创建后不可修改",
+              placeholder: this.$t('admin.product.phProductId'),
+              tips: this.$t('admin.product.tipProductId'),
               show: ["add"],
             },
             {
               key: "product_name",
-              title: "产品名称",
+              title: this.$t('admin.product.colProductName'),
               type: "text",
-              placeholder: "请输入产品名称",
+              placeholder: this.$t('admin.product.phProductName'),
             },
             {
               key: "product_type",
-              title: "产品类型",
+              title: this.$t('admin.product.colProductType'),
               slot: true,
             },
             {
               key: "status",
-              title: "状态",
+              title: this.$t('admin.product.colStatus'),
               type: "radio",
               data: statusData,
               defaultValue: 1,
             },
             // ========== 产品详情 ==========
-            { key: "", title: "产品详情", type: "bar-title" },
+            { key: "", title: this.$t('admin.product.sectionDetail'), type: "bar-title" },
             {
               key: "product_image",
-              title: "产品图",
+              title: this.$t('admin.product.colImage'),
               type: "image",
               limit: 1,
-              tips: "支持jpg/png格式，建议尺寸400x300",
+              tips: this.$t('admin.product.tipImage'),
             },
             {
               key: "description",
-              title: "产品描述",
+              title: this.$t('admin.product.colDescription'),
               type: "textarea",
-              placeholder: "请输入产品描述",
+              placeholder: this.$t('admin.product.phDescription'),
             },
             {
               key: "download_url",
-              title: "下载地址",
+              title: this.$t('admin.product.colDownloadUrl'),
               type: "text",
-              placeholder: "请输入下载地址",
-              tips: "已购买用户可下载的地址",
+              placeholder: this.$t('admin.product.phDownload'),
+              tips: this.$t('admin.product.tipDownload'),
             },
             {
               key: "version_logs",
-              title: "版本更新日志",
+              title: this.$t('admin.product.colVersionLogs'),
               slot: true,
             },
             {
               key: "detail_url",
-              title: "详情文档链接",
+              title: this.$t('admin.product.colDetailUrl'),
               type: "text",
-              placeholder: "请输入飞书文档链接",
-              tips: "用户点击查看详情时跳转的文档链接（飞书文档等）",
+              placeholder: this.$t('admin.product.phDocLink'),
+              tips: this.$t('admin.product.tipDetailUrl'),
             },
             // ========== 收费配置 ==========
-            { key: "", title: "收费配置", type: "bar-title" },
+            { key: "", title: this.$t('admin.product.sectionPricing'), type: "bar-title" },
             {
               key: "buy_price",
-              title: "购买价格",
+              title: this.$t('admin.product.colBuyPrice'),
               type: "number",
-              placeholder: "请输入公开产品的购买价格",
-              tips: "公开产品的一次性购买价格（积分），0表示不可购买",
+              placeholder: this.$t('admin.product.phBuyPricePublic'),
+              tips: this.$t('admin.product.tipBuyPrice'),
               defaultValue: 0,
             },
             {
               key: "price_standard",
-              title: "收费标准",
+              title: this.$t('admin.product.colPriceStandard'),
               slot: true,
             },
             {
               key: "valid_days_options",
-              title: "卡密收费",
+              title: this.$t('admin.product.colCardPricing'),
               slot: true,
-              tips: "可选配置，支持按天数+折扣灵活定价",
+              tips: this.$t('admin.product.tipCardPricing'),
             },
             // ========== 高级配置 ==========
-            { key: "", title: "高级配置", type: "bar-title" },
+            { key: "", title: this.$t('admin.product.sectionAdvanced'), type: "bar-title" },
             {
               key: "custom_user_ids",
-              title: "可见范围",
+              title: this.$t('admin.product.colVisibility'),
               slot: true,
             },
             {
               key: "special_price_config",
-              title: "特殊价格配置",
+              title: this.$t('admin.product.colSpecialConfig'),
               slot: true,
             },
             {
               key: "purchased_user_ids",
-              title: "已购买用户",
+              title: this.$t('admin.product.colPurchasedUsers'),
               slot: true,
             },
             {
               key: "remark",
-              title: "备注",
+              title: this.$t('admin.product.colRemark'),
               type: "textarea",
-              placeholder: "请输入备注",
+              placeholder: this.$t('admin.product.phRemark'),
             },
           ],
           rules: {
             product_id: [
-              { required: true, message: "请输入产品ID", trigger: "blur" },
+              { required: true, message: this.$t('admin.product.ruleProductId'), trigger: "blur" },
               {
                 pattern: /^[a-z0-9-]+$/,
-                message: "只能包含小写字母、数字和连字符",
+                message: this.$t('admin.product.ruleProductIdPattern'),
                 trigger: "blur",
               },
             ],
             product_name: [
-              { required: true, message: "请输入产品名称", trigger: "blur" },
+              { required: true, message: this.$t('admin.product.ruleProductName'), trigger: "blur" },
             ],
             product_type: [
-              { required: true, message: "请选择产品类型", trigger: "change" },
+              { required: true, message: this.$t('admin.product.ruleProductType'), trigger: "change" },
             ],
             price_points: [
-              { required: true, message: "请输入收费积分", trigger: "blur" },
+              { required: true, message: this.$t('admin.product.rulePricePoints'), trigger: "blur" },
               {
                 type: "number",
                 min: 1,
-                message: "收费积分必须大于0",
+                message: this.$t('admin.product.rulePricePointsMin'),
                 trigger: "blur",
               },
             ],
             price_months: [
-              { required: true, message: "请输入收费月数", trigger: "blur" },
+              { required: true, message: this.$t('admin.product.rulePriceMonths'), trigger: "blur" },
               {
                 type: "number",
                 min: 1,
-                message: "收费月数必须大于0",
+                message: this.$t('admin.product.rulePriceMonthsMin'),
                 trigger: "blur",
               },
             ],
             price_machines: [
-              { required: true, message: "请输入收费机器数", trigger: "blur" },
+              { required: true, message: this.$t('admin.product.rulePriceMachines'), trigger: "blur" },
               {
                 type: "number",
                 min: 1,
-                message: "收费机器数必须大于0",
+                message: this.$t('admin.product.rulePriceMachinesMin'),
                 trigger: "blur",
               },
             ],
             status: [
-              { required: true, message: "请选择状态", trigger: "change" },
+              { required: true, message: this.$t('admin.product.ruleStatus'), trigger: "change" },
             ],
           },
           formType: "",
@@ -1350,6 +1355,7 @@ export default {
         },
         fail: (err) => {
           console.error('加载产品分类失败：', err);
+          vk.toast(err.msg || err.message || that.$t('admin.common.loadFailed'), 'none');
         }
       });
     },
@@ -1385,6 +1391,9 @@ export default {
             }));
           }
         },
+        fail: (err) => {
+          vk.toast(err.msg || err.message || that.$t('admin.common.loadFailed'), 'none');
+        }
       });
     },
     // 搜索
@@ -1398,13 +1407,13 @@ export default {
     // 新增
     addBtn() {
       if (!that.isAdmin) {
-        vk.toast("只有管理员才能新增产品");
+        vk.toast(that.$t('admin.product.onlyAdminAdd'), 'none');
         return;
       }
       vk.pubfn.resetForm(originalForms, that);
       that.form1.props.action = "admin/product/sys/add";
       that.form1.props.formType = "add";
-      that.form1.props.title = "新增产品";
+      that.form1.props.title = that.$t('admin.product.addTitle');
       that.$set(that.form1, "data", {
         product_id: "",
         product_name: "",
@@ -1420,10 +1429,10 @@ export default {
         remark: "",
         status: 1,
         valid_days_options: [
-          { days: 30, label: "月卡(30天)", discount: 1 },
-          { days: 90, label: "季卡(90天)", discount: 1 },
-          { days: 180, label: "半年卡(180天)", discount: 1 },
-          { days: 365, label: "年卡(365天)", discount: 1 },
+          { days: 30, label: that.$t('admin.product.cardMonth'), discount: 1 },
+          { days: 90, label: that.$t('admin.product.cardQuarter'), discount: 1 },
+          { days: 180, label: that.$t('admin.product.cardHalfYear'), discount: 1 },
+          { days: 365, label: that.$t('admin.product.cardYear'), discount: 1 },
         ],
         custom_user_ids: ["all"], // 默认为所有人可见
         special_price: 1, // 特殊价格，默认为1积分/月/机器（兼容旧数据）
@@ -1437,13 +1446,13 @@ export default {
     // 编辑
     editBtn({ item }) {
       if (!that.isAdmin) {
-        vk.toast("只有管理员才能编辑产品");
+        vk.toast(that.$t('admin.product.onlyAdminEdit'), 'none');
         return;
       }
       vk.pubfn.resetForm(originalForms, that);
       that.form1.props.action = "admin/product/sys/update";
       that.form1.props.formType = "edit";
-      that.form1.props.title = "编辑产品";
+      that.form1.props.title = that.$t('admin.product.editTitle');
       that.$set(that.form1, "data", {
         _id: item._id,
         product_id: item.product_id,
@@ -1472,22 +1481,28 @@ export default {
     // 删除
     deleteBtn({ item, deleteFn }) {
       if (!that.isAdmin) {
-        vk.toast("只有管理员才能删除产品");
+        vk.toast(that.$t('admin.product.onlyAdminDelete'), 'none');
         return;
       }
-      vk.confirm(`确定要删除产品【${item.product_name}】吗？`, "提示", "确定", "取消", (res) => {
-        if (res.confirm) {
-        deleteFn({
-          action: "admin/product/sys/delete",
-          data: { _id: item._id },
-        });
+      vk.confirm(
+        that.$t('admin.product.deleteConfirm', { name: item.product_name }),
+        that.$t('admin.common.confirm'),
+        that.$t('admin.common.ok'),
+        that.$t('admin.common.cancel'),
+        (res) => {
+          if (res.confirm) {
+            deleteFn({
+              action: "admin/product/sys/delete",
+              data: { _id: item._id },
+            });
+          }
         }
-      });
+      );
     },
     // 改变状态
     changeStatus(row) {
       if (!that.isAdmin) {
-        vk.toast("只有管理员才能修改产品状态");
+        vk.toast(that.$t('admin.product.onlyAdminStatus'), 'none');
         // 恢复原状态
         row.status = row.status === 1 ? 0 : 1;
         return;
@@ -1499,11 +1514,12 @@ export default {
           status: row.status,
         },
         success: () => {
-          vk.toast("状态更新成功");
+          vk.toast(that.$t('admin.product.statusUpdated'), 'success');
           that.$store.commit('$user/SET_PRODUCT_LIST', []);
           that.refresh();
         },
-        fail: () => {
+        fail: (err) => {
+          vk.toast(err.msg || err.message || that.$t('admin.common.updateFailed'), 'none');
           // 失败时恢复原状态
           row.status = row.status === 1 ? 0 : 1;
         },
@@ -1516,7 +1532,7 @@ export default {
       }
       that.form1.data.valid_days_options.push({
         days: 30,
-        label: "月卡(30天)",
+        label: that.$t('admin.product.cardMonth'),
         discount: 1,
       });
     },
@@ -1559,7 +1575,7 @@ export default {
      async beforeSubmit() {
        // 检查是否有图片
        if (!that.form1.data.product_image) {
-         vk.toast("请上传产品图");
+         vk.toast(that.$t('admin.product.errNeedImage'), 'none');
          return false;
        }
        return true; // 返回true继续提交
@@ -1567,7 +1583,7 @@ export default {
     // 表单提交成功
     formSuccess() {
       that.form1.props.show = false;
-      vk.toast("操作成功");
+      vk.toast(that.$t('admin.common.actionSuccess'), 'success');
       that.$store.commit('$user/SET_PRODUCT_LIST', []);
       that.refresh();
     },
@@ -1678,29 +1694,29 @@ export default {
       if (!that.editingCell.rowId || that.editingCell.field !== 'price_standard') {
         return;
       }
-      
+
       const priceData = that.editingCell.priceData;
       const pricePoints = priceData.price_points;
       const priceMonths = priceData.price_months;
       const priceMachines = priceData.price_machines;
-      
+
       // 验证
       if (!pricePoints || !priceMonths || !priceMachines) {
-        vk.toast('请填写完整的收费标准');
+        vk.toast(that.$t('admin.product.errPriceRequired'), 'none');
         return;
       }
-      
+
       // 检查是否有变化
-      if (pricePoints === row.price_points && 
-          priceMonths === row.price_months && 
+      if (pricePoints === row.price_points &&
+          priceMonths === row.price_months &&
           priceMachines === row.price_machines) {
         that.cancelCellEdit();
         return;
       }
-      
+
       // 计算 base_price
       const basePrice = pricePoints / priceMonths / priceMachines;
-      
+
       const updateData = {
         price_points: pricePoints,
         price_months: priceMonths,
@@ -1708,7 +1724,7 @@ export default {
         base_price: basePrice,
         _update_time: Date.now(),
       };
-      
+
       try {
         await vk.callFunction({
           url: 'admin/product/sys/update',
@@ -1717,13 +1733,13 @@ export default {
             ...updateData
           }
         });
-        
+
         // 更新本地数据
         row.price_points = pricePoints;
         row.price_months = priceMonths;
         row.price_machines = priceMachines;
         row.base_price = basePrice;
-        vk.toast('修改成功');
+        vk.toast(that.$t('admin.product.updateSuccess'), 'success');
 
         // 清除产品列表缓存
         that.$store.commit('$user/SET_PRODUCT_LIST', []);
@@ -1732,7 +1748,7 @@ export default {
         that.cancelCellEdit();
       } catch (err) {
         console.error('保存失败：', err);
-        vk.toast(err.msg || '保存失败');
+        vk.toast(err.msg || err.message || that.$t('admin.common.saveFailed'), 'none');
       }
     },
     // 保存单元格编辑
@@ -1740,11 +1756,11 @@ export default {
       if (!that.editingCell.rowId || that.editingCell.field === null) {
         return;
       }
-      
+
       const field = that.editingCell.field;
       let newValue = that.editingCell.value;
       const oldValue = row[field];
-      
+
       // 数组类型字段需要特殊处理
       if (Array.isArray(newValue)) {
         // 如果值没有变化，直接取消编辑
@@ -1759,23 +1775,23 @@ export default {
           return;
         }
       }
-      
+
       // 构建更新数据
       const updateData = {
         [field]: newValue,
         _update_time: Date.now(),
       };
-      
+
       // 字符串类型字段需要去除首尾空格
       if (typeof newValue === 'string') {
         updateData[field] = newValue.trim();
       }
-      
+
       // 数组类型字段确保是数组
       if (Array.isArray(newValue)) {
         updateData[field] = newValue;
       }
-      
+
       try {
         await vk.callFunction({
           url: 'admin/product/sys/update',
@@ -1784,14 +1800,14 @@ export default {
             ...updateData
           }
         });
-        
+
         // 更新本地数据
         if (Array.isArray(newValue)) {
           row[field] = [...newValue]; // 深拷贝
         } else {
           row[field] = newValue;
         }
-        vk.toast('修改成功');
+        vk.toast(that.$t('admin.product.updateSuccess'), 'success');
 
         // 清除产品列表缓存，确保用户端同步更新
         that.$store.commit('$user/SET_PRODUCT_LIST', []);
@@ -1800,7 +1816,7 @@ export default {
         that.cancelCellEdit();
       } catch (err) {
         console.error('保存失败：', err);
-        vk.toast(err.msg || '保存失败');
+        vk.toast(err.msg || err.message || that.$t('admin.common.saveFailed'), 'none');
         // 恢复原值
         if (Array.isArray(oldValue)) {
           row[field] = oldValue ? [...oldValue] : [];
@@ -1817,7 +1833,7 @@ export default {
           // 检查值是否有变化
           const newValue = that.editingCell.value;
           const oldValue = that.editingCell.originalValue;
-          
+
           if (Array.isArray(newValue) && Array.isArray(oldValue)) {
             if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
               // 有变化，保存
@@ -1844,7 +1860,7 @@ export default {
           // 检查值是否有变化
           const priceData = that.editingCell.priceData;
           const originalPriceData = that.editingCell.originalPriceData;
-          
+
           if (priceData.price_points === originalPriceData.price_points &&
               priceData.price_months === originalPriceData.price_months &&
               priceData.price_machines === originalPriceData.price_machines) {
@@ -1863,7 +1879,7 @@ export default {
           // 检查值是否有变化
           const newValue = that.editingCell.value;
           const oldValue = that.editingCell.originalValue;
-          
+
           if (Array.isArray(newValue) && Array.isArray(oldValue)) {
             if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
               // 有变化，保存
@@ -1916,11 +1932,11 @@ export default {
     // 批量修改
     batchEditBtn() {
       if (!that.isAdmin) {
-        vk.toast("只有管理员才能批量修改产品");
+        vk.toast(that.$t('admin.product.onlyAdminBatch'), 'none');
         return;
       }
       if (!that.table1.multipleSelection || that.table1.multipleSelection.length === 0) {
-        vk.toast("请先选择要修改的产品");
+        vk.toast(that.$t('admin.product.selectProductsFirst'), 'none');
         return;
       }
       // 重置表单（所有字段都为空，避免误操作）
@@ -1948,14 +1964,14 @@ export default {
     // 批量修改提交
     batchEditSubmit() {
       if (!that.table1.multipleSelection || that.table1.multipleSelection.length === 0) {
-        vk.toast("请先选择要修改的产品");
+        vk.toast(that.$t('admin.product.selectProductsFirst'), 'none');
         return;
       }
-      
+
       // 构建更新数据（只包含被修改过的字段）
       const updateData = {};
       const modifiedFields = that.batchEditDialog.modifiedFields;
-      
+
       // 数字类型字段：如果被修改过，则更新（包括0值）
       if (modifiedFields.price_points && that.batchEditDialog.form.price_points !== null && that.batchEditDialog.form.price_points !== undefined) {
         updateData.price_points = that.batchEditDialog.form.price_points;
@@ -1969,47 +1985,47 @@ export default {
       if (modifiedFields.buy_price && that.batchEditDialog.form.buy_price !== null && that.batchEditDialog.form.buy_price !== undefined) {
         updateData.buy_price = that.batchEditDialog.form.buy_price;
       }
-      
+
       // 数组类型字段：如果被修改过，则更新（包括空数组）
       // 注意：空数组 [] 表示清空，null 表示不修改
       if (modifiedFields.custom_user_ids) {
-        updateData.custom_user_ids = Array.isArray(that.batchEditDialog.form.custom_user_ids) 
-          ? that.batchEditDialog.form.custom_user_ids 
+        updateData.custom_user_ids = Array.isArray(that.batchEditDialog.form.custom_user_ids)
+          ? that.batchEditDialog.form.custom_user_ids
           : [];
       }
       if (modifiedFields.special_price && that.batchEditDialog.form.special_price !== null && that.batchEditDialog.form.special_price !== undefined) {
         updateData.special_price = that.batchEditDialog.form.special_price;
       }
       if (modifiedFields.special_price_user_ids) {
-        updateData.special_price_user_ids = Array.isArray(that.batchEditDialog.form.special_price_user_ids) 
-          ? that.batchEditDialog.form.special_price_user_ids 
+        updateData.special_price_user_ids = Array.isArray(that.batchEditDialog.form.special_price_user_ids)
+          ? that.batchEditDialog.form.special_price_user_ids
           : [];
       }
-      
+
       // 检查是否有要更新的字段
       if (Object.keys(updateData).length === 0) {
-        vk.toast("请至少修改一个字段");
+        vk.toast(that.$t('admin.product.modifyOneField'), 'none');
         return;
       }
-      
+
       // 如果收费标准有更新，重新计算 base_price
       // 需要从原产品数据中获取未修改的字段值
       const needRecalculateBasePrice = modifiedFields.price_points || modifiedFields.price_months || modifiedFields.price_machines;
-      
+
       // 更新时间
       updateData._update_time = Date.now();
-      
+
       // 获取选中的产品ID列表
       const productIds = that.table1.multipleSelection.map(item => item._id);
-      
+
       // 如果需要重新计算 base_price，需要为每个产品单独计算（因为可能只修改了部分字段）
       const finalUpdateData = needRecalculateBasePrice ? null : updateData;
-      
+
       vk.confirm(
-        `确定要批量修改 ${productIds.length} 个产品吗？`,
-        '提示',
-        '确定',
-        '取消',
+        that.$t('admin.product.batchConfirmMsg', { n: productIds.length }),
+        that.$t('admin.common.confirm'),
+        that.$t('admin.common.ok'),
+        that.$t('admin.common.cancel'),
         async (res) => {
           if (res.confirm) {
             that.batchEditDialog.loading = true;
@@ -2017,11 +2033,11 @@ export default {
               // 批量更新产品
               let successCount = 0;
               let failCount = 0;
-              
+
               for (const productId of productIds) {
                 try {
                   let productUpdateData = finalUpdateData;
-                  
+
                   // 如果需要重新计算 base_price，需要获取原产品数据
                   if (needRecalculateBasePrice) {
                     productUpdateData = { ...updateData };
@@ -2032,20 +2048,20 @@ export default {
                         whereJson: { _id: productId }
                       }
                     });
-                    
+
                     if (productRes && productRes.rows && productRes.rows.length > 0) {
                       const product = productRes.rows[0];
                       // 使用修改后的值或原值
                       const pricePoints = modifiedFields.price_points ? updateData.price_points : product.price_points;
                       const priceMonths = modifiedFields.price_months ? updateData.price_months : product.price_months;
                       const priceMachines = modifiedFields.price_machines ? updateData.price_machines : product.price_machines;
-                      
+
                       if (pricePoints > 0 && priceMonths > 0 && priceMachines > 0) {
                         productUpdateData.base_price = pricePoints / priceMonths / priceMachines;
                       }
                     }
                   }
-                  
+
                   await vk.callFunction({
                     url: 'admin/product/sys/update',
                     data: {
@@ -2059,16 +2075,19 @@ export default {
                   failCount++;
                 }
               }
-              
+
               that.batchEditDialog.loading = false;
               that.batchEditDialog.show = false;
-              
+
               if (failCount === 0) {
-                vk.toast(`成功修改 ${successCount} 个产品`);
+                vk.toast(that.$t('admin.product.batchSuccess', { n: successCount }), 'success');
               } else {
-                vk.alert(`修改完成！\n成功：${successCount} 个\n失败：${failCount} 个`, '批量修改结果');
+                vk.alert(
+                  that.$t('admin.product.batchResult', { success: successCount, fail: failCount }),
+                  that.$t('admin.product.batchResultTitle')
+                );
               }
-              
+
               // 清空选择
               that.table1.multipleSelection = [];
               that.$refs.table1.clearSelection();
@@ -2080,7 +2099,7 @@ export default {
               that.refresh();
             } catch (err) {
               that.batchEditDialog.loading = false;
-              vk.toast(err.msg || '批量修改失败');
+              vk.toast(err.msg || err.message || that.$t('admin.product.batchFailed'), 'none');
             }
           }
         }
@@ -2102,10 +2121,10 @@ export default {
     align-items: center;
     margin-bottom: 10px;
     padding: 8px 12px;
-    background: #e4e7ed;
+    background: var(--vk-border);
     border-radius: 4px;
     font-size: 12px;
-    color: #606266;
+    color: var(--vk-text);
     font-weight: 500;
 
     .header-item {
@@ -2118,7 +2137,7 @@ export default {
     align-items: center;
     margin-bottom: 10px;
     padding: 10px;
-    background: #f5f7fa;
+    background: var(--vk-bg-muted, #f5f7fa);
     border-radius: 4px;
   }
 }
@@ -2128,9 +2147,9 @@ export default {
   .config-item {
     margin-bottom: 15px;
     padding: 15px;
-    background: #f5f7fa;
+    background: var(--vk-bg-muted, #f5f7fa);
     border-radius: 4px;
-    border: 1px solid #e4e7ed;
+    border: 1px solid var(--vk-border);
 
     .config-header {
       display: flex;
@@ -2140,7 +2159,7 @@ export default {
 
       .config-title {
         font-weight: 500;
-        color: #303133;
+        color: var(--vk-text);
       }
     }
 
@@ -2155,9 +2174,9 @@ export default {
   .version-log-item {
     margin-bottom: 15px;
     padding: 15px;
-    background: #f5f7fa;
+    background: var(--vk-bg-muted, #f5f7fa);
     border-radius: 4px;
-    border-left: 3px solid #409EFF;
+    border-left: 3px solid var(--vk-primary, #409EFF);
 
     .version-log-header {
       display: flex;
@@ -2165,12 +2184,12 @@ export default {
       justify-content: space-between;
       margin-bottom: 15px;
       padding-bottom: 10px;
-      border-bottom: 1px solid #e4e7ed;
+      border-bottom: 1px solid var(--vk-border);
 
       .version-tag {
         font-size: 14px;
         font-weight: bold;
-        color: #409EFF;
+        color: var(--vk-primary, #409EFF);
       }
     }
 
@@ -2182,7 +2201,7 @@ export default {
           display: block;
           margin-bottom: 5px;
           font-size: 13px;
-          color: #606266;
+          color: var(--vk-text);
           font-weight: 500;
         }
       }
@@ -2197,9 +2216,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f7fa;
+  background: var(--vk-bg-muted, #f5f7fa);
   border-radius: 4px;
-  color: #c0c4cc;
+  color: var(--vk-text-muted);
   font-size: 24px;
 }
 
@@ -2209,10 +2228,9 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: #f5f7fa;
-  color: #c0c4cc;
+  background: var(--vk-bg-muted, #f5f7fa);
+  color: var(--vk-text-muted);
   font-size: 24px;
 }
 
 </style>
-

@@ -13,10 +13,31 @@ import en from "../../locale/en.json";
 
 Vue.use(VueI18n);
 
+// 主 locale 文件保持精简，页面补充键写在 locale/parts/*.{zh,en}.json，启动时自动合并
+function loadLocaleParts() {
+	const zhParts = {};
+	const enParts = {};
+	try {
+		const ctx = require.context("../../locale/parts", false, /\.json$/);
+		ctx.keys().forEach((key) => {
+			const mod = ctx(key);
+			const data = mod && mod.default ? mod.default : mod;
+			if (!data || typeof data !== "object") return;
+			if (/\.zh\.json$/i.test(key)) Object.assign(zhParts, data);
+			else if (/\.en\.json$/i.test(key)) Object.assign(enParts, data);
+		});
+	} catch (e) {}
+	return { zhParts, enParts };
+}
+
+const { zhParts, enParts } = loadLocaleParts();
+const zhHansMessages = Object.assign({}, zhHans, zhParts);
+const enMessages = Object.assign({}, en, enParts);
+
 const messages = {
-	"zh-Hans": zhHans,
-	zh: zhHans,
-	en,
+	"zh-Hans": zhHansMessages,
+	zh: zhHansMessages,
+	en: enMessages,
 };
 
 function resolveLocale() {

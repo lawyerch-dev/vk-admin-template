@@ -1,38 +1,38 @@
 <template>
 	<el-card class="user-info-card">
-		<div class="user-header">
+		<view class="user-header">
 			<el-avatar :size="80" :src="userInfo.avatar">
 				{{ avatarChar }}
 			</el-avatar>
-			<div class="user-details">
-				<div class="user-name">{{ userInfo.nickname || userInfo.username || '未设置昵称' }}</div>
-				<div class="user-id">
-					ID: {{ userInfo._id }}
+			<view class="user-details">
+				<view class="user-name">{{ userInfo.nickname || userInfo.username || $t('userCenter.nicknameUnset') }}</view>
+				<view class="user-id">
+					{{ $t('userCenter.idPrefix') }} {{ userInfo._id }}
 					<el-button type="text" icon="el-icon-copy-document" size="mini" @click="$emit('copy', userInfo._id)" style="margin-left: 5px;"></el-button>
-				</div>
-			</div>
-			<div class="user-points-inline">
-				<div class="points-stats-inline">
-					<div class="points-item-inline">
-						<div class="points-label-inline">绑定机器</div>
-						<div class="points-value-inline warning">{{ machineStats.total_machines || 0 }}</div>
-					</div>
-					<div class="points-item-inline">
-						<div class="points-label-inline">可用积分</div>
-						<div class="points-value-inline primary">{{ pointsInfo.available_points || 0 }}</div>
-					</div>
-					<div class="points-item-inline">
-						<div class="points-label-inline">累计获得</div>
-						<div class="points-value-inline">{{ pointsInfo.total_points || 0 }}</div>
-					</div>
-					<div class="points-item-inline">
-						<div class="points-label-inline">已消耗</div>
-						<div class="points-value-inline">{{ pointsInfo.consumed_points || 0 }}</div>
-					</div>
-				</div>
-				<el-button type="text" icon="el-icon-refresh" @click="$emit('refresh')" size="small">刷新</el-button>
-			</div>
-		</div>
+				</view>
+			</view>
+			<view class="user-points-inline">
+				<view class="points-stats-inline">
+					<view class="points-item-inline">
+						<view class="points-label-inline">{{ $t('userCenter.boundMachines') }}</view>
+						<view class="points-value-inline warning">{{ machineStats.total_machines || 0 }}</view>
+					</view>
+					<view class="points-item-inline">
+						<view class="points-label-inline">{{ $t('userCenter.availablePoints') }}</view>
+						<view class="points-value-inline primary">{{ pointsInfo.available_points || 0 }}</view>
+					</view>
+					<view class="points-item-inline">
+						<view class="points-label-inline">{{ $t('userCenter.totalPoints') }}</view>
+						<view class="points-value-inline">{{ pointsInfo.total_points || 0 }}</view>
+					</view>
+					<view class="points-item-inline">
+						<view class="points-label-inline">{{ $t('userCenter.consumedPoints') }}</view>
+						<view class="points-value-inline">{{ pointsInfo.consumed_points || 0 }}</view>
+					</view>
+				</view>
+				<el-button type="text" icon="el-icon-refresh" @click="$emit('refresh')" size="small">{{ $t('userCenter.refresh') }}</el-button>
+			</view>
+		</view>
 	</el-card>
 </template>
 
@@ -66,13 +66,13 @@ export default {
 			.user-name {
 				font-size: 24px;
 				font-weight: bold;
-				color: #303133;
+				color: var(--vk-text, #1e293b);
 				margin-bottom: 8px;
 			}
 
 			.user-id {
 				font-size: 14px;
-				color: #909399;
+				color: var(--vk-text-secondary, #64748b);
 			}
 		}
 
@@ -89,7 +89,7 @@ export default {
 				display: flex;
 				gap: 50px;
 				padding: 10px 30px;
-				background: #f5f7fa;
+				background: var(--vk-bg-muted, #f1f5f9);
 				border-radius: 8px;
 
 				.points-item-inline {
@@ -98,21 +98,21 @@ export default {
 
 					.points-label-inline {
 						font-size: 12px;
-						color: #909399;
+						color: var(--vk-text-secondary, #64748b);
 						margin-bottom: 5px;
 					}
 
 					.points-value-inline {
 						font-size: 24px;
 						font-weight: bold;
-						color: #303133;
+						color: var(--vk-text, #1e293b);
 
 						&.primary {
-							color: #409EFF;
+							color: var(--vk-primary, #3b82f6);
 						}
 
 						&.warning {
-							color: #E6A23C;
+							color: var(--vk-warning, #e6a23c);
 						}
 					}
 				}

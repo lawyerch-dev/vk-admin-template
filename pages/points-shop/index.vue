@@ -2,35 +2,35 @@
 	<view class="points-shop">
 		<!-- 页面标题 -->
 		<view class="page-header">
-			<div class="header-content">
-				<h2>购买积分</h2>
-				<p>请按需选择合适的积分套餐，开启您的会员之旅！</p>
-			</div>
+			<view class="header-content">
+				<text class="header-title">{{ $t('shop.pageTitle') }}</text>
+				<text class="header-subtitle">{{ $t('shop.pageSubtitle') }}</text>
+			</view>
 		</view>
 
 		<!-- 当前积分显示 -->
 		<el-card class="current-points-card">
-			<div class="current-points">
-				<div class="points-icon">
+			<view class="current-points">
+				<view class="points-icon">
 					<i class="el-icon-coin"></i>
-				</div>
-				<div class="points-info">
-					<div class="points-label">当前可用积分</div>
-					<div class="points-value">{{ userPoints || 0 }}</div>
-				</div>
-				<el-button type="text" @click="refreshPoints" icon="el-icon-refresh">刷新</el-button>
-				<el-button type="text" @click="showServiceQRCode" icon="el-icon-service" style="margin-left: 10px;">遇到问题？联系客服</el-button>
-			</div>
+				</view>
+				<view class="points-info">
+					<text class="points-label">{{ $t('shop.currentPoints') }}</text>
+					<text class="points-value">{{ userPoints || 0 }}</text>
+				</view>
+				<el-button type="text" @click="refreshPoints" icon="el-icon-refresh">{{ $t('shop.refresh') }}</el-button>
+				<el-button type="text" @click="showServiceQRCode" icon="el-icon-service" style="margin-left: 10px;">{{ $t('shop.contactSupport') }}</el-button>
+			</view>
 		</el-card>
 
 		<!-- 支付未到账自助修复 -->
 		<el-card class="repair-card">
-			<div class="repair-inline">
+			<view class="repair-inline">
 				<i class="el-icon-warning-outline"></i>
-				<span class="repair-label">支付成功但积分未到账？输入订单号自动核查补发</span>
+				<text class="repair-label">{{ $t('shop.repairLabel') }}</text>
 				<el-input
 					v-model="repairTradeNo"
-					placeholder="输入订单号"
+					:placeholder="$t('shop.repairPlaceholder')"
 					size="small"
 					clearable
 					class="repair-input"
@@ -42,28 +42,28 @@
 					:loading="repairLoading"
 					:disabled="repairLoading"
 					@click="submitRepair"
-				>{{ repairLoading ? '查询中...' : '立即核查' }}</el-button>
-			</div>
-			<div class="repair-result" v-if="repairResult">
+				>{{ repairLoading ? $t('shop.repairChecking') : $t('shop.repairSubmit') }}</el-button>
+			</view>
+			<view class="repair-result" v-if="repairResult">
 				<el-alert :title="repairResult.title" :type="repairResult.type" show-icon :closable="false">
 					<template slot="default">
-						<div v-if="repairResult.order" class="repair-order-info">
-							<p>订单号：{{ repairResult.order.trade_no }}</p>
-							<p>套餐名称：{{ repairResult.order.goods_name }}</p>
-							<p>支付金额：¥{{ repairResult.order.total_amount }}</p>
-							<p>购买时间：{{ repairResult.order.create_time }}</p>
-							<p>支付状态：{{ repairResult.order.is_paid ? '已支付' : '未支付' }}</p>
-							<p>到账状态：{{ repairResult.order.is_credited ? '已到账' : '未到账' }}</p>
-						</div>
-						<div v-else>{{ repairResult.desc }}</div>
+						<view v-if="repairResult.order" class="repair-order-info">
+							<text class="repair-line">{{ $t('shop.orderTradeNo', { n: repairResult.order.trade_no }) }}</text>
+							<text class="repair-line">{{ $t('shop.orderGoodsName', { n: repairResult.order.goods_name }) }}</text>
+							<text class="repair-line">{{ $t('shop.orderPayAmount', { n: repairResult.order.total_amount }) }}</text>
+							<text class="repair-line">{{ $t('shop.orderCreateTime', { n: repairResult.order.create_time }) }}</text>
+							<text class="repair-line">{{ $t('shop.orderPayStatus', { n: repairResult.order.is_paid ? $t('shop.statusPaid') : $t('shop.statusUnpaid') }) }}</text>
+							<text class="repair-line">{{ $t('shop.orderCreditStatus', { n: repairResult.order.is_credited ? $t('shop.statusCredited') : $t('shop.statusNotCredited') }) }}</text>
+						</view>
+						<text v-else class="repair-desc">{{ repairResult.desc }}</text>
 					</template>
 				</el-alert>
-			</div>
+			</view>
 		</el-card>
 
 		<!-- 积分套餐列表 -->
 		<view class="packages-section">
-			<h3 class="section-title">选择积分套餐</h3>
+			<text class="section-title">{{ $t('shop.selectPackage') }}</text>
 			<view class="packages-grid">
 				<el-card 
 					v-for="pkg in packages" 
@@ -73,33 +73,33 @@
 					@click.native="selectPackage(pkg)"
 				>
 					<!-- 推荐标签 -->
-					<div class="recommended-badge" v-if="pkg.recommended">
-						<i class="el-icon-star-on"></i> 推荐
-					</div>
+					<view class="recommended-badge" v-if="pkg.recommended">
+						<i class="el-icon-star-on"></i> {{ $t('shop.recommended') }}
+					</view>
 
 					<!-- 套餐名称 -->
-					<div class="package-name">{{ pkg.name }}</div>
+					<text class="package-name">{{ pkgName(pkg) }}</text>
 
 					<!-- 积分数量 -->
-					<div class="package-points">
-						<span class="points-number">{{ pkg.points }}</span>
-						<span class="points-unit">积分</span>
-					</div>
+					<view class="package-points">
+						<text class="points-number">{{ pkg.points }}</text>
+						<text class="points-unit">{{ $t('shop.pointsUnit') }}</text>
+					</view>
 
 
 					<!-- 价格 -->
-					<div class="package-price">
-						<span class="price-symbol">¥</span>
-						<span class="price-number">{{ pkg.price }}</span>
-					</div>
+					<view class="package-price">
+						<text class="price-symbol">¥</text>
+						<text class="price-number">{{ pkg.price }}</text>
+					</view>
 
 					<!-- 优惠信息 -->
-					<div class="package-discount" v-if="pkg.discount">
-						<el-tag type="danger" size="mini">{{ pkg.discount }}</el-tag>
-					</div>
+					<view class="package-discount" v-if="pkgDiscount(pkg)">
+						<el-tag type="danger" size="mini">{{ pkgDiscount(pkg) }}</el-tag>
+					</view>
 
 					<!-- 说明 -->
-					<div class="package-desc">{{ pkg.description }}</div>
+					<text class="package-desc">{{ pkgDesc(pkg) }}</text>
 
 					<!-- 选择按钮 -->
 					<el-button 
@@ -109,23 +109,23 @@
 						:loading="creatingOrder && selectedPackage === pkg.id"
 						:disabled="creatingOrder || paymentLoading"
 					>
-						{{ selectedPackage === pkg.id && creatingOrder ? '跳转中...' : '立即支付' }}
+						{{ selectedPackage === pkg.id && creatingOrder ? $t('shop.redirecting') : $t('shop.payNow') }}
 					</el-button>
 				</el-card>
 
 				<!-- 客服联系卡片 -->
 				<el-card class="package-card service-card" @click.native="showServiceQRCode">
-					<div class="service-icon">
+					<view class="service-icon">
 						<i class="el-icon-service"></i>
-					</div>
-					<div class="package-name">联系客服</div>
-					<div class="service-desc">
-						<p>遇到问题？</p>
-						<p>扫码添加QQ客服</p>
-						<p>专属客服为您服务</p>
-					</div>
+					</view>
+					<text class="package-name">{{ $t('shop.serviceTitle') }}</text>
+					<view class="service-desc">
+						<text class="service-line">{{ $t('shop.serviceDesc1') }}</text>
+						<text class="service-line">{{ $t('shop.serviceDesc2') }}</text>
+						<text class="service-line">{{ $t('shop.serviceDesc3') }}</text>
+					</view>
 					<el-button type="success" class="select-btn">
-						查看二维码
+						{{ $t('shop.viewQrcode') }}
 					</el-button>
 				</el-card>
 			</view>
@@ -136,33 +136,34 @@
 
 		<!-- 支付加载遮罩 -->
 		<view class="payment-mask" v-if="paymentLoading">
-			<div class="payment-modal">
-				<div class="payment-icon">
+			<view class="payment-modal">
+				<view class="payment-icon">
 					<i class="el-icon-loading"></i>
-				</div>
-				<div class="payment-title">{{ pollingStartTime ? '正在自动查询支付结果...' : '订单已创建，请前往支付' }}</div>
-				<div class="payment-desc">为避免浏览器拦截，支付页改为点击按钮后打开。支付完成后可自动或手动查询到账结果。</div>
-				<div class="payment-timer" v-if="pollingStartTime">已自动查询 {{ paymentElapsed }} 秒 / 300 秒</div>
-				<div class="payment-progress">
+				</view>
+				<text class="payment-title">{{ pollingStartTime ? $t('shop.pollingTitle') : $t('shop.orderCreatedTitle') }}</text>
+				<text class="payment-desc">{{ $t('shop.paymentDesc') }}</text>
+				<text class="payment-timer" v-if="pollingStartTime">{{ $t('shop.elapsed', { n: paymentElapsed }) }}</text>
+				<view class="payment-progress">
 					<el-progress 
 						:percentage="Math.floor((paymentElapsed / 300) * 100)" 
 						:stroke-width="6"
-						color="#409EFF"
+						color="var(--vk-primary, #409EFF)"
 					></el-progress>
-				</div>
-				<div class="payment-tips">
-					<i class="el-icon-info"></i> 订单号：{{ currentTradeNo || '-' }}
-				</div>
-				<div class="payment-actions" v-if="paymentUrl">
-					<el-button type="primary" plain @click="openPaymentPage">立即前往支付</el-button>
-					<el-button type="success" plain @click="manualCheckPayment">我已完成支付，立即查询</el-button>
-					<el-button plain @click="copyPaymentLink">复制支付链接</el-button>
-				</div>
-				<div class="payment-warning">
-					支付页没有自动弹出属于正常现象，请点击上方按钮继续支付。
-				</div>
-				<el-button type="danger" plain @click="cancelPayment">暂不支付</el-button>
-			</div>
+				</view>
+				<view class="payment-tips">
+					<i class="el-icon-info"></i>
+					<text>{{ $t('shop.orderTradeNo', { n: currentTradeNo || '-' }) }}</text>
+				</view>
+				<view class="payment-actions" v-if="paymentUrl">
+					<el-button type="primary" plain @click="openPaymentPage">{{ $t('shop.goPay') }}</el-button>
+					<el-button type="success" plain @click="manualCheckPayment">{{ $t('shop.paidCheck') }}</el-button>
+					<el-button plain @click="copyPaymentLink">{{ $t('shop.copyPayLink') }}</el-button>
+				</view>
+				<text class="payment-warning">
+					{{ $t('shop.payWarning') }}
+				</text>
+				<el-button type="danger" plain @click="cancelPayment">{{ $t('shop.cancelPay') }}</el-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -203,13 +204,14 @@ export default {
 				pay_query_path: '/shopApi/Pay/query'
 			},
 			// 积分套餐配置（与支付平台商品对应，goods_key 为兜底，实际以后台「支付接口配置」为准）
+			// nameKey/descKey/discountN 为 i18n 默认文案；后台下发时用 name/description/discount 原文
 			packages: [
-				{ id: 1, name: '体验套餐（10积分）', points: 10, price: 10, discount: '', description: '适合新手体验', recommended: false, goods_key: 't1hw3w' },
-				{ id: 2, name: '基础套餐（50积分）', points: 50, price: 45, discount: '省5元', description: '性价比之选', recommended: false, goods_key: 'u4zjhq' },
-				{ id: 3, name: '超值套餐（100积分）', points: 100, price: 90, discount: '省10元', description: '最受欢迎', recommended: true, goods_key: 'mw9di3' },
-				{ id: 4, name: '豪华套餐（300积分）', points: 300, price: 270, discount: '省30元', description: '超值优惠', recommended: false, goods_key: '8wouhk' },
-				{ id: 5, name: '至尊套餐（500积分）', points: 500, price: 450, discount: '省50元', description: '刚需必选', recommended: false, goods_key: 'qv19cx' },
-				{ id: 6, name: '终极套餐（1000积分）', points: 1000, price: 900, discount: '省100元', description: '土豪专属', recommended: false, goods_key: 'y3qiel' }
+				{ id: 1, nameKey: 'shop.pkgTrial', name: '', points: 10, price: 10, discountN: 0, discount: '', descKey: 'shop.pkgTrialDesc', description: '', recommended: false, goods_key: 't1hw3w' },
+				{ id: 2, nameKey: 'shop.pkgBasic', name: '', points: 50, price: 45, discountN: 5, discount: '', descKey: 'shop.pkgBasicDesc', description: '', recommended: false, goods_key: 'u4zjhq' },
+				{ id: 3, nameKey: 'shop.pkgValue', name: '', points: 100, price: 90, discountN: 10, discount: '', descKey: 'shop.pkgValueDesc', description: '', recommended: true, goods_key: 'mw9di3' },
+				{ id: 4, nameKey: 'shop.pkgDeluxe', name: '', points: 300, price: 270, discountN: 30, discount: '', descKey: 'shop.pkgDeluxeDesc', description: '', recommended: false, goods_key: '8wouhk' },
+				{ id: 5, nameKey: 'shop.pkgSupreme', name: '', points: 500, price: 450, discountN: 50, discount: '', descKey: 'shop.pkgSupremeDesc', description: '', recommended: false, goods_key: 'qv19cx' },
+				{ id: 6, nameKey: 'shop.pkgUltimate', name: '', points: 1000, price: 900, discountN: 100, discount: '', descKey: 'shop.pkgUltimateDesc', description: '', recommended: false, goods_key: 'y3qiel' }
 			]
 		};
 	},
@@ -229,6 +231,20 @@ export default {
 	onHide() {},
 	onUnload() { this.clearPollingTimer(); },
 	methods: {
+		// 套餐展示文案：优先 i18n key，其次后台原文
+		pkgName(pkg) {
+			if (pkg.nameKey) return this.$t(pkg.nameKey, { n: pkg.points });
+			return pkg.name || '';
+		},
+		pkgDesc(pkg) {
+			if (pkg.descKey) return this.$t(pkg.descKey);
+			return pkg.description || '';
+		},
+		pkgDiscount(pkg) {
+			if (pkg.discountN) return this.$t('shop.saveYuan', { n: pkg.discountN });
+			return pkg.discount || '';
+		},
+
 		async init() {
 			this.$store.dispatch('$user/loadPointsInfo');
 			this.loadPayConfig();
@@ -241,10 +257,13 @@ export default {
 				this.packages = packages.map(p => ({
 					id: p.id,
 					name: p.name,
+					nameKey: null,
 					points: p.points,
 					price: p.price,
 					discount: p.discount || '',
+					discountN: 0,
 					description: p.description || '',
+					descKey: null,
 					recommended: !!p.recommended,
 					goods_key: p.goods_key || ''
 				}));
@@ -258,7 +277,7 @@ export default {
 		},
 		refreshPoints() {
 			this.loadUserPoints();
-			vk.toast("刷新成功");
+			vk.toast(this.$t('shop.refreshSuccess'));
 		},
 
 		// ========== 核心流程：选套餐 → 创建订单 → 跳支付 → 轮询 ==========
@@ -271,7 +290,7 @@ export default {
 			this.creatingOrder = true;
 			try {
 				const { trade_no, payurl } = await paymentService.createOrder(this.payConfig, pkg);
-				console.log('[支付] 订单创建成功:', { trade_no, payurl, package: pkg.name });
+				console.log('[支付] 订单创建成功:', { trade_no, payurl, package: this.pkgName(pkg) });
 				this.currentTradeNo = trade_no;
 				this.currentPackageInfo = { ...pkg };
 				this.paymentUrl = payurl;
@@ -284,7 +303,10 @@ export default {
 				this.startPolling(trade_no);
 			} catch (err) {
 				console.error('[支付] 创建订单异常:', err.message);
-				vk.alert(`创建订单失败\n原因：${err.message}\n套餐：${pkg.name}`, '创建订单失败');
+				vk.alert(
+					this.$t('shop.createOrderFailMsg', { n: err.message, p: this.pkgName(pkg) }),
+					this.$t('shop.createOrderFailed')
+				);
 			} finally {
 				this.creatingOrder = false;
 			}
@@ -308,7 +330,7 @@ export default {
 			if (this.pollingStartTime && (Date.now() - this.pollingStartTime) > this.pollingTimeout) {
 				this.clearPollingTimer();
 				this.paymentElapsed = Math.floor(this.pollingTimeout / 1000);
-				if (fromPolling) vk.toast('自动查询已停止，请点击"我已完成支付，立即查询"');
+				if (fromPolling) vk.toast(this.$t('shop.autoQueryStopped', { n: this.$t('shop.paidCheck') }));
 				return;
 			}
 			if (this.checkingPayment) return;
@@ -318,7 +340,12 @@ export default {
 				const isPaid = await paymentService.queryPayment(this.payConfig, trade_no);
 				if (!isPaid) {
 					this.checkingPayment = false;
-					if (!fromPolling) vk.alert(`订单暂未支付\n订单号：${trade_no}`, '未支付');
+					if (!fromPolling) {
+						vk.alert(
+							this.$t('shop.unpaidMsg', { n: trade_no }),
+							this.$t('shop.unpaidTitle')
+						);
+					}
 					return;
 				}
 
@@ -334,37 +361,56 @@ export default {
 
 				if (addRes.code !== 0 && addRes.code !== 1) {
 					vk.alert(
-						`支付成功但充值失败！\n\n订单号：${trade_no}\n套餐：${packageInfo.name}\n错误：${addRes.msg || '未知'}\n\n请联系客服处理，提供以上信息`,
-						'充值失败'
+						this.$t('shop.creditFailMsg', {
+							n: trade_no,
+							p: this.pkgName(packageInfo),
+							e: addRes.msg || '-'
+						}),
+						this.$t('shop.creditFailTitle')
 					);
 					return;
 				}
 				const totalPoints = (addRes.data && addRes.data.total_points) || packageInfo.points || 0;
 				const balance = (addRes.data && addRes.data.balance !== undefined) ? addRes.data.balance : this.userPoints;
-				vk.alert(`支付成功！\n获得积分：${totalPoints}积分\n当前余额：${balance}积分`, '支付成功', () => { this.selectedPackage = null; });
+				vk.alert(
+					this.$t('shop.paySuccessMsg', { n: totalPoints, b: balance }),
+					this.$t('shop.paySuccessTitle'),
+					() => { this.selectedPackage = null; }
+				);
 			} catch (err) {
 				this.checkingPayment = false;
 				if (!fromPolling) {
-					vk.alert(`支付查询异常\n订单号：${trade_no}\n错误：${err.message}`, '查询异常', () => { this.resetPaymentFlowState(); });
+					vk.alert(
+						this.$t('shop.queryErrorMsg', { n: trade_no, e: err.message }),
+						this.$t('shop.queryErrorTitle'),
+						() => { this.resetPaymentFlowState(); }
+					);
 				}
 			}
 		},
 
 		manualCheckPayment() {
-			if (!this.currentTradeNo) return vk.toast('订单不存在');
+			if (!this.currentTradeNo) return vk.toast(this.$t('shop.orderMissing'));
 			this.checkPaymentStatus(this.currentTradeNo);
 		},
 		cancelPayment() {
-			vk.confirm('确定要取消支付吗？', '确认取消', res => {
-				if (res.confirm) { this.resetPaymentFlowState(); vk.toast('已取消支付'); }
+			vk.confirm(this.$t('shop.cancelConfirm'), this.$t('shop.cancelConfirmTitle'), res => {
+				if (res.confirm) {
+					this.resetPaymentFlowState();
+					vk.toast(this.$t('shop.cancelled'));
+				}
 			});
 		},
 		copyPaymentLink() {
-			if (!this.paymentUrl) return vk.toast('支付链接不存在');
-			uni.setClipboardData({ data: this.paymentUrl, success: () => vk.toast('支付链接已复制'), fail: () => vk.toast('复制失败') });
+			if (!this.paymentUrl) return vk.toast(this.$t('shop.payLinkMissing'));
+			uni.setClipboardData({
+				data: this.paymentUrl,
+				success: () => vk.toast(this.$t('shop.payLinkCopied')),
+				fail: () => vk.toast(this.$t('shop.copyFailed'))
+			});
 		},
 		openPaymentPage() {
-			if (!this.paymentUrl) return vk.toast('支付链接不存在');
+			if (!this.paymentUrl) return vk.toast(this.$t('shop.payLinkMissing'));
 			window.open(this.paymentUrl, '_blank');
 			this.startPolling(this.currentTradeNo);
 		},
@@ -410,7 +456,7 @@ export default {
 		// ========== 自助修复 ==========
 		async submitRepair() {
 			const trade_no = this.repairTradeNo;
-			if (!trade_no || !trade_no.trim()) return vk.toast('请输入订单号');
+			if (!trade_no || !trade_no.trim()) return vk.toast(this.$t('shop.enterTradeNo'));
 
 			this.repairLoading = true;
 			this.repairResult = null;
@@ -421,18 +467,22 @@ export default {
 				const order = d.order || null;
 
 				if (res.code === 0 && d.status === 'credited') {
-					this.repairResult = { type: 'success', title: '修复成功，积分已到账', order };
+					this.repairResult = { type: 'success', title: this.$t('shop.repairCredited'), order };
 					this.repairTradeNo = '';
 					await this.loadUserPoints();
 				} else if (res.code === 0 && d.status === 'already_credited') {
-					this.repairResult = { type: 'success', title: '该订单积分已到账，无需修复', order };
+					this.repairResult = { type: 'success', title: this.$t('shop.repairAlready'), order };
 				} else if (res.code === 0 && d.status === 'not_paid') {
-					this.repairResult = { type: 'warning', title: '该订单尚未支付', order };
+					this.repairResult = { type: 'warning', title: this.$t('shop.repairNotPaid'), order };
 				} else {
-					this.repairResult = { type: 'error', title: res.msg || '核查失败', order };
+					this.repairResult = { type: 'error', title: res.msg || this.$t('shop.repairFailed'), order };
 				}
 			} catch (err) {
-				this.repairResult = { type: 'error', title: '请求异常', desc: err.message || '网络异常' };
+				this.repairResult = {
+					type: 'error',
+					title: this.$t('shop.repairError'),
+					desc: err.message || this.$t('shop.networkError')
+				};
 			} finally {
 				this.repairLoading = false;
 			}
@@ -444,7 +494,7 @@ export default {
 <style lang="scss" scoped>
 .points-shop {
 	min-height: 100vh;
-	background: linear-gradient(135deg, #4facfe 55%, #e1e8f2 100%);
+	background: var(--vk-bg, #e1e8f2);
 	padding: 20px;
 }
 
@@ -452,17 +502,19 @@ export default {
 .page-header {
 	text-align: center;
 	padding: 30px 20px 20px;
-	color: white;
 
-	h2 {
+	.header-title {
+		display: block;
 		font-size: 32px;
 		font-weight: bold;
 		margin-bottom: 10px;
+		color: var(--vk-text, #1e293b);
 	}
 
-	p {
+	.header-subtitle {
+		display: block;
 		font-size: 16px;
-		opacity: 0.9;
+		color: var(--vk-text-secondary, #64748b);
 	}
 }
 
@@ -471,6 +523,7 @@ export default {
 	margin-bottom: 30px;
 	border-radius: 16px;
 	overflow: hidden;
+	background: var(--vk-card, #ffffff);
 
 	.current-points {
 		display: flex;
@@ -487,15 +540,17 @@ export default {
 			flex: 1;
 
 			.points-label {
+				display: block;
 				font-size: 14px;
-				color: #909399;
+				color: var(--vk-text-secondary, #909399);
 				margin-bottom: 5px;
 			}
 
 			.points-value {
+				display: block;
 				font-size: 32px;
 				font-weight: bold;
-				color: #409EFF;
+				color: var(--vk-primary, #409EFF);
 			}
 		}
 	}
@@ -506,8 +561,10 @@ export default {
 	margin-bottom: 30px;
 
 	.section-title {
-		color: white;
+		display: block;
+		color: var(--vk-text, #1e293b);
 		font-size: 24px;
+		font-weight: bold;
 		margin-bottom: 20px;
 		text-align: center;
 	}
@@ -527,6 +584,7 @@ export default {
 	cursor: pointer;
 	transition: all 0.3s;
 	overflow: hidden;
+	background: var(--vk-card, #ffffff);
 
 	&:hover {
 		transform: translateY(-8px);
@@ -551,7 +609,7 @@ export default {
 	}
 
 	&.selected {
-		border: 3px solid #409EFF;
+		border: 3px solid var(--vk-primary, #409EFF);
 		box-shadow: 0 0 20px rgba(64, 158, 255, 0.5);
 	}
 
@@ -561,9 +619,10 @@ export default {
 	}
 
 	.package-name {
+		display: block;
 		font-size: 22px;
 		font-weight: bold;
-		color: #303133;
+		color: var(--vk-text, #303133);
 		margin-bottom: 15px;
 	}
 
@@ -573,12 +632,12 @@ export default {
 		.points-number {
 			font-size: 48px;
 			font-weight: bold;
-			color: #409EFF;
+			color: var(--vk-primary, #409EFF);
 		}
 
 		.points-unit {
 			font-size: 16px;
-			color: #909399;
+			color: var(--vk-text-secondary, #909399);
 			margin-left: 5px;
 		}
 	}
@@ -605,8 +664,9 @@ export default {
 	}
 
 	.package-desc {
+		display: block;
 		font-size: 14px;
-		color: #909399;
+		color: var(--vk-text-secondary, #909399);
 		margin-bottom: 20px;
 	}
 
@@ -630,7 +690,7 @@ export default {
 	backdrop-filter: blur(5px);
 
 	.payment-modal {
-		background: white;
+		background: var(--vk-card, #ffffff);
 		border-radius: 20px;
 		padding: 40px;
 		width: 90%;
@@ -641,7 +701,7 @@ export default {
 
 		.payment-icon {
 			font-size: 64px;
-			color: #409EFF;
+			color: var(--vk-primary, #409EFF);
 			margin-bottom: 20px;
 			
 			i {
@@ -650,21 +710,24 @@ export default {
 		}
 
 		.payment-title {
+			display: block;
 			font-size: 24px;
 			font-weight: bold;
-			color: #303133;
+			color: var(--vk-text, #303133);
 			margin-bottom: 10px;
 		}
 
 		.payment-desc {
+			display: block;
 			font-size: 14px;
-			color: #909399;
+			color: var(--vk-text-secondary, #909399);
 			margin-bottom: 20px;
 		}
 
 		.payment-timer {
+			display: block;
 			font-size: 18px;
-			color: #409EFF;
+			color: var(--vk-primary, #409EFF);
 			font-weight: bold;
 			margin-bottom: 15px;
 		}
@@ -674,11 +737,11 @@ export default {
 		}
 
 		.payment-tips {
-			background: #f0f9ff;
-			border: 1px solid #b3d8ff;
+			background: var(--vk-bg-secondary, #f0f9ff);
+			border: 1px solid var(--vk-border, #b3d8ff);
 			border-radius: 8px;
 			padding: 12px;
-			color: #409EFF;
+			color: var(--vk-primary, #409EFF);
 			font-size: 13px;
 			margin-bottom: 20px;
 
@@ -696,10 +759,11 @@ export default {
 		}
 
 		.payment-warning {
+			display: block;
 			font-size: 13px;
 			line-height: 1.6;
-			color: #e6a23c;
-			background: #fff7e6;
+			color: var(--vk-text-secondary, #e6a23c);
+			background: var(--vk-bg-muted, #fff7e6);
 			border-radius: 12px;
 			padding: 12px 14px;
 			margin-bottom: 18px;
@@ -754,7 +818,8 @@ export default {
 		margin: 20px 0;
 		line-height: 1.8;
 		
-		p {
+		.service-line {
+			display: block;
 			margin: 5px 0;
 			font-size: 14px;
 		}
@@ -779,8 +844,8 @@ export default {
 .repair-card {
 	margin-bottom: 20px;
 	border-radius: 12px;
-	border: 1px solid #faecd8;
-	background: #fdf6ec;
+	border: 1px solid var(--vk-border, #faecd8);
+	background: var(--vk-bg-muted, #fdf6ec);
 
 	::v-deep .el-card__body {
 		padding: 14px 20px;
@@ -798,7 +863,7 @@ export default {
 
 		.repair-label {
 			font-size: 14px;
-			color: #909399;
+			color: var(--vk-text-secondary, #909399);
 			white-space: nowrap;
 		}
 
@@ -812,13 +877,19 @@ export default {
 		margin-top: 12px;
 
 		.repair-order-info {
-			p {
+			.repair-line {
+				display: block;
 				margin: 4px 0;
 				font-size: 13px;
-				color: #606266;
+				color: var(--vk-text, #606266);
 			}
+		}
+
+		.repair-desc {
+			display: block;
+			font-size: 13px;
+			color: var(--vk-text, #606266);
 		}
 	}
 }
 </style>
-

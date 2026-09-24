@@ -584,7 +584,8 @@
 			width: 100%;
 			min-height: 30vh;
 			height: auto;
-			background: #fff;
+			background: var(--vk-card, #fff);
+			color: var(--vk-text, #1e293b);
 			margin-top: 0px;
 			font-size: 16px;
 			line-height: 1.5;
@@ -893,8 +894,8 @@
 		top: 42px;
 		left: 50%;
 		z-index: 100;
-		background-color: #fff;
-		border-bottom: 1px solid #e4e7ed;
+		background-color: var(--vk-card, #fff);
+		border-bottom: 1px solid var(--vk-border, #e4e7ed);
 		display: flex;
 		flex-direction: column;
 		transform-origin: center 0;

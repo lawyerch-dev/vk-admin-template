@@ -2,43 +2,43 @@
   <view class="page-body">
     <el-card>
       <div slot="header" class="card-header">
-        <span>产品分类管理</span>
+        <span>{{ $t('admin.category.title') }}</span>
         <div>
-          <el-button size="small" icon="el-icon-download" @click="loadPresets" :loading="presetLoading">加载预设</el-button>
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd">新增分类</el-button>
+          <el-button size="small" icon="el-icon-download" @click="loadPresets" :loading="presetLoading">{{ $t('admin.category.loadPresets') }}</el-button>
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleAdd">{{ $t('admin.category.add') }}</el-button>
         </div>
       </div>
 
       <el-table :data="categoryList" border stripe v-loading="loading" style="width: 100%">
-        <el-table-column prop="sort" label="排序" width="80" align="center" />
-        <el-table-column prop="icon" label="图标" width="80" align="center">
+        <el-table-column prop="sort" :label="$t('admin.category.colSort')" width="80" align="center" />
+        <el-table-column prop="icon" :label="$t('admin.category.colIcon')" width="80" align="center">
           <template slot-scope="scope">
             <i :class="scope.row.icon" style="font-size: 20px;" v-if="scope.row.icon"></i>
-            <span v-else style="color: #c0c4cc;">-</span>
+            <span v-else style="color: var(--vk-text-muted);">-</span>
           </template>
         </el-table-column>
-        <el-table-column prop="value" label="分类标识" width="160">
+        <el-table-column prop="value" :label="$t('admin.category.colValue')" width="160">
           <template slot-scope="scope">
             <el-tag size="small" type="info">{{ scope.row.value }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="label" label="分类名称" min-width="150" />
-        <el-table-column prop="enable" label="状态" width="100" align="center">
+        <el-table-column prop="label" :label="$t('admin.category.colLabel')" min-width="150" />
+        <el-table-column prop="enable" :label="$t('admin.category.colStatus')" width="100" align="center">
           <template slot-scope="scope">
             <el-tag :type="scope.row.enable ? 'success' : 'danger'" size="small">
-              {{ scope.row.enable ? '启用' : '禁用' }}
+              {{ scope.row.enable ? $t('admin.common.enabled') : $t('admin.common.disabled') }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="_add_time" label="创建时间" width="170">
+        <el-table-column prop="_add_time" :label="$t('admin.category.colCreateTime')" width="170">
           <template slot-scope="scope">
             {{ formatTime(scope.row._add_time) }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" align="center" fixed="right">
+        <el-table-column :label="$t('admin.common.action')" width="180" align="center" fixed="right">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">{{ $t('admin.common.edit') }}</el-button>
+            <el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row)">{{ $t('admin.common.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -46,41 +46,41 @@
 
     <!-- 新增/编辑弹窗 -->
     <el-dialog
-      :title="dialog.isEdit ? '编辑分类' : '新增分类'"
+      :title="dialog.isEdit ? $t('admin.category.editTitle') : $t('admin.category.addTitle')"
       :visible.sync="dialog.show"
       width="500px"
       :close-on-click-modal="false"
     >
       <el-form :model="dialog.form" :rules="dialog.rules" ref="categoryForm" label-width="100px">
-        <el-form-item label="分类标识" prop="value">
+        <el-form-item :label="$t('admin.category.colValue')" prop="value">
           <el-input
             v-model="dialog.form.value"
-            placeholder="英文标识，如 software"
+            :placeholder="$t('admin.category.valuePlaceholder')"
             :disabled="dialog.isEdit"
           />
-          <div class="form-tip">创建后不可修改，用于数据库关联</div>
+          <div class="form-tip">{{ $t('admin.category.valueTip') }}</div>
         </el-form-item>
-        <el-form-item label="分类名称" prop="label">
-          <el-input v-model="dialog.form.label" placeholder="显示名称，如 软件" />
+        <el-form-item :label="$t('admin.category.colLabel')" prop="label">
+          <el-input v-model="dialog.form.label" :placeholder="$t('admin.category.labelPlaceholder')" />
         </el-form-item>
-        <el-form-item label="图标">
-          <el-input v-model="dialog.form.icon" placeholder="Element UI 图标类名，如 el-icon-monitor" />
+        <el-form-item :label="$t('admin.category.colIcon')">
+          <el-input v-model="dialog.form.icon" :placeholder="$t('admin.category.iconPlaceholder')" />
           <div class="form-tip">
             <i :class="dialog.form.icon" style="margin-right: 4px;" v-if="dialog.form.icon"></i>
-            预览效果如左
+            {{ $t('admin.category.iconTip') }}
           </div>
         </el-form-item>
-        <el-form-item label="排序">
+        <el-form-item :label="$t('admin.category.colSort')">
           <el-input-number v-model="dialog.form.sort" :min="0" :max="999" />
-          <div class="form-tip">数值越小越靠前</div>
+          <div class="form-tip">{{ $t('admin.category.sortTip') }}</div>
         </el-form-item>
-        <el-form-item label="启用">
-          <el-switch v-model="dialog.form.enable" active-text="是" inactive-text="否" />
+        <el-form-item :label="$t('admin.category.fieldEnable')">
+          <el-switch v-model="dialog.form.enable" :active-text="$t('admin.common.yes')" :inactive-text="$t('admin.common.no')" />
         </el-form-item>
       </el-form>
       <span slot="footer">
-        <el-button @click="dialog.show = false">取消</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="dialog.loading">确定</el-button>
+        <el-button @click="dialog.show = false">{{ $t('admin.common.cancel') }}</el-button>
+        <el-button type="primary" @click="handleSubmit" :loading="dialog.loading">{{ $t('admin.common.ok') }}</el-button>
       </span>
     </el-dialog>
   </view>
@@ -108,8 +108,8 @@ export default {
           enable: true
         },
         rules: {
-          value: [{ required: true, message: '请输入分类标识', trigger: 'blur' }],
-          label: [{ required: true, message: '请输入分类名称', trigger: 'blur' }]
+          value: [{ required: true, message: this.$t('admin.category.ruleValue'), trigger: 'blur' }],
+          label: [{ required: true, message: this.$t('admin.category.ruleLabel'), trigger: 'blur' }]
         }
       }
     };
@@ -130,7 +130,7 @@ export default {
           this.categoryList = rows;
         },
         fail: (err) => {
-          vk.toast(err.msg || '加载失败', 'none');
+          vk.toast(err.msg || err.message || this.$t('admin.common.loadFailed'), 'none');
         },
         complete: () => {
           this.loading = false;
@@ -146,14 +146,14 @@ export default {
         data: {},
         success: (res) => {
           if (res.code === 0) {
-            vk.toast(res.msg || '加载成功');
+            vk.toast(res.msg || this.$t('admin.common.loadSuccess'));
             this.loadCategories();
           } else {
-            vk.toast(res.msg || '加载失败', 'none');
+            vk.toast(res.msg || this.$t('admin.common.loadFailed'), 'none');
           }
         },
         fail: (err) => {
-          vk.toast(err.msg || '加载失败', 'none');
+          vk.toast(err.msg || err.message || this.$t('admin.common.loadFailed'), 'none');
         },
         complete: () => {
           this.presetLoading = false;
@@ -214,12 +214,12 @@ export default {
               enable: this.dialog.form.enable
             },
             success: (res) => {
-              vk.toast('更新成功');
+              vk.toast(this.$t('admin.common.updateSuccess'));
               this.dialog.show = false;
               this.loadCategories();
             },
             fail: (err) => {
-              vk.toast(err.msg || '更新失败', 'none');
+              vk.toast(err.msg || err.message || this.$t('admin.common.updateFailed'), 'none');
             },
             complete: () => {
               this.dialog.loading = false;
@@ -237,12 +237,12 @@ export default {
               enable: this.dialog.form.enable
             },
             success: (res) => {
-              vk.toast('添加成功');
+              vk.toast(this.$t('admin.common.addSuccess'));
               this.dialog.show = false;
               this.loadCategories();
             },
             fail: (err) => {
-              vk.toast(err.msg || '添加失败', 'none');
+              vk.toast(err.msg || err.message || this.$t('admin.common.addFailed'), 'none');
             },
             complete: () => {
               this.dialog.loading = false;
@@ -254,20 +254,20 @@ export default {
 
     // 删除分类
     handleDelete(row) {
-      this.$confirm(`确定要删除分类 "${row.label}" 吗？`, '确认删除', {
-        confirmButtonText: '确定删除',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('admin.category.deleteConfirm', { name: row.label }), this.$t('admin.category.deleteTitle'), {
+        confirmButtonText: this.$t('admin.category.deleteOk'),
+        cancelButtonText: this.$t('admin.common.cancel'),
         type: 'warning'
       }).then(() => {
         vk.callFunction({
           url: 'admin/product-category/sys/delete',
           data: { _id: row._id },
           success: (res) => {
-            vk.toast('删除成功');
+            vk.toast(this.$t('admin.common.deleteSuccess'));
             this.loadCategories();
           },
           fail: (err) => {
-            vk.toast(err.msg || '删除失败', 'none');
+            vk.toast(err.msg || err.message || this.$t('admin.common.deleteFailed'), 'none');
           }
         });
       }).catch(() => {});
@@ -298,7 +298,7 @@ export default {
 
 .form-tip {
   font-size: 12px;
-  color: #909399;
+  color: var(--vk-text-secondary, #64748b);
   line-height: 1.5;
   margin-top: 4px;
 }
