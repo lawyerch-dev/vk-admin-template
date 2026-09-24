@@ -1,0 +1,7 @@
+{
+  "name": "seed-demo-products",
+  "version": "1.0.0",
+  "description": "写入产品中心默认示例产品（可重复执行）",
+  "main": "index.js",
+  "dependencies": {}
+}

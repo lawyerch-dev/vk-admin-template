@@ -1,0 +1,71 @@
+[
+  {
+    "_id": "demo-basic",
+    "product_id": "demo-basic",
+    "product_name": "AI 商务助手（示例）",
+    "product_type": "software",
+    "product_image": "",
+    "download_url": "",
+    "detail_url": "",
+    "price_points": 5,
+    "price_months": 1,
+    "price_machines": 1,
+    "buy_price": 10,
+    "description": "这是系统预置的基础示例产品，用于产品中心展示与购买流程演示。你可以在「产品配置 → 产品管理」中修改名称、价格、描述，或删除后换成自己的正式产品。",
+    "remark": "种子示例数据，可安全删除",
+    "status": 1,
+    "valid_days_options": [
+      { "days": 30, "label": "月卡(30天)", "discount": 1 },
+      { "days": 90, "label": "季卡(90天)", "discount": 0.9 },
+      { "days": 365, "label": "年卡(365天)", "discount": 0.8 }
+    ],
+    "custom_user_ids": ["all"],
+    "purchased_user_ids": [],
+    "special_price_user_ids": [],
+    "special_price": 1,
+    "special_price_configs": [],
+    "version_logs": [
+      {
+        "version": "1.0.0",
+        "date": 1596416400000,
+        "log": "首个示例版本：基础产品展示与购买流程演示",
+        "download_url": ""
+      }
+    ],
+    "_add_time": 1596416400000
+  },
+  {
+    "_id": "demo-plugin",
+    "product_id": "demo-plugin",
+    "product_name": "效率浏览器插件（示例）",
+    "product_type": "plugin",
+    "product_image": "",
+    "download_url": "",
+    "detail_url": "",
+    "price_points": 10,
+    "price_months": 1,
+    "price_machines": 1,
+    "buy_price": 0,
+    "description": "浏览器插件类型示例，购买价格为 0 表示不可直接购买，用于「了解详情」展示。可在产品管理中调整为正式插件产品。",
+    "remark": "种子示例数据，可安全删除",
+    "status": 1,
+    "valid_days_options": [
+      { "days": 30, "label": "月卡(30天)", "discount": 1 },
+      { "days": 365, "label": "年卡(365天)", "discount": 0.85 }
+    ],
+    "custom_user_ids": ["all"],
+    "purchased_user_ids": [],
+    "special_price_user_ids": [],
+    "special_price": 1,
+    "special_price_configs": [],
+    "version_logs": [
+      {
+        "version": "1.0.0",
+        "date": 1596416400000,
+        "log": "示例插件首版",
+        "download_url": ""
+      }
+    ],
+    "_add_time": 1596416400000
+  }
+]
