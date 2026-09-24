@@ -55,6 +55,7 @@ export default {
 			"/pages/login/*",
 			"/pages/landing/*",
 			"/pages/products/*",
+			"/pages/index/*",
 			"/pages_template/element/*",
 			"/pages_template/components/form/*",
 			"/pages_template/components/icons/*",

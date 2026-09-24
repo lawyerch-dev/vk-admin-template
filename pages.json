@@ -1,5 +1,6 @@
 {
   "pages": [
+    { "path": "pages/index/index" },
     {
       "path": "pages/landing/index",
       "style": {
@@ -8,7 +9,6 @@
         "navigationStyle": "custom"
       }
     },
-    { "path": "pages/index/index" },
     {
       "path": "pages/products/index",
       "style": {

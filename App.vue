@@ -27,10 +27,10 @@ export default {
 			let that = this;
 			let { vk } = that;
 			let isPublic = that.isPublicPage();
-			// 公开主页/产品页：未登录可浏览，仅点击进入后台时才要求登录
+			// 未登录：公开页可浏览；其它页先回落地页（点「进入后台」再登录）
 			if (!vk.checkToken()) {
 				if (!isPublic) {
-					that.navigateToLogin();
+					that.navigateToLanding();
 				}
 				return false;
 			}
@@ -161,6 +161,11 @@ export default {
 			let url = `/${appOptions.path}${params}`;
 			let uniIdRedirectUrl = encodeURIComponent(url);
 			vk.reLaunch(`${config.login.url}?uniIdRedirectUrl=${uniIdRedirectUrl}`);
+		},
+		// 未登录默认先看落地页
+		navigateToLanding(){
+			let { vk } = this;
+			vk.reLaunch({ url: "/pages/landing/index" });
 		}
 	},
 	// 监听 - 页面404
@@ -172,6 +177,19 @@ export default {
 	// 监听 - 应用启动时
 	onLaunch: function(options) {
 		this.appOptions = options;
+		// 启动即分流：未登录进落地页（不中断后续 vk 初始化）
+		try {
+			const token = uni.getStorageSync("uni_id_token");
+			const tokenExpired = uni.getStorageSync("uni_id_token_expired");
+			const hasValidToken = !!(token && tokenExpired && tokenExpired > Date.now());
+			const path = (options && options.path) || "";
+			const isPublicLaunch = path.indexOf("pages/landing") === 0
+				|| path.indexOf("pages/products") === 0
+				|| path.indexOf("pages/login") === 0;
+			if (!hasValidToken && !isPublicLaunch) {
+				uni.reLaunch({ url: "/pages/landing/index" });
+			}
+		} catch (e) {}
 		if (config.debug) {
 			console.log(
 				`%c vk-admin %c v${version} `,

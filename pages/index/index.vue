@@ -144,6 +144,11 @@ export default {
 	onLoad(options = {}) {
 		vk = this.vk;
 		this.options = options;
+		// 首页为框架启动页：未登录先看落地页，点「进入后台」再登录
+		if (!vk.checkToken()) {
+			uni.reLaunch({ url: '/pages/landing/index' });
+			return;
+		}
 		this.init(options);
 		this.loadAnnouncement();
 	},
