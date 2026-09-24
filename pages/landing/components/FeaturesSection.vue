@@ -18,6 +18,14 @@
 export default {
   props: {
     data: { type: Object, default: () => ({}) }
+  },
+  methods: {
+    // 英文模式下覆盖后台配置的中文文案
+    trText(text, key) {
+      const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
+      if (locale === 'en' && this.$t) return this.$t(key);
+      return text;
+    }
   }
 };
 </script>
