@@ -42,6 +42,9 @@
 				</view>
 				<view class="header-actions">
 					<el-button type="primary" icon="el-icon-plus" size="small" @click="addStore">{{ $t('admin.pointsPay.addStore') }}</el-button>
+					<el-button type="success" icon="el-icon-check" size="small" @click="saveConfig" :loading="saving">
+						{{ $t('admin.pointsPay.saveConfig') }}
+					</el-button>
 					<el-button
 						type="danger"
 						icon="el-icon-delete"
@@ -49,9 +52,6 @@
 						:disabled="stores.length <= 1"
 						@click="removeStore(selected_store_id)"
 					>{{ $t('admin.common.delete') }}</el-button>
-					<el-button type="success" icon="el-icon-check" size="small" @click="saveConfig" :loading="saving">
-						{{ $t('admin.pointsPay.saveConfig') }}
-					</el-button>
 				</view>
 			</div>
 			<div class="tip-line">{{ $t('admin.pointsPay.storeTipLine') }}</div>
