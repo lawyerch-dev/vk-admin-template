@@ -1,7 +1,7 @@
 <template>
 	<view class="form-content">
 		<view class="field">
-			<text class="label">{{ $t('login.username') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.username') }}<text class="req">*</text></text>
 			<input 
 				class="input" 
 				v-model="form.username" 
@@ -11,7 +11,7 @@
 		</view>
 
 		<view class="field">
-			<text class="label">{{ $t('login.email') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.email') }}<text class="req">*</text></text>
 			<input 
 				class="input" 
 				v-model="form.email" 
@@ -21,7 +21,7 @@
 		</view>
 
 		<view class="field">
-			<text class="label">{{ $t('login.password') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.password') }}<text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
@@ -34,7 +34,7 @@
 		</view>
 
 		<view class="field">
-			<text class="label">{{ $t('login.confirmPassword') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.confirmPassword') }}<text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
@@ -47,7 +47,7 @@
 		</view>
 
 		<view class="field">
-			<text class="label">{{ $t('login.captcha') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.captcha') }}<text class="req">*</text></text>
 			<view class="captcha-wrapper">
 				<uni-captcha scene="register" v-model="form.captcha" :placeholder="$t('login.captchaPlaceholder')"></uni-captcha>
 			</view>
@@ -241,7 +241,7 @@ export default {
 
 .input:focus {
 	border-color: var(--vk-primary);
-	background-color: var(--vk-card);
+	background-color: var(--vk-bg-secondary);
 }
 
 .input-wrap {

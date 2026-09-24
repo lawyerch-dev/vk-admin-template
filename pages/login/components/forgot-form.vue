@@ -1,7 +1,7 @@
 <template>
 	<view class="form-content">
 		<view class="field">
-			<text class="label">{{ $t('login.email') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.email') }}<text class="req">*</text></text>
 			<input 
 				class="input" 
 				v-model="form.email" 
@@ -30,7 +30,7 @@
 		</view>
 
 		<view class="field">
-			<text class="label">{{ $t('login.newPassword') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.newPassword') }}<text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
@@ -43,7 +43,7 @@
 		</view>
 
 		<view class="field">
-			<text class="label">{{ $t('login.confirmPassword') }} <text class="req">*</text></text>
+			<text class="label">{{ $t('login.confirmPassword') }}<text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
@@ -230,7 +230,7 @@ export default {
 
 .input:focus {
 	border-color: var(--vk-primary);
-	background-color: var(--vk-card);
+	background-color: var(--vk-bg-secondary);
 }
 
 .input-wrap {

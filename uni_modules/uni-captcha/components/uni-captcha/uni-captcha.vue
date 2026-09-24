@@ -6,7 +6,7 @@
 				mode="widthFix"></image>
 		</view>
 		<input @blur="focusCaptchaInput = false" :focus="focusCaptchaInput" type="text" class="captcha"
-			:inputBorder="false" maxlength="4" v-model="val" placeholder="请输入验证码">
+			:inputBorder="false" maxlength="4" v-model="val" :placeholder="placeholder || '请输入验证码'">
 	</view>
 </template>
 
@@ -16,6 +16,12 @@
 			modelValue:String,
 			value:String,
 			scene: {
+				type: String,
+				default () {
+					return ""
+				}
+			},
+			placeholder: {
 				type: String,
 				default () {
 					return ""
@@ -121,11 +127,15 @@
 	}
 
 	.captcha {
-		background-color: #F8F8F8;
+		/* 浅底必须配深字，深色模式走主题变量，避免输入后看不见 */
+		background-color: var(--vk-bg-secondary, #F8F8F8);
+		color: var(--vk-text, #1e293b);
+		caret-color: var(--vk-primary, #3b82f6);
 		font-size: 14px;
 		flex: 1;
 		padding: 0 20rpx;
 		margin-left: 20rpx;
+		border-radius: 8px;
 		/* #ifndef APP-NVUE */
 		box-sizing: border-box;
 		/* #endif */
