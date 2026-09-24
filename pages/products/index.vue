@@ -62,21 +62,27 @@
           :key="product._id"
           class="product-card"
         >
-          <!-- 产品图片 -->
+          <!-- 封面区域 -->
           <view class="product-card__visual">
             <image
-              v-if="product.product_image"
+              v-if="getImageUrl(product.product_image)"
               :src="getImageUrl(product.product_image)"
               class="product-card__image"
               mode="aspectFill"
               @error="onImageError($event, product)"
             ></image>
             <view v-else class="product-card__placeholder">
-              <i class="el-icon-goods"></i>
+              <i class="el-icon-picture-outline"></i>
+              <text class="product-card__placeholder-name">{{ product.product_name }}</text>
             </view>
-            <!-- 类型标签 -->
-            <view class="product-card__type-badge">
-              {{ getTypeLabel(product.product_type) }}
+            <!-- 浮动标签 -->
+            <view class="product-card__badges">
+              <text class="type-badge" :class="product.product_type">
+                {{ getTypeLabel(product.product_type) }}
+              </text>
+              <text v-if="product.buy_price > 0" class="hot-badge">
+                <i class="el-icon-trophy"></i>
+              </text>
             </view>
           </view>
 
@@ -85,7 +91,7 @@
             <text class="product-card__name">{{ product.product_name }}</text>
             <text v-if="product.description" class="product-card__desc">{{ product.description }}</text>
 
-            <!-- 定价 -->
+            <!-- 定价栏 -->
             <view class="product-card__pricing">
               <view class="pricing-item">
                 <text class="pricing-value">{{ product.price_points }}</text>
@@ -179,8 +185,9 @@ export default {
             this.products = res.data || [];
             resolve();
           },
-          fail: () => {
+          fail: (err) => {
             this.products = [];
+            vk.toast((err && (err.msg || err.message)) || this.$t('products.empty'), 'none');
             resolve();
           },
         });
@@ -197,8 +204,9 @@ export default {
             this.categories = res.data || [];
             resolve();
           },
-          fail: () => {
+          fail: (err) => {
             this.categories = [];
+            vk.toast((err && (err.msg || err.message)) || this.$t('products.empty'), 'none');
             resolve();
           },
         });
@@ -208,13 +216,24 @@ export default {
     // 获取图片URL
     getImageUrl(image) {
       if (!image) return '';
-      if (image.startsWith('http')) return image;
-      if (image.startsWith('/')) return image;
-      return image;
+      if (typeof image === 'string') return image;
+      if (typeof image === 'object') {
+        if (image.url) return image.url;
+        if (image[0] && typeof image[0] === 'string') return image[0];
+        if (image[0] && image[0].url) return image[0].url;
+      }
+      return '';
     },
 
     // 获取类型标签
     getTypeLabel(type) {
+      const TYPE_KEYS = {
+        software: 'comp.type.software',
+        plugin: 'comp.type.plugin',
+        normal: 'comp.type.normal',
+      };
+      const key = TYPE_KEYS[type];
+      if (key) return this.$t(key);
       const found = this.categories.find(c => c.value === type);
       return found ? found.label : type || this.$t('products.fallback');
     },
@@ -464,24 +483,27 @@ export default {
   gap: 24px;
 }
 
-/* 产品卡片 */
+/* 产品卡片 — 与 components/product-card 视觉对齐 */
 .product-card {
-  background: var(--vk-bg);
+  background: var(--vk-card, #ffffff);
   border-radius: 12px;
+  border: 1px solid var(--vk-border, #e2e8f0);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   }
 
   &__visual {
     position: relative;
-    height: 200px;
+    height: 160px;
     background: var(--vk-bg-muted);
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   &__image {
@@ -493,67 +515,110 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: #fff;
 
     i {
-      font-size: 48px;
-      color: var(--vk-border);
+      font-size: 40px;
+      opacity: 0.7;
+      margin-bottom: 8px;
     }
   }
 
-  &__type-badge {
+  &__placeholder-name {
+    font-size: 14px;
+    opacity: 0.85;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__badges {
     position: absolute;
-    top: 12px;
-    left: 12px;
-    padding: 4px 12px;
-    background: rgba(59, 130, 246, 0.9);
-    color: #ffffff;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
   }
 
   &__body {
-    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
   }
 
   &__name {
-    display: block;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--vk-text);
-    margin-bottom: 8px;
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--vk-text, #1e293b);
+    line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__desc {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--vk-text-secondary, #64748b);
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-size: 14px;
-    color: var(--vk-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 16px;
   }
 
   &__pricing {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 20px;
-    padding: 12px;
-    background: var(--vk-bg-secondary);
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: var(--vk-bg-muted);
     border-radius: 8px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
   }
 
   &__actions {
     display: flex;
     gap: 10px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--vk-border, #e2e8f0);
   }
+}
+
+.type-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+
+  &.software { background: #2563eb; }
+  &.plugin   { background: #059669; }
+  &.normal   { background: #6b7280; }
+}
+
+.hot-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: #ea580c;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
 }
 
 .pricing-item {
@@ -564,16 +629,16 @@ export default {
   display: block;
   font-size: 18px;
   font-weight: 700;
-  color: var(--vk-primary);
+  color: var(--vk-text, #1e293b);
 }
 
 .pricing-label {
-  font-size: 12px;
-  color: var(--vk-text-muted);
+  font-size: 11px;
+  color: var(--vk-text-secondary, #64748b);
 }
 
 .pricing-sep {
-  color: var(--vk-border);
+  color: var(--vk-border, #e2e8f0);
   font-size: 14px;
 }
 
@@ -584,12 +649,15 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 10px 0;
+  height: 40px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
+
+  &:hover { transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
 
   i {
     font-size: 16px;

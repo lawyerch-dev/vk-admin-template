@@ -2,12 +2,12 @@
   <view class="features" id="features">
     <view class="features__inner">
       <text class="section__title">{{ trText(data.title, 'features.title') }}</text>
-      <text class="section__subtitle">{{ data.subtitle || '' }}</text>
+      <text class="section__subtitle">{{ trText(data.subtitle, 'features.subtitle') }}</text>
       <view class="features__grid" :class="'features__grid--' + (data.columns || 3)">
         <view class="feature-card" v-for="(item, i) in data.items" :key="i">
           <text class="feature-card__icon">{{ item.icon }}</text>
-          <text class="feature-card__title">{{ item.title }}</text>
-          <text class="feature-card__desc">{{ item.desc }}</text>
+          <text class="feature-card__title">{{ trText(item.title, `features.item${i}.title`) }}</text>
+          <text class="feature-card__desc">{{ trText(item.desc, `features.item${i}.desc`) }}</text>
         </view>
       </view>
     </view>
@@ -23,7 +23,10 @@ export default {
     // 英文模式下覆盖后台配置的中文文案
     trText(text, key) {
       const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
-      if (locale === 'en' && this.$t) return this.$t(key);
+      if (locale === 'en' && this.$t) {
+        const translated = this.$t(key);
+        if (translated && translated !== key) return translated;
+      }
       return text;
     }
   }

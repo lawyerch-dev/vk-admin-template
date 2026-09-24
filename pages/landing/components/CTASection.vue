@@ -2,7 +2,7 @@
   <view class="cta">
     <view class="cta__inner">
       <text class="cta__title">{{ trText(data.title, 'cta.title') }}</text>
-      <text class="cta__sub">{{ data.subtitle || '' }}</text>
+      <text class="cta__sub">{{ trText(data.subtitle, 'cta.subtitle') }}</text>
       <text class="btn btn--primary btn--lg" @click="handleClick">{{ trText(data.btn_text, 'cta.register') }}</text>
     </view>
   </view>
@@ -17,7 +17,10 @@ export default {
     // 英文模式下覆盖后台配置的中文文案
     trText(text, key) {
       const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
-      if (locale === 'en' && this.$t) return this.$t(key);
+      if (locale === 'en' && this.$t) {
+        const translated = this.$t(key);
+        if (translated && translated !== key) return translated;
+      }
       return text;
     },
 

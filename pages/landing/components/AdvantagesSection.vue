@@ -2,13 +2,13 @@
   <view class="advantages">
     <view class="advantages__inner">
       <text class="section__title">{{ trText(data.title, 'advantages.title') }}</text>
-      <text class="section__subtitle">{{ data.subtitle || '' }}</text>
+      <text class="section__subtitle">{{ trText(data.subtitle, 'advantages.subtitle') }}</text>
       <view class="advantages__list">
         <view class="adv-item" v-for="(item, i) in data.items" :key="i">
           <text class="adv-item__num">{{ String(i + 1).padStart(2, '0') }}</text>
           <view class="adv-item__content">
-            <text class="adv-item__title">{{ item.title }}</text>
-            <text class="adv-item__desc">{{ item.desc }}</text>
+            <text class="adv-item__title">{{ trText(item.title, `advantages.item${i}.title`) }}</text>
+            <text class="adv-item__desc">{{ trText(item.desc, `advantages.item${i}.desc`) }}</text>
           </view>
         </view>
       </view>
@@ -25,7 +25,10 @@ export default {
     // 英文模式下覆盖后台配置的中文文案
     trText(text, key) {
       const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
-      if (locale === 'en' && this.$t) return this.$t(key);
+      if (locale === 'en' && this.$t) {
+        const translated = this.$t(key);
+        if (translated && translated !== key) return translated;
+      }
       return text;
     }
   }

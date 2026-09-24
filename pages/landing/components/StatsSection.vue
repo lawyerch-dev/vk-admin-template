@@ -3,7 +3,7 @@
     <view class="stats__inner">
       <view class="stats__item" v-for="(item, i) in data.items" :key="i">
         <text class="stats__num">{{ item.num }}</text>
-        <text class="stats__label">{{ item.label }}</text>
+        <text class="stats__label">{{ trText(item.label, `stats.item${i}.label`) }}</text>
       </view>
     </view>
   </view>
@@ -13,6 +13,17 @@
 export default {
   props: {
     data: { type: Object, default: () => ({}) }
+  },
+  methods: {
+    // 英文模式下覆盖后台配置的中文文案
+    trText(text, key) {
+      const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
+      if (locale === 'en' && this.$t) {
+        const translated = this.$t(key);
+        if (translated && translated !== key) return translated;
+      }
+      return text;
+    }
   }
 };
 </script>

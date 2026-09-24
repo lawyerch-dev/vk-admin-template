@@ -20,16 +20,25 @@
           :key="product._id"
           class="product-item"
         >
-          <!-- 产品图片 -->
+          <!-- 封面区域 -->
           <view class="product-item__visual">
             <image
-              v-if="product.product_image"
-              :src="product.product_image"
+              v-if="imageUrl(product)"
+              :src="imageUrl(product)"
               class="product-item__image"
               mode="aspectFill"
             ></image>
             <view v-else class="product-item__placeholder">
-              <i class="el-icon-goods"></i>
+              <i class="el-icon-picture-outline"></i>
+              <text class="product-item__placeholder-name">{{ product.product_name }}</text>
+            </view>
+            <view class="product-item__badges">
+              <text class="type-badge" :class="product.product_type">
+                {{ typeLabel(product.product_type) }}
+              </text>
+              <text v-if="product.buy_price > 0" class="hot-badge">
+                <i class="el-icon-trophy"></i>
+              </text>
             </view>
           </view>
 
@@ -38,14 +47,22 @@
             <text class="product-item__name">{{ product.product_name }}</text>
             <text v-if="product.description" class="product-item__desc">{{ product.description }}</text>
 
-            <!-- 定价 -->
+            <!-- 定价栏 -->
             <view class="product-item__pricing">
-              <text class="pricing-value">{{ product.price_points }}</text>
-              <text class="pricing-label">{{ $t('products.points') }}/</text>
-              <text class="pricing-value">{{ product.price_months }}</text>
-              <text class="pricing-label">{{ $t('products.month') }}/</text>
-              <text class="pricing-value">{{ product.price_machines }}</text>
-              <text class="pricing-label">{{ $t('products.machine') }}</text>
+              <view class="pricing-item">
+                <text class="pricing-value">{{ product.price_points }}</text>
+                <text class="pricing-label">{{ $t('products.points') }}</text>
+              </view>
+              <text class="pricing-sep">×</text>
+              <view class="pricing-item">
+                <text class="pricing-value">{{ product.price_months }}</text>
+                <text class="pricing-label">{{ $t('products.month') }}</text>
+              </view>
+              <text class="pricing-sep">×</text>
+              <view class="pricing-item">
+                <text class="pricing-value">{{ product.price_machines }}</text>
+                <text class="pricing-label">{{ $t('products.machine') }}</text>
+              </view>
             </view>
 
             <!-- 操作 -->
@@ -75,6 +92,12 @@
 <script>
 import ServiceQrcode from '@/components/service-qrcode/index.vue';
 
+const TYPE_KEYS = {
+  software: 'comp.type.software',
+  plugin: 'comp.type.plugin',
+  normal: 'comp.type.normal',
+};
+
 export default {
   components: { ServiceQrcode },
   props: {
@@ -102,7 +125,10 @@ export default {
     // 英文模式下覆盖后台配置的中文文案
     trText(text, key) {
       const locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
-      if (locale === 'en' && this.$t) return this.$t(key);
+      if (locale === 'en' && this.$t) {
+        const translated = this.$t(key);
+        if (translated && translated !== key) return translated;
+      }
       return text;
     },
 
@@ -114,13 +140,29 @@ export default {
         success: (res) => {
           this.products = res.data || [];
         },
-        fail: () => {
+        fail: (err) => {
           this.products = [];
+          uni.vk.toast((err && (err.msg || err.message)) || this.$t('landing.empty'), 'none');
         },
         complete: () => {
           this.loading = false;
         },
       });
+    },
+    imageUrl(product) {
+      const img = product.product_image;
+      if (!img) return '';
+      if (typeof img === 'string') return img;
+      if (typeof img === 'object') {
+        if (img.url) return img.url;
+        if (img[0] && typeof img[0] === 'string') return img[0];
+        if (img[0] && img[0].url) return img[0].url;
+      }
+      return '';
+    },
+    typeLabel(type) {
+      const key = TYPE_KEYS[type];
+      return key ? this.$t(key) : (type || this.$t('products.fallback'));
     },
     openDetail(url) {
       if (!url) return;
@@ -210,21 +252,25 @@ export default {
 }
 
 .product-item {
-  background: var(--vk-bg);
+  background: var(--vk-card, #ffffff);
   border-radius: 12px;
+  border: 1px solid var(--vk-border, #e2e8f0);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   }
 
   &__visual {
-    height: 180px;
-    background: var(--vk-bg-muted);
+    position: relative;
+    height: 160px;
     overflow: hidden;
+    background: var(--vk-bg-muted);
+    flex-shrink: 0;
   }
 
   &__image {
@@ -236,77 +282,148 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: #fff;
 
     i {
-      font-size: 48px;
-      color: var(--vk-border);
+      font-size: 40px;
+      opacity: 0.7;
+      margin-bottom: 8px;
     }
   }
 
+  &__placeholder-name {
+    font-size: 14px;
+    opacity: 0.85;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+  }
+
   &__body {
-    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow: hidden;
   }
 
   &__name {
-    display: block;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--vk-text);
-    margin-bottom: 8px;
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--vk-text, #1e293b);
+    line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__desc {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--vk-text-secondary, #64748b);
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-size: 14px;
-    color: var(--vk-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 16px;
   }
 
   &__pricing {
     display: flex;
-    align-items: baseline;
-    gap: 2px;
-    margin-bottom: 16px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     padding: 10px;
-    background: var(--vk-bg-secondary);
-    border-radius: 6px;
+    background: var(--vk-bg-muted);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
   }
 
   &__actions {
     display: flex;
     gap: 10px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--vk-border, #e2e8f0);
   }
 }
 
+.type-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+
+  &.software { background: #2563eb; }
+  &.plugin   { background: #059669; }
+  &.normal   { background: #6b7280; }
+}
+
+.hot-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: #ea580c;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.pricing-item {
+  text-align: center;
+}
+
 .pricing-value {
+  display: block;
   font-size: 18px;
   font-weight: 700;
-  color: var(--vk-primary);
+  color: var(--vk-text, #1e293b);
 }
 
 .pricing-label {
-  font-size: 12px;
-  color: var(--vk-text-muted);
+  font-size: 11px;
+  color: var(--vk-text-secondary, #64748b);
+}
+
+.pricing-sep {
+  font-size: 14px;
+  color: var(--vk-border, #e2e8f0);
 }
 
 .action-btn {
   flex: 1;
-  display: block;
-  text-align: center;
-  padding: 10px 0;
-  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover { transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
 
   &--detail {
     background: var(--vk-primary-soft);
