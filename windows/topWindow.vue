@@ -56,6 +56,10 @@
 						<view class="navbar-prefs">
 							<nav-prefs />
 						</view>
+						<view class="back-site pointer" @click.stop="goLanding">
+							<vk-data-icon name="el-icon-s-home" size="14" :color="textColor"></vk-data-icon>
+							<text class="back-site__label">{{ $t('nav.backToSite') }}</text>
+						</view>
 						<view class="navbar-user navbar-user--always" :class="{ active: popupMenuOpened }" @click="togglePopupMenu">
 							<text class="avatar">{{ avatarChar }}</text>
 							<text class="username">{{ vk.getVuex("$user.userInfo.username") }}</text>
@@ -86,6 +90,9 @@
 								</view>
 							</view>
 							<view class="menu-divider"></view>
+							<view class="menu-item menu-row" @click="goLanding">
+								<text class="menu-row__label">{{ $t('nav.backToSite') }}</text>
+							</view>
 							<view class="menu-item menu-row" @click="openForm('updatePassword')">
 								<text class="menu-row__label">{{ $t('nav.changePassword') }}</text>
 							</view>
@@ -160,6 +167,14 @@ export default {
 		this.checkMenuCollapse();
 	},
 	methods: {
+		// 返回前台落地页
+		goLanding() {
+			let that = this;
+			that.popupMenuOpened = false;
+			uni.reLaunch({
+				url: "/pages/landing/index"
+			});
+		},
 		// 退出登录
 		logout() {
 			let that = this;
@@ -339,6 +354,30 @@ export default {
 		.navbar-prefs {
 			display: flex;
 			align-items: center;
+		}
+
+		.back-site {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			height: 34px;
+			padding: 0 12px;
+			margin-right: 4px;
+			border-radius: 999px;
+			border: 1px solid var(--vk-border, #e2e8f0);
+			background: var(--vk-bg-muted, #f1f5f9);
+			color: var(--vk-text, #1e293b);
+			font-size: 13px;
+			transition: background 0.2s, color 0.2s;
+
+			.back-site__label {
+				line-height: 1;
+			}
+
+			&:hover {
+				background: var(--vk-primary-light, #eff6ff);
+				color: var(--vk-primary, #3b82f6);
+			}
 		}
 
 		.menu-link {
