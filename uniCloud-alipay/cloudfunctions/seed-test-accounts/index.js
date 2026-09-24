@@ -12,11 +12,20 @@
  */
 exports.main = async (event = {}) => {
 	const uniId = require("uni-id");
-	const uniID = uniId.init({});
+	const uniID = uniId.createInstance({
+		clientInfo: {
+			appId: "__UNI__seed",
+			platform: "h5",
+			clientIP: "127.0.0.1",
+			userAgent: "seed-test-accounts",
+			os: "node",
+			locale: "zh-Hans"
+		}
+	});
 	const db = uniCloud.database();
 	const collection = db.collection("uni-id-users");
 	const now = Date.now();
-	const password = await uniID.encryptPwd("123456");
+	const { passwordHash: password } = uniID.encryptPwd("123456");
 
 	const accounts = [
 		{
