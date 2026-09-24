@@ -70,7 +70,14 @@
 					<el-input v-model="selectedStore.base_url" :placeholder="$t('admin.pointsPay.gatewayPlaceholder')"></el-input>
 				</el-form-item>
 				<el-form-item :label="$t('admin.pointsPay.fieldChannel')">
-					<el-input-number v-model="selectedStore.channel_id" :min="1" :max="999" size="small"></el-input-number>
+					<el-input-number
+						v-model="selectedStore.channel_id"
+						:min="1"
+						:max="999"
+						size="small"
+						:controls="false"
+						class="channel-input"
+					></el-input-number>
 					<span style="margin-left: 8px; color: var(--vk-text-secondary, #64748b); font-size: 12px;">{{ $t('admin.pointsPay.channelTip') }}</span>
 				</el-form-item>
 				<el-form-item :label="$t('admin.pointsPay.fieldQueryPassword')">
@@ -81,7 +88,7 @@
 			<view class="dual-panel">
 				<el-card class="inner-card panel-card">
 					<div slot="header">{{ $t('admin.pointsPay.apiPathsHeader') }}</div>
-					<el-form :model="selectedStore" label-width="120px" label-position="right">
+					<el-form :model="selectedStore" label-width="150px" label-position="right">
 						<el-form-item :label="$t('admin.pointsPay.fieldPayOrder')">
 							<el-input v-model="selectedStore.pay_order_path" placeholder="/shopApi/Pay/order"></el-input>
 						</el-form-item>
@@ -487,6 +494,21 @@ export default {
 /* 表格内数字输入：去掉加减后默认宽约 150px，会溢出窄列，改为撑满 */
 .num-cell-input {
 	width: 100% !important;
+
+	::v-deep .el-input {
+		width: 100% !important;
+	}
+
+	::v-deep .el-input__inner {
+		padding-left: 8px !important;
+		padding-right: 8px !important;
+		text-align: center;
+	}
+}
+
+/* 支付通道 ID：去加减并加宽 */
+.channel-input {
+	width: 200px !important;
 
 	::v-deep .el-input {
 		width: 100% !important;
