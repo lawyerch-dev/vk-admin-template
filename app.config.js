@@ -13,11 +13,11 @@ export default {
 	login: {
 		url: "/pages/login/index",
 		testUser: {
-			show: false, // 是否显示
+			show: true, // 登录页展示演示账号
 			list: [
-				{ username: "test11", password: "123456", nickname: "高级管理员" },
-				{ username: "test12", password: "123456", nickname: "初级管理员" },
-				{ username: "test13", password: "123456", nickname: "无权限用户" }
+				{ username: "demo-ops", password: "123456", nickname: "产品运营", desc: "产品管理 + 数据统计" },
+				{ username: "demo-view", password: "123456", nickname: "只读访客", desc: "仅查询，不可增删改" },
+				{ username: "demo-user", password: "123456", nickname: "基础用户", desc: "可进后台，无管理权限" }
 			]
 		}
 	},

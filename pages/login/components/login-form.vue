@@ -46,10 +46,29 @@
 		<view class="btn-primary" @click="handleSubmit">
 			<text class="btn-text">登 录</text>
 		</view>
+
+		<!-- 演示账号（无完全权限，点击可填充） -->
+		<view v-if="testUsers.length" class="demo-accounts">
+			<text class="demo-title">演示账号（密码均为 123456，点击填充）</text>
+			<view
+				v-for="user in testUsers"
+				:key="user.username"
+				class="demo-item"
+				@click="fillTestUser(user)"
+			>
+				<view class="demo-item__main">
+					<text class="demo-item__name">{{ user.nickname }}</text>
+					<text class="demo-item__desc">{{ user.desc }}</text>
+				</view>
+				<text class="demo-item__account">{{ user.username }}</text>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+import config from '@/app.config.js';
+
 let vk = uni.vk;
 
 export default {
@@ -71,6 +90,13 @@ export default {
 			checked: false
 		}
 	},
+	computed: {
+		testUsers() {
+			const testUser = config.login && config.login.testUser;
+			if (!testUser || !testUser.show) return [];
+			return testUser.list || [];
+		}
+	},
 	created() {
 		// 读取记住的账号密码
 		let { login } = vk.getVuex("$user");
@@ -90,6 +116,11 @@ export default {
 		onAgreementChange(e) {
 			let value = e.detail.value || [];
 			this.form.agreement = value.length > 0;
+		},
+		fillTestUser(user) {
+			this.form.username = user.username;
+			this.form.password = user.password || '123456';
+			vk.toast(`已填充：${user.nickname}`, 'none');
 		},
 		handleSubmit() {
 			if (!this.form.agreement) {
@@ -217,6 +248,68 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.demo-accounts {
+	margin-top: 4px;
+	padding-top: 12px;
+	border-top-width: 1px;
+	border-top-color: #E2E8F0;
+	border-top-style: dashed;
+}
+
+.demo-title {
+	font-size: 12px;
+	color: #94A3B8;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.demo-item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 12px;
+	margin-bottom: 8px;
+	background-color: #F8FAFC;
+	border-width: 1px;
+	border-color: #E2E8F0;
+	border-style: solid;
+	border-radius: 8px;
+}
+
+.demo-item:active {
+	background-color: #EFF6FF;
+	border-color: #93C5FD;
+}
+
+.demo-item__main {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	margin-right: 8px;
+}
+
+.demo-item__name {
+	font-size: 13px;
+	font-weight: 600;
+	color: #0F172A;
+	line-height: 18px;
+}
+
+.demo-item__desc {
+	font-size: 12px;
+	color: #64748B;
+	line-height: 16px;
+	margin-top: 2px;
+}
+
+.demo-item__account {
+	font-size: 12px;
+	color: #0891B2;
+	font-weight: 500;
+	flex-shrink: 0;
 }
 
 .btn-text {

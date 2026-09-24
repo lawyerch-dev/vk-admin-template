@@ -8,6 +8,7 @@ vk-unicloud-admin — Vue 2 + uni-app + uniCloud 管理后台框架。
 - 后端：单云函数 `router`，URL 路径 = service 文件路径
 - 数据库：uniCloud，通过 `vk.baseDao` 操作
 - 环境变量：见 `.claude/rules/env.md`
+- 开发规则：见 `.claude/rules/rules.md`
 
 
 
