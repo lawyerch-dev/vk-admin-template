@@ -10,8 +10,8 @@
         <view class="nav__right">
           <nav-prefs />
           <template v-if="isLoggedIn">
-            <text class="nav__user">{{ userInfo.nickname || userInfo.username || $t('user.fallback') }}</text>
             <text class="nav__btn" @click="goAdmin">{{ $t('nav.admin') }}</text>
+            <text class="nav__user">{{ userInfo.nickname || userInfo.username || $t('user.fallback') }}</text>
           </template>
           <template v-else>
             <text class="nav__btn nav__btn--ghost" @click="goLogin">{{ $t('nav.login') }}</text>

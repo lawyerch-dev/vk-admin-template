@@ -363,7 +363,7 @@ export default {
 			height: 34px;
 			padding: 0 12px;
 			margin-right: 4px;
-			border-radius: 999px;
+			border-radius: 6px;
 			border: 1px solid var(--vk-border, #e2e8f0);
 			background: var(--vk-bg-muted, #f1f5f9);
 			color: var(--vk-text, #1e293b);
@@ -457,7 +457,7 @@ export default {
 			gap: 8px;
 			height: 34px;
 			padding: 0 10px 0 4px;
-			border-radius: 999px;
+			border-radius: 6px;
 			background: var(--vk-bg-muted, #f1f5f9);
 			cursor: pointer;
 			transition: background 0.2s;
