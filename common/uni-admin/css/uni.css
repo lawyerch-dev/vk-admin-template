@@ -11,7 +11,7 @@ html {
 
 .uni-app--showleftwindow uni-main {
 	position: relative;
-	background-color: #f5f5f5;
+	background-color: var(--vk-bg, #f5f5f5);
 }
 
 .uni-mask+.uni-left-window,
@@ -275,7 +275,7 @@ uni-page-head .uni-btn-icon {
 
 .uni-tabs__item.is-active {
 	color: #007aff;
-	background-color: #fff;
+	background-color: var(--vk-card, #fff);
 	border-right-color: #dcdfe6;
 	border-left-color: #dcdfe6;
 }
@@ -322,9 +322,9 @@ uni-page-head .uni-btn-icon {
 
 
 button {
-	background: #fff;
-	border: 1px solid #dcdfe6;
-	color: #606266;
+	background: var(--vk-card, #fff);
+	border: 1px solid var(--vk-border, #dcdfe6);
+	color: var(--vk-text, #606266);
 	box-sizing: border-box;
 }
 
@@ -341,9 +341,9 @@ button[type=warn] {
 }
 
 button[type=default] {
-	background: #fff;
-	border: 1px solid #dcdfe6;
-	color: #606266;
+	background: var(--vk-card, #fff);
+	border: 1px solid var(--vk-border, #dcdfe6);
+	color: var(--vk-text, #606266);
 	box-sizing: border-box;
 }
 

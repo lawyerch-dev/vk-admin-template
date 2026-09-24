@@ -661,24 +661,12 @@ export default {
 				line-height: 50px;
 				font-size: 20px;
 				font-weight: bold;
-				background-image: -webkit-linear-gradient(left, #aaa, #fff 35%, #fff 65%, #aaa);
-				-webkit-text-fill-color: transparent;
-				-webkit-background-clip: text;
-				-webkit-background-size: 200% 100%;
-				-webkit-animation: masked-animation 3s infinite linear;
+				// 跟随主题：浅色用深色字，深色用浅色字，避免写死白字在浅色模式下不可见
+				color: var(--vk-text, #1e293b);
 				display: inline-block;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow:ellipsis;
-			}
-
-			@-webkit-keyframes masked-animation {
-				0%  { 
-					background-position: -200% 0;
-				}
-				100% { 
-					background-position: 200% 0;
-				}
 			}
 		}
 	}

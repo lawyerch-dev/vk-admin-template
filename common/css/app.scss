@@ -57,3 +57,91 @@ a, button, view, text {
 	padding-left: 24em;
 }
 /* 富文本编辑器样式结束 */
+
+/* ---------- 深浅色：覆盖 vk-unicloud-admin-ui / uni-admin 写死的浅色 ---------- */
+/* 主内容区容器：框架默认 #f5f5f5 / #fff，深色模式会漏出白边 */
+uni-main,
+.uni-app--showleftwindow uni-main {
+	background-color: var(--vk-bg, #ffffff) !important;
+}
+
+.uni-app--showleftwindow uni-page-wrapper {
+	background-color: var(--vk-bg, #ffffff) !important;
+}
+
+.uni-app--showleftwindow uni-page-body {
+	background-color: var(--vk-bg, #ffffff) !important;
+}
+
+/* 原生 button（含 tabs 右侧下拉）全局白底 */
+button {
+	background: var(--vk-card, #ffffff) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+button[type="primary"] {
+	background-color: var(--vk-primary, #3b82f6) !important;
+	border-color: var(--vk-primary, #3b82f6) !important;
+	color: #ffffff !important;
+}
+
+button[type="warn"] {
+	background-color: #f56c6c !important;
+	border-color: #f56c6c !important;
+	color: #ffffff !important;
+}
+
+/* tabs 标签 + 右侧下拉按钮（.arrow-down） */
+.vk-data-menu-tabs .el-tabs--card > .el-tabs__header .el-tabs__item {
+	background-color: var(--vk-card, #ffffff) !important;
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.vk-data-menu-tabs .el-tabs__item.is-active {
+	color: var(--vk-primary, #3b82f6) !important;
+	background-color: var(--vk-card, #ffffff) !important;
+}
+
+.vk-data-menu-tabs .arrow-down {
+	background-color: var(--vk-card, #ffffff) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.vk-data-menu-tabs .is-focus {
+	box-shadow: none !important;
+}
+
+/* tabs 下拉菜单 */
+.vk-tabs-dropdown-menu.el-popover {
+	background: var(--vk-card, #ffffff) !important;
+	border: 1px solid var(--vk-border, #e2e8f0) !important;
+}
+
+.vk-tabs-dropdown-menu .dropdown-item {
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.vk-tabs-dropdown-menu .dropdown-item:hover {
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+}
+
+.vk-tabs-dropdown-menu .dropdown-item .icon,
+.vk-tabs-dropdown-menu .dropdown-item .text {
+	color: var(--vk-text, #1e293b) !important;
+}
+
+/* 页脚固定条 */
+.page-footer {
+	background-color: var(--vk-card, #ffffff) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+/* 框架内滚动条轨道（默认 #efefef，深色刺眼） */
+.uni-scroll-view::-webkit-scrollbar-track {
+	background: rgba(135, 135, 135, 0.12) !important;
+}
+
+.uni-scroll-view::-webkit-scrollbar-thumb {
+	background: rgba(135, 135, 135, 0.4) !important;
+}
