@@ -1,5 +1,7 @@
 {
 	"nav.backToSite": "返回前台",
+	"common.needPCTitle": "请使用电脑端",
+	"common.needPC": "为确保功能正常显示与操作，请使用电脑浏览器打开本系统。",
 	"win.pwd.title": "修改密码",
 	"win.pwd.submit": "修改",
 	"win.pwd.cancel": "关闭",

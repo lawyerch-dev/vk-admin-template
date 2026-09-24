@@ -1,5 +1,7 @@
 {
 	"nav.backToSite": "View site",
+	"common.needPCTitle": "Use a computer",
+	"common.needPC": "Please open this system in a desktop browser to ensure features work properly.",
 	"win.pwd.title": "Change Password",
 	"win.pwd.submit": "Save",
 	"win.pwd.cancel": "Close",

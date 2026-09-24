@@ -145,6 +145,31 @@ export default {
 				console.error('检查充值告警失败：', e);
 			}
 		},
+		// 非 PC 端提示：产品按电脑端设计，功能需在 PC 使用
+		checkPcClient() {
+			let that = this;
+			try {
+				const info = uni.getSystemInfoSync();
+				const width = info.windowWidth || 0;
+				const platform = String(info.platform || "").toLowerCase();
+				const ua = String(info.browserName || info.ua || (typeof navigator !== "undefined" ? navigator.userAgent : "") || "").toLowerCase();
+				const mobilePlatform = ["ios", "android", "mp-weixin", "mp-alipay", "mp-qq", "mp-toutiao"].some((p) => platform.indexOf(p) > -1);
+				const mobileUA = /mobile|iphone|android|ipad|ipod/.test(ua);
+				const isPc = !mobilePlatform && !mobileUA && width >= 768;
+				vk.setVuex("$app.isPC", isPc);
+				if (isPc) return;
+				if (that._pcTipShown) return;
+				that._pcTipShown = true;
+				that.$alert(that.$t("common.needPC"), that.$t("common.needPCTitle"), {
+					confirmButtonText: that.$t("common.ok"),
+					customClass: "vk-confirm-box",
+					closeOnClickModal: false,
+					showClose: false
+				}).catch(() => {});
+			} catch (e) {
+				console.warn("checkPcClient:", e);
+			}
+		},
 		// 初始化系统环境变量
 		initApp() {
 			uni.getSystemInfo().then(([err, res]) => {
@@ -152,6 +177,7 @@ export default {
 				vk.setVuex("$app.isPC", isPC);
 				vk.setVuex("$app.width", res.windowWidth);
 				vk.setVuex("$app.height", res.windowHeight);
+				this.checkPcClient();
 			});
 			uni.onWindowResize(res => {
 				vk.pubfn.debounce(() => {
