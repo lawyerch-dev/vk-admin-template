@@ -63,5 +63,10 @@
 	"demo.view": "Read only",
 	"demo.product": "Products only",
 	"login.agreeSpace": "Agree ",
-	"captcha.placeholder": "Enter captcha"
+	"captcha.placeholder": "Enter captcha",
+	"nav.changePassword": "Password",
+	"nav.logout": "Logout",
+	"nav.docsAdmin": "Admin docs",
+	"nav.morePlugins": "VK plugins",
+	"nav.user": "User"
 }

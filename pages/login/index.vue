@@ -193,12 +193,8 @@ export default {
 				}
 			}
 			
-			let pages = getCurrentPages();
-			if (pages.length >= 2 && pages[pages.length - 2] && pages[pages.length - 2].route && pages[pages.length - 2].route.indexOf("login/") == -1) {
-				vk.reLaunch("/" + pages[pages.length - 2].route);
-			} else {
-				vk.navigateToHome();
-			}
+			// 登录成功统一进后台首页（落地页/产品页为公开页，不作为登录去向）
+			vk.reLaunch(config.index.url || "/pages/index/index");
 		},
 		onRegisterSuccess({ username }) {
 			this.activeTab = 'login';

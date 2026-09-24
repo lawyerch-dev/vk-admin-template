@@ -63,5 +63,10 @@
 	"demo.view": "只读参观",
 	"demo.product": "仅产品列表",
 	"login.agreeSpace": "同意 ",
-	"captcha.placeholder": "请输入验证码"
+	"captcha.placeholder": "请输入验证码",
+	"nav.changePassword": "修改密码",
+	"nav.logout": "退出",
+	"nav.docsAdmin": "Admin文档",
+	"nav.morePlugins": "VK插件",
+	"nav.user": "用户"
 }

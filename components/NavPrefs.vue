@@ -86,8 +86,8 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	gap: 8px;
-	margin-right: 8px;
+	gap: 6px;
+	margin-right: 0;
 }
 
 .seg {

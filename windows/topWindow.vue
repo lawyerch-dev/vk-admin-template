@@ -56,10 +56,7 @@
 						<view class="navbar-prefs">
 							<nav-prefs />
 						</view>
-						<view
-							@click="togglePopupMenu"
-							class="navbar-user"
-						>
+						<view class="navbar-user navbar-user--always" @click="togglePopupMenu">
 							<view class="username">
 								<text>{{ vk.getVuex("$user.userInfo.username") }}</text>
 							</view>
@@ -93,16 +90,16 @@
 								:key="link.url"
 								class="menu-item text-overflow"
 							>
-								<vk-data-link class="menu-link" :href="link.url" :text="link.text" />
+								<vk-data-link class="menu-link" :href="link.url" :text="$t(link.textKey)" />
 							</view>
 							<view class="menu-item text-overflow user-chip">
 								<text>{{ vk.getVuex("$user.userInfo.username") }}</text>
 							</view>
 							<view class="menu-item action-btn" @click="openForm('updatePassword')">
-								<text class="text-overflow">修改密码</text>
+								<text class="text-overflow">{{ $t('nav.changePassword') }}</text>
 							</view>
 							<view class="menu-item action-btn action-btn--danger">
-								<text class="logout pointer text-overflow" @click="logout">退出</text>
+								<text class="logout pointer text-overflow" @click="logout">{{ $t('nav.logout') }}</text>
 							</view>
 							<view class="popup-menu__arrow"></view>
 						</view>
@@ -154,11 +151,11 @@ export default {
 			// 右侧链接,只在开发模式时显示
 			links: [
 				{
-					text: "Admin框架文档",
+					textKey: "nav.docsAdmin",
 					url: "https://vkdoc.fsq.pub/admin/"
 				},
 				{
-					text: "浏览更多VK插件",
+					textKey: "nav.morePlugins",
 					url: "https://ext.dcloud.net.cn/search?q=vk"
 				}
 			],
@@ -434,13 +431,63 @@ export default {
 			border-bottom-color: #fff;
 		}
 
-		/* 大屏时，隐藏的内容 */
+		/* 默认：用户入口 + 偏好；详细操作进下拉 */
 		.menu-icon,
 		.navbar-middle,
-		.navbar-user,
-		.popup-menu__arrow,
+		.popup-menu__arrow {
+			display: none;
+		}
+
+		.navbar-user--always {
+			display: flex !important;
+		}
+
 		.navbar-right .vk-mask {
 			display: none;
+		}
+
+		.navbar-menu {
+			display: none !important;
+		}
+
+		.popup-menu .navbar-menu {
+			display: flex !important;
+			flex-direction: column;
+			align-items: stretch;
+			position: absolute;
+			right: 12px;
+			top: 46px;
+			min-width: 160px;
+			background: var(--vk-card, #ffffff);
+			border: 1px solid var(--vk-border, #e2e8f0);
+			border-radius: 10px;
+			box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+			padding: 8px;
+			gap: 6px;
+			z-index: 1000;
+		}
+
+		.popup-menu .navbar-right .vk-mask {
+			display: block;
+			position: fixed;
+			inset: 0;
+			z-index: 999;
+		}
+
+		.popup-menu .popup-menu__arrow {
+			display: none;
+		}
+
+		.navbar-menu .menu-item {
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.navbar-menu .action-btn,
+		.navbar-menu .user-chip,
+		.navbar-menu .menu-link {
+			text-align: center;
+			justify-content: center;
 		}
 
 		/* 小屏，显示的内容 */
@@ -457,7 +504,6 @@ export default {
 		.navbar-mini .menu-collapse,
 		.navbar-mini .logo,
 		.navbar-mini .debug,
-		.navbar-mini .navbar-menu,
 		.navbar-mini .navbar-menu .username,
 		.navbar-mini .breadcrumb-view,
 		.navbar-mini .mini-none {
@@ -483,7 +529,7 @@ export default {
 
 		/* 小屏时，弹出下拉菜单 */
 		.navbar-mini.popup-menu .navbar-menu {
-			display: flex;
+			display: flex !important;
 		}
 
 		.navbar-mini.popup-menu .popup-menu__arrow,
@@ -502,7 +548,7 @@ export default {
 	.right-bottom {
 		padding: 0px 12px;
 		height: 50px;
-		background-color: #f5f5f5;
+		background-color: var(--vk-bg-muted, #f1f5f9);
 	}
 
 	::v-deep .navbar .top-bar .item-content {
