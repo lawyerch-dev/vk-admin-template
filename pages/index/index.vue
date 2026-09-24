@@ -6,10 +6,10 @@
 		<view class="welcome-section">
 			<view class="welcome-card animate-fade-in">
 				<h1 class="welcome-title">
-					<span class="gradient-text">欢迎回来</span>
+					<span class="gradient-text">{{ $t('home.welcome') }}</span>
 					<span class="wave-emoji">👋</span>
 				</h1>
-				<p class="welcome-subtitle">今天也是充满活力的一天！</p>
+				<p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
 			</view>
 		</view>
 
@@ -25,7 +25,7 @@
 					<view class="action-icon-bg" :style="{ background: action.gradient }">
 						<i :class="action.icon" class="action-icon"></i>
 					</view>
-					<view class="action-label">{{ action.label }}</view>
+					<view class="action-label">{{ $t(action.label) }}</view>
 				</view>
 			</view>
 		</view>
@@ -67,8 +67,8 @@
 					</view>
 				</view>
 				<view class="popup-footer">
-					<el-button size="small" @click="handleDontShowToday">今日不再提示</el-button>
-					<el-button type="primary" size="small" @click="dialog.show = false">我知道了</el-button>
+					<el-button size="small" @click="handleDontShowToday">{{ $t('home.muteToday') }}</el-button>
+					<el-button type="primary" size="small" @click="dialog.show = false">{{ $t('home.gotIt') }}</el-button>
 				</view>
 		</view>
 		<!-- 右下角公告弹窗结束 -->
@@ -102,37 +102,37 @@ export default {
 			// 快捷操作
 			quickActions: [
 				{
-					label: '卡密管理',
+					label: 'home.card',
 					icon: 'el-icon-tickets',
 					gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
 					path: '/pages/card-manage/index'
 				},
 				{
-					label: '定制插件',
+					label: 'home.plugin',
 					icon: 'el-icon-link',
 					gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
 					path: '/pages/docs/crx-extensions/index'
 				},
 				{
-					label: '定制AI工具',
+					label: 'home.ai',
 					icon: 'el-icon-magic-stick',
 					gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
 					path: '/pages/docs/ai-tools/ai-tools'
 				},
 				{
-					label: '定制软件',
+					label: 'home.software',
 					icon: 'el-icon-monitor',
 					gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
 					path: '/pages/docs/software/index'
 				},
 				{
-					label: '定制多维表',
+					label: 'home.table',
 					icon: 'el-icon-data-board',
 					gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
 					path: '/pages/docs/table/index'
 				},
 				{
-					label: '更多需求',
+					label: 'home.more',
 					icon: 'el-icon-plus',
 					gradient: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
 					path: 'https://qm.qq.com/q/4x1zI4LkmI'
@@ -262,7 +262,7 @@ export default {
 	min-height: calc(100vh - 100px);
 	padding: 30px;
 	overflow: hidden;
-	background: #f5f7fa;
+	background: var(--vk-bg);
 }
 
 /* 欢迎区域 */
@@ -323,7 +323,7 @@ export default {
 .section-title {
 	font-size: 20px;
 	font-weight: 600;
-	color: #2c3e50;
+	color: var(--vk-text);
 	margin-bottom: 24px;
 	display: flex;
 	align-items: center;
@@ -342,7 +342,7 @@ export default {
 }
 
 .action-card {
-	background: white;
+	background: var(--vk-card);
 	border-radius: 16px;
 	padding: 28px 20px;
 	text-align: center;
@@ -384,7 +384,7 @@ export default {
 .action-label {
 	font-size: 15px;
 	font-weight: 500;
-	color: #2c3e50;
+	color: var(--vk-text);
 }
 
 /* 动态背景 */
@@ -418,7 +418,7 @@ export default {
 .dialog-text {
 	font-size: 22px;
 	font-weight: 600;
-	color: #2c3e50;
+	color: var(--vk-text);
 	margin-bottom: 12px;
 }
 
@@ -439,7 +439,7 @@ export default {
 .changelog-title {
 	font-size: 20px;
 	font-weight: 600;
-	color: #2c3e50;
+	color: var(--vk-text);
 	margin: 0 0 15px 0;
 	padding-bottom: 10px;
 	border-bottom: 2px solid #e4e7ed;
@@ -452,14 +452,14 @@ export default {
 }
 
 .changelog-item {
-	background: #f8f9fa;
+	background: var(--vk-bg-secondary);
 	border-radius: 8px;
 	padding: 15px;
 	border-left: 3px solid #409eff;
 	transition: all 0.3s;
 
 	&:hover {
-		background: #f0f2f5;
+		background: var(--vk-bg-muted);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	}
 }
@@ -640,7 +640,7 @@ export default {
 	bottom: 20px;
 	width: 420px;
 	max-height: 500px;
-	background: #fff;
+	background: var(--vk-card);
 	border-radius: 12px;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 	z-index: 1000;
@@ -683,7 +683,7 @@ export default {
 .popup-main-title {
 	font-size: 15px;
 	font-weight: 600;
-	color: #2c3e50;
+	color: var(--vk-text);
 	margin: 0 0 8px 0;
 	line-height: 1.4;
 }
@@ -700,7 +700,7 @@ export default {
 }
 
 .popup-log-item {
-	background: #f8f9fa;
+	background: var(--vk-bg-secondary);
 	border-radius: 8px;
 	padding: 12px;
 	margin-bottom: 10px;
@@ -783,7 +783,7 @@ export default {
 	display: flex;
 	justify-content: flex-end;
 	gap: 10px;
-	background: #fafafa;
+	background: var(--vk-bg-secondary);
 }
 
 /* 响应式布局 */

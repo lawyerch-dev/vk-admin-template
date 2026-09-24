@@ -68,5 +68,18 @@
 	"nav.logout": "退出",
 	"nav.docsAdmin": "Admin文档",
 	"nav.morePlugins": "VK插件",
-	"nav.user": "用户"
+	"nav.user": "用户",
+	"home.welcome": "欢迎回来",
+	"home.subtitle": "今天也是充满活力的一天！",
+	"home.quick": "快捷操作",
+	"home.card": "卡密管理",
+	"home.plugin": "定制插件",
+	"home.ai": "定制AI工具",
+	"home.software": "定制软件",
+	"home.table": "定制多维表",
+	"home.more": "更多需求",
+	"home.notice": "系统公告",
+	"home.detail": "查看详情",
+	"home.muteToday": "今日不再提示",
+	"home.gotIt": "我知道了"
 }

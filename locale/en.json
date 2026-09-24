@@ -68,5 +68,18 @@
 	"nav.logout": "Logout",
 	"nav.docsAdmin": "Admin docs",
 	"nav.morePlugins": "VK plugins",
-	"nav.user": "User"
+	"nav.user": "User",
+	"home.welcome": "Welcome back",
+	"home.subtitle": "Another energetic day!",
+	"home.quick": "Quick actions",
+	"home.card": "Card keys",
+	"home.plugin": "Plugins",
+	"home.ai": "AI tools",
+	"home.software": "Software",
+	"home.table": "Tables",
+	"home.more": "More",
+	"home.notice": "Announcements",
+	"home.detail": "Details",
+	"home.muteToday": "Hide today",
+	"home.gotIt": "Got it"
 }

@@ -412,7 +412,7 @@ export default {
 			border-width: 6px;
 			margin-right: 3px;
 			border-top-width: 0;
-			border-bottom-color: #ebeef5;
+			border-bottom-color: var(--vk-border);
 			filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03));
 		}
 
@@ -517,12 +517,12 @@ export default {
 			position: fixed;
 			right: 20px;
 			top: 50px;
-			background-color: #fff;
+			background-color: var(--vk-card);
 			z-index: 999;
 			padding: 0px 15px;
 			margin: 5px 0;
 			background-color: #fff;
-			border: 1px solid #ebeef5;
+			border: 1px solid var(--vk-border);
 			border-radius: 4px;
 			box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 		}

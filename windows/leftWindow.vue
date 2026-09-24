@@ -89,12 +89,18 @@
 				return groups;
 			},
 			styleCom(){
-				let theme = this.theme;
-				if (theme && theme.use) {
-					return theme[theme.use].leftMenu;
-				} else {
-					return {};
-				}
+				// 侧栏跟随全局深浅色变量
+				return {
+					backgroundColor: "var(--vk-bg-secondary)",
+					textColor: "var(--vk-text)",
+					activeTextColor: "var(--vk-primary)",
+					activeBackgroundColor: "var(--vk-primary-light)",
+					hoverTextColor: "var(--vk-text)",
+					hoverBackgroundColor: "var(--vk-bg-muted)",
+					subBackgroundColor: "var(--vk-bg-secondary)",
+					collapseActiveTextColor: "var(--vk-primary)",
+					collapseActiveBackgroundColor: "var(--vk-primary-light)"
+				};
 			},
 			classCom(){
 				let obj = {
