@@ -303,10 +303,11 @@ export default {
 				this.startPolling(trade_no);
 			} catch (err) {
 				console.error('[支付] 创建订单异常:', err.message);
-				vk.alert(
+				this.$alert(
 					this.$t('shop.createOrderFailMsg', { n: err.message, p: this.pkgName(pkg) }),
-					this.$t('shop.createOrderFailed')
-				);
+					this.$t('shop.createOrderFailed'),
+					{ confirmButtonText: this.$t('common.ok'), customClass: 'vk-confirm-box' }
+				).catch(() => {});
 			} finally {
 				this.creatingOrder = false;
 			}
@@ -341,10 +342,11 @@ export default {
 				if (!isPaid) {
 					this.checkingPayment = false;
 					if (!fromPolling) {
-						vk.alert(
+						this.$alert(
 							this.$t('shop.unpaidMsg', { n: trade_no }),
-							this.$t('shop.unpaidTitle')
-						);
+							this.$t('shop.unpaidTitle'),
+							{ confirmButtonText: this.$t('common.ok'), customClass: 'vk-confirm-box' }
+						).catch(() => {});
 					}
 					return;
 				}
@@ -360,31 +362,40 @@ export default {
 				await this.loadUserPoints();
 
 				if (addRes.code !== 0 && addRes.code !== 1) {
-					vk.alert(
+					this.$alert(
 						this.$t('shop.creditFailMsg', {
 							n: trade_no,
 							p: this.pkgName(packageInfo),
 							e: addRes.msg || '-'
 						}),
-						this.$t('shop.creditFailTitle')
-					);
+						this.$t('shop.creditFailTitle'),
+						{ confirmButtonText: this.$t('common.ok'), customClass: 'vk-confirm-box' }
+					).catch(() => {});
 					return;
 				}
 				const totalPoints = (addRes.data && addRes.data.total_points) || packageInfo.points || 0;
 				const balance = (addRes.data && addRes.data.balance !== undefined) ? addRes.data.balance : this.userPoints;
-				vk.alert(
+				this.$alert(
 					this.$t('shop.paySuccessMsg', { n: totalPoints, b: balance }),
 					this.$t('shop.paySuccessTitle'),
-					() => { this.selectedPackage = null; }
-				);
+					{ confirmButtonText: this.$t('common.ok'), customClass: 'vk-confirm-box' }
+				)
+					.then(() => {
+						this.selectedPackage = null;
+					})
+					.catch(() => {});
 			} catch (err) {
 				this.checkingPayment = false;
 				if (!fromPolling) {
-					vk.alert(
+					this.$alert(
 						this.$t('shop.queryErrorMsg', { n: trade_no, e: err.message }),
 						this.$t('shop.queryErrorTitle'),
-						() => { this.resetPaymentFlowState(); }
-					);
+						{ confirmButtonText: this.$t('common.ok'), customClass: 'vk-confirm-box' }
+					)
+						.then(() => {
+							this.resetPaymentFlowState();
+						})
+						.catch(() => {});
 				}
 			}
 		},
@@ -394,12 +405,18 @@ export default {
 			this.checkPaymentStatus(this.currentTradeNo);
 		},
 		cancelPayment() {
-			vk.confirm(this.$t('shop.cancelConfirm'), this.$t('shop.cancelConfirmTitle'), res => {
-				if (res.confirm) {
+			this
+				.$confirm(this.$t('shop.cancelConfirm'), this.$t('shop.cancelConfirmTitle'), {
+					confirmButtonText: this.$t('common.ok'),
+					cancelButtonText: this.$t('common.cancel'),
+					customClass: 'vk-confirm-box',
+					distinguishCancelAndClose: true
+				})
+				.then(() => {
 					this.resetPaymentFlowState();
 					vk.toast(this.$t('shop.cancelled'));
-				}
-			});
+				})
+				.catch(() => {});
 		},
 		copyPaymentLink() {
 			if (!this.paymentUrl) return vk.toast(this.$t('shop.payLinkMissing'));

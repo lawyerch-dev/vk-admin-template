@@ -1484,20 +1484,24 @@ export default {
         vk.toast(that.$t('admin.product.onlyAdminDelete'), 'none');
         return;
       }
-      vk.confirm(
-        that.$t('admin.product.deleteConfirm', { name: item.product_name }),
-        that.$t('admin.common.confirm'),
-        that.$t('admin.common.ok'),
-        that.$t('admin.common.cancel'),
-        (res) => {
-          if (res.confirm) {
-            deleteFn({
-              action: "admin/product/sys/delete",
-              data: { _id: item._id },
-            });
+      that
+        .$confirm(
+          that.$t('admin.product.deleteConfirm', { name: item.product_name }),
+          that.$t('admin.common.confirm'),
+          {
+            confirmButtonText: that.$t('admin.common.ok'),
+            cancelButtonText: that.$t('admin.common.cancel'),
+            customClass: 'vk-confirm-box',
+            distinguishCancelAndClose: true
           }
-        }
-      );
+        )
+        .then(() => {
+          deleteFn({
+            action: "admin/product/sys/delete",
+            data: { _id: item._id },
+          });
+        })
+        .catch(() => {});
     },
     // 改变状态
     changeStatus(row) {
@@ -2021,13 +2025,18 @@ export default {
       // 如果需要重新计算 base_price，需要为每个产品单独计算（因为可能只修改了部分字段）
       const finalUpdateData = needRecalculateBasePrice ? null : updateData;
 
-      vk.confirm(
-        that.$t('admin.product.batchConfirmMsg', { n: productIds.length }),
-        that.$t('admin.common.confirm'),
-        that.$t('admin.common.ok'),
-        that.$t('admin.common.cancel'),
-        async (res) => {
-          if (res.confirm) {
+      that
+        .$confirm(
+          that.$t('admin.product.batchConfirmMsg', { n: productIds.length }),
+          that.$t('admin.common.confirm'),
+          {
+            confirmButtonText: that.$t('admin.common.ok'),
+            cancelButtonText: that.$t('admin.common.cancel'),
+            customClass: 'vk-confirm-box',
+            distinguishCancelAndClose: true
+          }
+        )
+        .then(async () => {
             that.batchEditDialog.loading = true;
             try {
               // 批量更新产品
@@ -2082,10 +2091,11 @@ export default {
               if (failCount === 0) {
                 vk.toast(that.$t('admin.product.batchSuccess', { n: successCount }), 'success');
               } else {
-                vk.alert(
+                that.$alert(
                   that.$t('admin.product.batchResult', { success: successCount, fail: failCount }),
-                  that.$t('admin.product.batchResultTitle')
-                );
+                  that.$t('admin.product.batchResultTitle'),
+                  { confirmButtonText: that.$t('admin.common.ok'), customClass: 'vk-confirm-box' }
+                ).catch(() => {});
               }
 
               // 清空选择
@@ -2101,9 +2111,8 @@ export default {
               that.batchEditDialog.loading = false;
               vk.toast(err.msg || err.message || that.$t('admin.product.batchFailed'), 'none');
             }
-          }
-        }
-      );
+        })
+        .catch(() => {});
     },
   },
 };

@@ -713,11 +713,13 @@
 	margin-left: 12px !important;
 }
 
-.buy-confirm-box {
+.buy-confirm-box,
+.vk-confirm-box {
 	border-radius: 14px !important;
 }
 
-.buy-confirm-box .el-message-box__title {
+.buy-confirm-box .el-message-box__title,
+.vk-confirm-box .el-message-box__title {
 	font-size: 17px !important;
 }
 

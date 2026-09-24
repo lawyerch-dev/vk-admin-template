@@ -179,7 +179,10 @@ export default {
 		onLoginSuccess(data) {
 			let { userInfo = {} } = data;
 			if (!getApp().isAllowLoginBackground(userInfo)) {
-				vk.alert(this.$t("login.err.noPermission"));
+				this.$alert(this.$t("login.err.noPermission"), this.$t("login.title"), {
+					confirmButtonText: this.$t("common.ok"),
+					customClass: "vk-confirm-box"
+				}).catch(() => {});
 				return;
 			}
 			vk.setVuex("$app.inited", false);

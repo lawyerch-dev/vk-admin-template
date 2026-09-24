@@ -559,9 +559,15 @@ export default {
     // 显示积分不足提示（提取公共逻辑）
     showInsufficientPointsAlert(neededPoints) {
       const deficit = neededPoints - that.userPoints.available_points;
-      vk.alert(that.$t('card.pointsInsufficient', { points: deficit }), that.$t('card.tip'), () => {
-        that.goToPointsShop();
-      });
+      that
+        .$alert(that.$t('card.pointsInsufficient', { points: deficit }), that.$t('card.tip'), {
+          confirmButtonText: that.$t('card.confirm'),
+          customClass: 'vk-confirm-box'
+        })
+        .then(() => {
+          that.goToPointsShop();
+        })
+        .catch(() => {});
     },
     // 多选变化
     selectionChange(list) {
@@ -571,9 +577,15 @@ export default {
     async addBtn() {
       const firstProduct = that.productList?.[0];
       if (!firstProduct) {
-        vk.alert(that.$t('card.noProduct'), that.$t('card.tip'), () => {
-          uni.navigateTo({ url: "/pages/my-products/index" });
-        });
+        that
+          .$alert(that.$t('card.noProduct'), that.$t('card.tip'), {
+            confirmButtonText: that.$t('card.confirm'),
+            customClass: 'vk-confirm-box'
+          })
+          .then(() => {
+            uni.navigateTo({ url: "/pages/my-products/index" });
+          })
+          .catch(() => {});
         return;
       }
 
@@ -633,33 +645,42 @@ export default {
     },
     // 删除
     deleteBtn({ item, deleteFn }) {
-      vk.confirm(
-        that.$t('card.deleteConfirm', { code: item.card_code }),
-        that.$t('card.tip'),
-        that.$t('card.confirm'),
-        that.$t('card.cancel'),
-        (res) => {
-          if (res.confirm) {
-            deleteFn({
-              action: "admin/card/kh/delete",
-              data: { _id: item._id },
-            });
+      that
+        .$confirm(
+          that.$t('card.deleteConfirm', { code: item.card_code }),
+          that.$t('card.tip'),
+          {
+            confirmButtonText: that.$t('card.confirm'),
+            cancelButtonText: that.$t('card.cancel'),
+            customClass: 'vk-confirm-box',
+            distinguishCancelAndClose: true
           }
-        }
-      );
+        )
+        .then(() => {
+          deleteFn({
+            action: "admin/card/kh/delete",
+            data: { _id: item._id },
+          });
+        })
+        .catch(() => {});
     },
     // 批量删除
     batchDeleteBtn() {
       if (that.table1.multipleSelection.length === 0) {
         return vk.toast(that.$t('card.selectToDelete'));
       }
-      vk.confirm(
-        that.$t('card.batchDeleteConfirm', { count: that.table1.multipleSelection.length }),
-        that.$t('card.tip'),
-        that.$t('card.confirm'),
-        that.$t('card.cancel'),
-        (res) => {
-          if (res.confirm) {
+      that
+        .$confirm(
+          that.$t('card.batchDeleteConfirm', { count: that.table1.multipleSelection.length }),
+          that.$t('card.tip'),
+          {
+            confirmButtonText: that.$t('card.confirm'),
+            cancelButtonText: that.$t('card.cancel'),
+            customClass: 'vk-confirm-box',
+            distinguishCancelAndClose: true
+          }
+        )
+        .then(() => {
           vk.callFunction({
             url: "admin/card/kh/batchDelete",
             data: {
@@ -670,9 +691,8 @@ export default {
               that.refresh();
             },
           });
-          }
-        }
-      );
+        })
+        .catch(() => {});
     },
     // 批量设置前缀后缀
     batchSetPrefixSuffixBtn() {
@@ -695,22 +715,27 @@ export default {
         return vk.toast(that.$t('card.needPrefixOrSuffix'));
       }
       
-      vk.confirm(
-        that.$t('card.batchSetConfirm', { count: that.table1.multipleSelection.length }),
-        that.$t('card.tip'),
-        that.$t('card.confirm'),
-        that.$t('card.cancel'),
-        (res) => {
-          if (res.confirm) {
+      that
+        .$confirm(
+          that.$t('card.batchSetConfirm', { count: that.table1.multipleSelection.length }),
+          that.$t('card.tip'),
+          {
+            confirmButtonText: that.$t('card.confirm'),
+            cancelButtonText: that.$t('card.cancel'),
+            customClass: 'vk-confirm-box',
+            distinguishCancelAndClose: true
+          }
+        )
+        .then(() => {
             // 计算新的卡密并逐个更新
             const updatePromises = that.table1.multipleSelection.map((item) => {
               const originalCode = item.card_code || '';
               // 去除原有的前缀和后缀（如果存在）
               let codeWithoutPrefixSuffix = originalCode;
-              
+
               // 构建新的卡密
               const newCode = (prefix || '') + codeWithoutPrefixSuffix + (suffix || '');
-              
+
               return vk.callFunction({
                 url: "admin/card/kh/update",
                 data: {
@@ -728,9 +753,8 @@ export default {
               console.error('批量设置失败：', err);
               vk.toast(that.$t('card.setFailed'));
             });
-          }
-        }
-      );
+        })
+        .catch(() => {});
     },
     // 导出卡密
     exportBtn() {
