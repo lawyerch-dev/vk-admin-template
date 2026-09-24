@@ -368,9 +368,9 @@ export default {
           {
             confirmButtonText: that.$t('common.ok'),
             cancelButtonText: that.$t('common.cancel'),
-            type: 'warning',
             customClass: 'buy-confirm-box',
-            distinguishCancelAndClose: true
+            distinguishCancelAndClose: true,
+            closeOnClickModal: false
           }
         )
         .then(() => {

@@ -653,25 +653,47 @@
 	box-shadow: 0 16px 48px rgba(15, 23, 42, 0.28) !important;
 }
 
-.el-message-box__header {
-	padding: 18px 20px 8px !important;
+.el-message-box__wrapper .el-message-box {
+	background-color: var(--vk-card, #ffffff) !important;
 }
 
-.el-message-box__title,
-.el-message-box__message,
-.el-message-box__headerbtn .el-message-box__close {
-	color: var(--vk-text, #1e293b) !important;
+.el-message-box__header {
+	padding: 18px 20px 8px !important;
+	position: relative !important;
+}
+
+/* type=warning 时状态图标会压住标题，这里拆开排版 */
+.el-message-box__status {
+	position: static !important;
+	display: inline-block !important;
+	transform: none !important;
+	margin-right: 8px !important;
+	font-size: 18px !important;
+	color: #e6a23c !important;
+	vertical-align: middle !important;
 }
 
 .el-message-box__title {
 	font-size: 16px !important;
 	font-weight: 600 !important;
+	color: var(--vk-text, #1e293b) !important;
+	line-height: 1.4 !important;
+	padding-right: 36px !important;
+	display: flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+}
+
+.el-message-box__headerbtn {
+	top: 14px !important;
+	right: 14px !important;
 }
 
 .el-message-box__message {
 	color: var(--vk-text-secondary, #64748b) !important;
 	line-height: 1.7 !important;
 	padding: 8px 20px 16px !important;
+	font-size: 14px !important;
 }
 
 .el-message-box__btns {
@@ -684,15 +706,19 @@
 .el-message-box__btns .el-button {
 	min-width: 88px;
 	border-radius: 8px !important;
-	margin-left: 12px !important;
+	margin-left: 0 !important;
 }
 
-.el-message-box__btns .el-button:first-child {
-	margin-left: 0 !important;
+.el-message-box__btns .el-button + .el-button {
+	margin-left: 12px !important;
 }
 
 .buy-confirm-box {
 	border-radius: 14px !important;
+}
+
+.buy-confirm-box .el-message-box__title {
+	font-size: 17px !important;
 }
 
 .el-message {
