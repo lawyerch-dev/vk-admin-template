@@ -80,6 +80,10 @@ function injectDialogFix() {
 .el-select-dropdown, .el-picker__popper {
   background-color: var(--vk-card, #ffffff) !important;
 }
+.el-input__count, .el-input__count-inner {
+  background-color: transparent !important;
+  color: var(--vk-text-muted, #94a3b8) !important;
+}
 `;
 }
 

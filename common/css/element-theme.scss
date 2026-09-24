@@ -66,6 +66,20 @@
 	color: var(--vk-text-secondary, #64748b) !important;
 }
 
+/* 字数统计（show-word-limit），默认白底/浅灰字，深色下刺眼 */
+.el-input__count,
+.el-input .el-input__count,
+.el-textarea .el-input__count {
+	color: var(--vk-text-muted, #94a3b8) !important;
+	background-color: transparent !important;
+}
+
+.el-input__count .el-input__count-inner,
+.el-textarea .el-input__count .el-input__count-inner {
+	background-color: transparent !important;
+	color: var(--vk-text-muted, #94a3b8) !important;
+}
+
 .el-input-group__append,
 .el-input-group__prepend {
 	color: var(--vk-text-secondary, #64748b) !important;
