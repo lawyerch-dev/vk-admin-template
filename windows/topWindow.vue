@@ -53,6 +53,9 @@
 						<text class="title-text">{{ navigationBarTitleText }}</text>
 					</view>
 					<view class="navbar-right pointer">
+						<view class="navbar-prefs">
+							<nav-prefs />
+						</view>
 						<view
 							@click="togglePopupMenu"
 							class="navbar-user"
@@ -90,15 +93,15 @@
 								:key="link.url"
 								class="menu-item text-overflow"
 							>
-								<vk-data-link :href="link.url" :text="link.text" />
+								<vk-data-link class="menu-link" :href="link.url" :text="link.text" />
 							</view>
-							<view class="menu-item text-overflow">
+							<view class="menu-item text-overflow user-chip">
 								<text>{{ vk.getVuex("$user.userInfo.username") }}</text>
 							</view>
-							<view class="menu-item" @click="openForm('updatePassword')">
+							<view class="menu-item action-btn" @click="openForm('updatePassword')">
 								<text class="text-overflow">修改密码</text>
 							</view>
-							<view class="menu-item">
+							<view class="menu-item action-btn action-btn--danger">
 								<text class="logout pointer text-overflow" @click="logout">退出</text>
 							</view>
 							<view class="popup-menu__arrow"></view>
@@ -124,11 +127,13 @@ import config from "@/app.config.js";
 import breadcrumb from "./components/breadcrumb";
 import errorLog from "./components/errorLog";
 import updatePassword from "./components/updatePassword";
+import NavPrefs from "@/components/NavPrefs.vue";
 export default {
 	components: {
 		breadcrumb,
 		errorLog,
-		updatePassword
+		updatePassword,
+		NavPrefs
 	},
 	props: {
 		navigationBarTitleText: {
@@ -331,6 +336,10 @@ export default {
 			padding: 5px;
 		}
 
+		.menu-item a {
+			text-decoration: none !important;
+		}
+
 		.debug {
 			display: inline-block;
 			position: relative;
@@ -348,9 +357,51 @@ export default {
 			margin-left: 3px;
 		}
 
+
 		.navbar-right {
 			display: flex;
 			justify-content: flex-end;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.navbar-prefs {
+			display: flex;
+			align-items: center;
+		}
+
+		.menu-link {
+			color: var(--vk-primary, #3b82f6) !important;
+			text-decoration: none !important;
+			font-weight: 500;
+			padding: 4px 10px;
+			border-radius: 6px;
+			background: var(--vk-primary-soft, #ecfeff);
+		}
+
+		.user-chip {
+			background: var(--vk-bg-muted, #f1f5f9) !important;
+			border-radius: 16px !important;
+			padding: 4px 12px !important;
+			font-weight: 600;
+			color: var(--vk-text, #1e293b) !important;
+		}
+
+		.action-btn {
+			background: var(--vk-primary, #3b82f6) !important;
+			border-radius: 6px !important;
+			padding: 4px 12px !important;
+			font-weight: 500;
+		}
+
+		.action-btn .text-overflow,
+		.action-btn .logout,
+		.action-btn text {
+			color: #ffffff !important;
+		}
+
+		.action-btn--danger {
+			background: #ef4444 !important;
 		}
 
 		.navbar-right .vk-mask {
