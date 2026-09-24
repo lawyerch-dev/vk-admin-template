@@ -202,7 +202,7 @@ export default {
 	font-size: 14px;
 	font-weight: 500;
 	color: var(--vk-text-secondary);
-	width: 70px;
+	width: 88px;
 	text-align: right;
 	margin-right: 12px;
 	flex-shrink: 0;
@@ -210,6 +210,8 @@ export default {
 
 .req {
 	color: #EF4444;
+	margin-left: 2px;
+	display: inline;
 }
 
 .input {
@@ -228,7 +230,7 @@ export default {
 
 .input:focus {
 	border-color: var(--vk-primary);
-	background-color: #ffffff;
+	background-color: var(--vk-card);
 }
 
 .input-wrap {
@@ -276,7 +278,7 @@ export default {
 }
 
 .btn-code.disabled {
-	background-color: #CBD5E1;
+	background-color: var(--vk-bg-muted);
 }
 
 .btn-code-text {

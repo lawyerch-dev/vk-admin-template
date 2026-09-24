@@ -59,5 +59,9 @@
 	"cta.register": "Sign up",
 	"user.fallback": "User",
 	"nav.theme.light": "Light",
-	"nav.theme.dark": "Dark"
+	"nav.theme.dark": "Dark",
+	"demo.view": "Read only",
+	"demo.product": "Products only",
+	"login.agreeSpace": "Agree ",
+	"captcha.placeholder": "Enter captcha"
 }

@@ -244,7 +244,7 @@ export default {
 	left: 0;
 	right: 0;
 	z-index: 100;
-	background: rgba(255, 255, 255, 0.9);
+	background: var(--vk-nav);
 	backdrop-filter: blur(12px);
 	border-bottom: 1px solid var(--vk-border);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -321,7 +321,7 @@ export default {
 .login-card {
 	width: 100%;
 	max-width: 560px;
-	background-color: #ffffff;
+	background-color: var(--vk-card);
 	border-radius: 12px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
@@ -381,7 +381,7 @@ export default {
 }
 
 .tab-btn.active {
-	background-color: #ffffff;
+	background-color: var(--vk-card);
 	position: relative;
 }
 

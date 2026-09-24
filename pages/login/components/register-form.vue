@@ -49,7 +49,7 @@
 		<view class="field">
 			<text class="label">{{ $t('login.captcha') }} <text class="req">*</text></text>
 			<view class="captcha-wrapper">
-				<uni-captcha scene="register" v-model="form.captcha"></uni-captcha>
+				<uni-captcha scene="register" v-model="form.captcha" :placeholder="$t('login.captchaPlaceholder')"></uni-captcha>
 			</view>
 		</view>
 
@@ -66,7 +66,7 @@
 			<checkbox-group @change="onAgreementChange">
 				<checkbox value="agree" :checked="form.agreement" :color="primaryColor" />
 			</checkbox-group>
-			<text class="checkbox-text">{{ $t('login.agree') }}</text>
+			<text class="checkbox-text">{{ $t('login.agree') }} </text>
 			<text class="link" @click="$emit('open-agreement')">{{ $t('login.agreement') }}</text>
 		</view>
 
@@ -213,7 +213,7 @@ export default {
 	font-size: 14px;
 	font-weight: 500;
 	color: var(--vk-text-secondary);
-	width: 70px;
+	width: 88px;
 	text-align: right;
 	margin-right: 12px;
 	flex-shrink: 0;
@@ -221,6 +221,8 @@ export default {
 
 .req {
 	color: #EF4444;
+	margin-left: 2px;
+	display: inline;
 }
 
 .input {
@@ -239,7 +241,7 @@ export default {
 
 .input:focus {
 	border-color: var(--vk-primary);
-	background-color: #ffffff;
+	background-color: var(--vk-card);
 }
 
 .input-wrap {
@@ -301,7 +303,7 @@ export default {
 .badge {
 	font-size: 11px;
 	color: #059669;
-	background-color: #ECFDF5;
+	background-color: var(--vk-primary-soft);
 	padding: 2px 8px;
 	border-radius: 4px;
 	margin-left: 8px;
