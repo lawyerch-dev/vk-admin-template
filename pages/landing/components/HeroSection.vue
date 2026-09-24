@@ -83,21 +83,21 @@ export default {
   transition: all 0.2s;
 
   &--primary {
-    background: #3b82f6;
+    background: var(--vk-primary);
     color: #ffffff;
 
     &:hover {
-      background: #2563eb;
+      background: var(--vk-primary-hover);
     }
   }
 
   &--outline {
     background: transparent;
-    color: #3b82f6;
-    border: 1px solid #3b82f6;
+    color: var(--vk-primary);
+    border: 1px solid var(--vk-primary);
 
     &:hover {
-      background: #3b82f6;
+      background: var(--vk-primary);
       color: #ffffff;
     }
   }

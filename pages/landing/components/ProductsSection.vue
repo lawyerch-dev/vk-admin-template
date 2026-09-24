@@ -190,7 +190,7 @@ export default {
 .more-btn {
   display: inline-block;
   padding: 12px 32px;
-  background: #3b82f6;
+  background: var(--vk-primary);
   color: #fff;
   border-radius: 8px;
   font-size: 16px;
@@ -198,7 +198,7 @@ export default {
   cursor: pointer;
 
   &:hover {
-    background: #2563eb;
+    background: var(--vk-primary-hover);
   }
 }
 
@@ -283,7 +283,7 @@ export default {
 .pricing-value {
   font-size: 18px;
   font-weight: 700;
-  color: #3b82f6;
+  color: var(--vk-primary);
 }
 
 .pricing-label {
@@ -303,7 +303,7 @@ export default {
 
   &--detail {
     background: #f0f9ff;
-    color: #3b82f6;
+    color: var(--vk-primary);
     border: 1px solid #bfdbfe;
 
     &:hover {
@@ -312,11 +312,11 @@ export default {
   }
 
   &--buy {
-    background: #3b82f6;
+    background: var(--vk-primary);
     color: #fff;
 
     &:hover {
-      background: #2563eb;
+      background: var(--vk-primary-hover);
     }
   }
 }

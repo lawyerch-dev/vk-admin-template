@@ -5,12 +5,12 @@
       <view class="nav__inner">
         <view class="nav__left" @click="goHome">
           <image class="nav__logo" src="/static/logo.png" mode="aspectFit"></image>
-          <text class="nav__brand">AI 商务定制</text>
+          <text class="nav__brand">{{ $t('nav.brand') }}</text>
         </view>
         <view class="nav__right">
-          <text class="nav__btn nav__btn--ghost" @click="goHome">首页</text>
-          <text v-if="isLoggedIn" class="nav__btn" @click="goAdmin">进入后台</text>
-          <text v-else class="nav__btn" @click="goLogin">登录</text>
+          <text class="nav__btn nav__btn--ghost" @click="goHome">{{ $t('nav.home') }}</text>
+          <text v-if="isLoggedIn" class="nav__btn" @click="goAdmin">{{ $t('nav.admin') }}</text>
+          <text v-else class="nav__btn" @click="goLogin">{{ $t('nav.login') }}</text>
         </view>
       </view>
     </view>
@@ -320,13 +320,13 @@ export default {
     cursor: pointer;
 
     &:hover {
-      color: #3b82f6;
+      color: var(--vk-primary);
     }
   }
 
   &__btn {
     padding: 8px 20px;
-    background: #3b82f6;
+    background: var(--vk-primary);
     color: #fff;
     border-radius: 6px;
     font-size: 14px;
@@ -334,16 +334,16 @@ export default {
     cursor: pointer;
 
     &:hover {
-      background: #2563eb;
+      background: var(--vk-primary-hover);
     }
 
     &--ghost {
       background: #ffffff;
-      color: #3b82f6;
-      border: 1px solid #3b82f6;
+      color: var(--vk-primary);
+      border: 1px solid var(--vk-primary);
 
       &:hover {
-        background: #eff6ff;
+        background: var(--vk-primary-light);
       }
     }
   }
@@ -394,17 +394,17 @@ export default {
   transition: all 0.2s;
 
   &:hover {
-    border-color: #3b82f6;
-    color: #3b82f6;
+    border-color: var(--vk-primary);
+    color: var(--vk-primary);
   }
 
   &--active {
-    background: #3b82f6;
-    border-color: #3b82f6;
+    background: var(--vk-primary);
+    border-color: var(--vk-primary);
     color: #fff;
 
     &:hover {
-      background: #2563eb;
+      background: var(--vk-primary-hover);
       color: #fff;
     }
   }
@@ -564,7 +564,7 @@ export default {
   display: block;
   font-size: 18px;
   font-weight: 700;
-  color: #3b82f6;
+  color: var(--vk-primary);
 }
 
 .pricing-label {
@@ -597,7 +597,7 @@ export default {
 
   &--detail {
     background: #f0f9ff;
-    color: #3b82f6;
+    color: var(--vk-primary);
     border: 1px solid #bfdbfe;
 
     &:hover {
@@ -606,11 +606,11 @@ export default {
   }
 
   &--buy {
-    background: #3b82f6;
+    background: var(--vk-primary);
     color: #fff;
 
     &:hover {
-      background: #2563eb;
+      background: var(--vk-primary-hover);
     }
   }
 }

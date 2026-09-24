@@ -56,7 +56,7 @@ export default {
   cursor: pointer;
 
   &--primary {
-    background: #3b82f6;
+    background: var(--vk-primary);
     color: #ffffff;
   }
 

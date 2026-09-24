@@ -5,17 +5,17 @@
       <view class="nav__inner">
         <view class="nav__left">
           <image class="nav__logo" src="/static/logo.png" mode="aspectFit"></image>
-          <text class="nav__brand">AI 商务定制</text>
+          <text class="nav__brand">{{ $t('nav.brand') }}</text>
         </view>
         <view class="nav__right">
           <nav-prefs />
           <template v-if="isLoggedIn">
             <text class="nav__user">{{ userInfo.nickname || userInfo.username || '用户' }}</text>
-            <text class="nav__btn" @click="goAdmin">进入后台</text>
+            <text class="nav__btn" @click="goAdmin">{{ $t('nav.admin') }}</text>
           </template>
           <template v-else>
-            <text class="nav__btn nav__btn--ghost" @click="goLogin">登录</text>
-            <text class="nav__btn" @click="goRegister">免费注册</text>
+            <text class="nav__btn nav__btn--ghost" @click="goLogin">{{ $t('nav.login') }}</text>
+            <text class="nav__btn" @click="goRegister">{{ $t('nav.register') }}</text>
           </template>
         </view>
       </view>
@@ -222,7 +222,7 @@ export default {
 
   &__btn {
     padding: 8px 20px;
-    background: #3b82f6;
+    background: var(--vk-primary);
     color: #ffffff;
     border-radius: 6px;
     font-size: 14px;
@@ -230,16 +230,16 @@ export default {
     cursor: pointer;
 
     &:hover {
-      background: #2563eb;
+      background: var(--vk-primary-hover);
     }
 
     &--ghost {
       background: #ffffff;
-      color: #3b82f6;
-      border: 1px solid #3b82f6;
+      color: var(--vk-primary);
+      border: 1px solid var(--vk-primary);
 
       &:hover {
-        background: #eff6ff;
+        background: var(--vk-primary-light);
       }
     }
   }

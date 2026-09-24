@@ -59,5 +59,14 @@ export function restoreBrand() {
 	return applyBrand(saved || "blue");
 }
 
+/** 当前主题名 */
+export function getBrandName() {
+	try {
+		const saved = uni.getStorageSync(STORAGE_KEY);
+		if (typeof saved === "string" && brandPresets[saved]) return saved;
+	} catch (e) {}
+	return "blue";
+}
+
 export { brandTokens, brandPresets };
-export default { applyBrand, restoreBrand, brandTokens, brandPresets };
+export default { applyBrand, restoreBrand, getBrandName, brandTokens, brandPresets };

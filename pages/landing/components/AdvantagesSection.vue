@@ -70,7 +70,7 @@ export default {
   &__num {
     font-size: 24px;
     font-weight: 700;
-    color: #3b82f6;
+    color: var(--vk-primary);
     min-width: 40px;
   }
 
