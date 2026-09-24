@@ -115,5 +115,23 @@ exports.main = async () => {
 		}
 	}
 
-	return { code: 0, msg: "ok", data: result };
+	// 回读全量菜单，便于确认「产品配置」是否已入库
+	const all = await col.orderBy("sort", "asc").limit(100).get();
+	const menuList = (all.data || []).map((m) => ({
+		menu_id: m.menu_id,
+		name: m.name,
+		parent_id: m.parent_id || null,
+		enable: m.enable
+	}));
+
+	return {
+		code: 0,
+		msg: "ok",
+		data: {
+			...result,
+			total: menuList.length,
+			hasProductConfig: menuList.some((m) => m.menu_id === "product-config"),
+			menus: menuList
+		}
+	};
 };

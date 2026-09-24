@@ -823,3 +823,89 @@ uni-page-body .page-body .no-selected .footer-item,
 	color: var(--vk-text, #1e293b) !important;
 	border-color: var(--vk-border, #e2e8f0) !important;
 }
+
+/* ============================================================
+   弹窗内树控件 / 菜单赋予·权限赋予（el-tree + tree-box）
+   ============================================================ */
+.el-tree,
+.tree-box {
+	background-color: var(--vk-card, #ffffff) !important;
+	color: var(--vk-text, #1e293b) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+.tree-box {
+	border: 1px solid var(--vk-border, #e2e8f0) !important;
+}
+
+.el-tree-node__content,
+.el-tree-node__label {
+	color: var(--vk-text, #1e293b) !important;
+	background-color: transparent !important;
+}
+
+.el-tree-node__content:hover {
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+}
+
+.el-tree-node:focus > .el-tree-node__content {
+	background-color: var(--vk-primary-light, #eff6ff) !important;
+}
+
+.el-tree-node__expand-icon {
+	color: var(--vk-text-secondary, #64748b) !important;
+}
+
+.el-tree-node__expand-icon.is-leaf {
+	color: transparent !important;
+}
+
+/* 弹窗表单容器（vk-data-dialog.form） */
+.vk-data-dialog .el-dialog__body,
+.vk-data-form .admin-form,
+.el-dialog__body {
+	background-color: var(--vk-card, #ffffff) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+/* 弹窗内 checkbox / switch 标签 */
+.el-dialog .el-checkbox__label,
+.el-dialog .el-form-item__label,
+.el-dialog .el-form-item__content {
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.el-dialog .el-checkbox__inner {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+.el-dialog .el-checkbox__input.is-checked .el-checkbox__inner {
+	background-color: var(--vk-primary, #3b82f6) !important;
+	border-color: var(--vk-primary, #3b82f6) !important;
+}
+
+/* 弹窗底部按钮区 */
+.vk-data-form .dialog-footer,
+.el-dialog__footer {
+	background-color: var(--vk-card, #ffffff) !important;
+	border-top-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+/* el-transfer / 双栏选择（权限类弹窗） */
+.el-transfer-panel,
+.el-transfer-panel__body,
+.el-transfer-panel__list {
+	background-color: var(--vk-card, #ffffff) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.el-transfer-panel__item.el-checkbox {
+	color: var(--vk-text, #1e293b) !important;
+}
+
+.el-transfer-panel__filter .el-input__inner {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+}
