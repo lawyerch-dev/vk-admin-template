@@ -31,22 +31,28 @@
 
 		<view class="field">
 			<text class="label">新密码 <text class="req">*</text></text>
-			<input 
-				class="input" 
-				v-model="form.password" 
-				type="password" 
-				placeholder="请输入新密码" 
-			/>
+			<view class="input-wrap">
+				<input
+					class="input"
+					v-model="form.password"
+					:type="showPassword ? 'text' : 'password'"
+					placeholder="请输入新密码"
+				/>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+			</view>
 		</view>
 
 		<view class="field">
 			<text class="label">确认密码 <text class="req">*</text></text>
-			<input 
-				class="input" 
-				v-model="form.password2" 
-				type="password" 
-				placeholder="再次输入新密码" 
-			/>
+			<view class="input-wrap">
+				<input
+					class="input"
+					v-model="form.password2"
+					:type="showPassword ? 'text' : 'password'"
+					placeholder="再次输入新密码"
+				/>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+			</view>
 		</view>
 
 		<view class="btn-primary" @click="handleSubmit">
@@ -69,7 +75,8 @@ export default {
 			},
 			codeBtnText: "获取验证码",
 			codeBtnDisabled: false,
-			codeCountdown: 0
+			codeCountdown: 0,
+			showPassword: false
 		}
 	},
 	methods: {
@@ -216,6 +223,28 @@ export default {
 .input:focus {
 	border-color: #0891B2;
 	background-color: #FFFFFF;
+}
+
+.input-wrap {
+	flex: 1;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.input-wrap .input {
+	flex: 1;
+	padding-right: 48px;
+}
+
+.pwd-toggle {
+	position: absolute;
+	right: 10px;
+	font-size: 12px;
+	color: #0891B2;
+	z-index: 2;
+	padding: 4px;
 }
 
 .code-row {

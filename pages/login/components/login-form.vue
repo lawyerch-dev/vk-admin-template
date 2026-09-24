@@ -12,12 +12,15 @@
 
 		<view class="field">
 			<text class="label">密码 <text class="req">*</text></text>
-			<input 
-				class="input" 
-				v-model="form.password" 
-				type="password" 
-				placeholder="请输入密码" 
-			/>
+			<view class="input-wrap">
+				<input
+					class="input"
+					v-model="form.password"
+					:type="showPassword ? 'text' : 'password'"
+					placeholder="请输入密码"
+				/>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+			</view>
 		</view>
 
 		<view class="field">
@@ -87,7 +90,8 @@ export default {
 				agreement: true,
 				needPermission: true
 			},
-			checked: false
+			checked: false,
+			showPassword: false
 		}
 	},
 	computed: {
@@ -204,6 +208,28 @@ export default {
 .input:focus {
 	border-color: #0891B2;
 	background-color: #FFFFFF;
+}
+
+.input-wrap {
+	flex: 1;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.input-wrap .input {
+	flex: 1;
+	padding-right: 48px;
+}
+
+.pwd-toggle {
+	position: absolute;
+	right: 10px;
+	font-size: 12px;
+	color: #0891B2;
+	z-index: 2;
+	padding: 4px;
 }
 
 .captcha-wrapper {
