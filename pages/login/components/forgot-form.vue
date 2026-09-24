@@ -1,12 +1,12 @@
 <template>
 	<view class="form-content">
 		<view class="field">
-			<text class="label">QQ邮箱 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.email') }} <text class="req">*</text></text>
 			<input 
 				class="input" 
 				v-model="form.email" 
 				type="text" 
-				placeholder="请输入注册时的QQ邮箱" 
+				:placeholder="$t('login.emailLoginPlaceholder')" 
 			/>
 		</view>
 
@@ -17,7 +17,7 @@
 					class="input code-input" 
 					v-model="form.code" 
 					type="number" 
-					placeholder="邮箱验证码" 
+					:placeholder="$t('login.emailCode')" 
 					maxlength="6" 
 				/>
 				<view 
@@ -30,33 +30,33 @@
 		</view>
 
 		<view class="field">
-			<text class="label">新密码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.newPassword') }} <text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
 					v-model="form.password"
 					:type="showPassword ? 'text' : 'password'"
-					placeholder="请输入新密码"
+					:placeholder="$t('login.passwordNewPlaceholder')"
 				/>
-				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? $t('login.hide') : $t('login.show') }}</text>
 			</view>
 		</view>
 
 		<view class="field">
-			<text class="label">确认密码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.confirmPassword') }} <text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
 					v-model="form.password2"
 					:type="showPassword ? 'text' : 'password'"
-					placeholder="再次输入新密码"
+					:placeholder="$t('login.passwordConfirmPlaceholder')"
 				/>
-				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? $t('login.hide') : $t('login.show') }}</text>
 			</view>
 		</view>
 
 		<view class="btn-primary" @click="handleSubmit">
-			<text class="btn-text">重置密码</text>
+			<text class="btn-text">{{ $t('login.forgotSubmit') }}</text>
 		</view>
 	</view>
 </template>
@@ -65,6 +65,12 @@
 let vk = uni.vk;
 
 export default {
+	computed: {
+		primaryColor() {
+			const b = this.$brand ? this.$brand() : null;
+			return (b && b.primary) || '#3b82f6';
+		}
+	},
 	data() {
 		return {
 			form: {
@@ -221,7 +227,7 @@ export default {
 }
 
 .input:focus {
-	border-color: #0891B2;
+	border-color: var(--vk-primary);
 	background-color: #FFFFFF;
 }
 
@@ -242,7 +248,7 @@ export default {
 	position: absolute;
 	right: 10px;
 	font-size: 12px;
-	color: #0891B2;
+	color: var(--vk-primary);
 	z-index: 2;
 	padding: 4px;
 }
@@ -262,7 +268,7 @@ export default {
 .btn-code {
 	width: 110px;
 	height: 40px;
-	background-color: #0891B2;
+	background-color: var(--vk-primary);
 	border-radius: 8px;
 	display: flex;
 	align-items: center;
@@ -281,7 +287,7 @@ export default {
 .btn-primary {
 	width: 100%;
 	height: 44px;
-	background-color: #0891B2;
+	background-color: var(--vk-primary);
 	border-radius: 8px;
 	display: flex;
 	align-items: center;

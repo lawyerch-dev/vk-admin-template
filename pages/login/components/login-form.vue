@@ -1,30 +1,30 @@
 <template>
 	<view class="form-content">
 		<view class="field">
-			<text class="label">用户名 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.username') }} <text class="req">*</text></text>
 			<input 
 				class="input" 
 				v-model="form.username" 
 				type="text" 
-				placeholder="请输入用户名" 
+				:placeholder="$t('login.usernamePlaceholder')" 
 			/>
 		</view>
 
 		<view class="field">
-			<text class="label">密码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.password') }} <text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
 					v-model="form.password"
 					:type="showPassword ? 'text' : 'password'"
-					placeholder="请输入密码"
+					:placeholder="$t('login.passwordPlaceholder')"
 				/>
-				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? $t('login.hide') : $t('login.show') }}</text>
 			</view>
 		</view>
 
 		<view class="field">
-			<text class="label">验证码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.captcha') }} <text class="req">*</text></text>
 			<view class="captcha-wrapper">
 				<uni-captcha scene="login" v-model="form.captcha"></uni-captcha>
 			</view>
@@ -33,28 +33,28 @@
 		<view class="checkbox-row">
 			<view class="checkbox-item">
 				<checkbox-group @change="onCheckboxChange">
-					<checkbox value="remember" :checked="checked" color="#0891B2" />
+					<checkbox value="remember" :checked="checked" :color="primaryColor" />
 				</checkbox-group>
-				<text class="checkbox-text">记住密码</text>
+				<text class="checkbox-text">{{ $t('login.remember') }}</text>
 			</view>
 			<view class="checkbox-item">
 				<checkbox-group @change="onAgreementChange">
-					<checkbox value="agree" :checked="form.agreement" color="#0891B2" />
+					<checkbox value="agree" :checked="form.agreement" :color="primaryColor" />
 				</checkbox-group>
-				<text class="checkbox-text">同意</text>
-				<text class="link" @click="$emit('open-agreement')">《用户协议》</text>
+				<text class="checkbox-text">{{ $t('login.agree') }}</text>
+				<text class="link" @click="$emit('open-agreement')">{{ $t('login.agreement') }}</text>
 			</view>
 		</view>
 
 		<view class="btn-primary" @click="handleSubmit">
-			<text class="btn-text">登 录</text>
+			<text class="btn-text">{{ $t('login.submit') }}</text>
 		</view>
 
 		<!-- 演示账号：点击填充 -->
 		<view v-if="testUsers.length" class="demo-accounts">
 			<view class="demo-head">
-				<text class="demo-title">演示账号</text>
-				<text class="demo-hint">密码 123456 · 点击填充</text>
+				<text class="demo-title">{{ $t('login.demoTitle') }}</text>
+				<text class="demo-hint">{{ $t('login.demoHint') }}</text>
 			</view>
 			<view
 				v-for="user in testUsers"
@@ -95,6 +95,10 @@ export default {
 		}
 	},
 	computed: {
+			primaryColor() {
+				const b = this.$brand ? this.$brand() : null;
+				return (b && b.primary) || '#3b82f6';
+			},
 		testUsers() {
 			const testUser = config.login && config.login.testUser;
 			if (!testUser || !testUser.show) return [];
@@ -206,7 +210,7 @@ export default {
 }
 
 .input:focus {
-	border-color: #0891B2;
+	border-color: var(--vk-primary);
 	background-color: #FFFFFF;
 }
 
@@ -227,7 +231,7 @@ export default {
 	position: absolute;
 	right: 10px;
 	font-size: 12px;
-	color: #0891B2;
+	color: var(--vk-primary);
 	z-index: 2;
 	padding: 4px;
 }
@@ -261,14 +265,14 @@ export default {
 
 .link {
 	font-size: 13px;
-	color: #0891B2;
+	color: var(--vk-primary);
 	font-weight: 500;
 }
 
 .btn-primary {
 	width: 100%;
 	height: 44px;
-	background-color: #0891B2;
+	background-color: var(--vk-primary);
 	border-radius: 8px;
 	display: flex;
 	align-items: center;
@@ -311,8 +315,8 @@ export default {
 }
 
 .demo-row:active {
-	background-color: #EFF6FF;
-	border-color: #93C5FD;
+	background-color: var(--vk-primary-light);
+	border-color: var(--vk-primary-border);
 }
 
 .demo-account {
@@ -324,8 +328,8 @@ export default {
 
 .demo-tag {
 	font-size: 12px;
-	color: #0891B2;
-	background-color: #ECFEFF;
+	color: var(--vk-primary);
+	background-color: var(--vk-primary-soft);
 	border-radius: 4px;
 	padding: 2px 8px;
 	line-height: 16px;

@@ -38,6 +38,13 @@ modulesFiles.keys().map((modulePath, index) => {
 // 引入 自定义全局css 样式
 import '@/common/css/app.scss';
 
+// 轻量 i18n + 品牌换肤
+import { installI18n } from '@/common/i18n';
+import { restoreBrand, brandTokens } from '@/common/theme/runtime';
+Vue.use({ install: installI18n });
+Vue.prototype.$brand = () => brandTokens;
+restoreBrand();
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'

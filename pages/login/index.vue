@@ -5,10 +5,10 @@
 			<view class="nav__inner">
 				<view class="nav__left" @click="goHome">
 					<image class="nav__logo" src="/static/logo.png" mode="aspectFit"></image>
-					<text class="nav__brand">AI 商务定制</text>
+					<text class="nav__brand">{{ $t('nav.brand') }}</text>
 				</view>
 				<view class="nav__right">
-					<text class="nav__btn nav__btn--ghost" @click="goHome">返回主页</text>
+					<text class="nav__btn nav__btn--ghost" @click="goHome">{{ $t('nav.home') }}</text>
 				</view>
 			</view>
 		</view>
@@ -18,8 +18,8 @@
 			<view class="card-header">
 				<image class="logo" :src="logoImage"></image>
 				<view class="header-text">
-					<text class="title">AI自动化商务定制化</text>
-					<text class="subtitle">智能管理，高效运营</text>
+					<text class="title">{{ $t('login.title') }}</text>
+					<text class="subtitle">{{ $t('login.subtitle') }}</text>
 				</view>
 			</view>
 
@@ -60,12 +60,12 @@
 
 			<!-- 底部链接 -->
 			<view class="footer">
-				<text v-if="activeTab === 'login'" class="footer-text">没有账号？</text>
-				<text v-if="activeTab === 'login'" class="footer-link" @click="activeTab = 'register'">立即注册</text>
-				<text v-if="activeTab === 'register'" class="footer-text">已有账号？</text>
-				<text v-if="activeTab === 'register'" class="footer-link" @click="activeTab = 'login'">立即登录</text>
-				<text v-if="activeTab === 'forgot'" class="footer-text">想起密码了？</text>
-				<text v-if="activeTab === 'forgot'" class="footer-link" @click="activeTab = 'login'">返回登录</text>
+				<text v-if="activeTab === 'login'" class="footer-text">{{ $t('login.noAccount') }}</text>
+				<text v-if="activeTab === 'login'" class="footer-link" @click="activeTab = 'register'">{{ $t('login.toRegister') }}</text>
+				<text v-if="activeTab === 'register'" class="footer-text">{{ $t('login.hasAccount') }}</text>
+				<text v-if="activeTab === 'register'" class="footer-link" @click="activeTab = 'login'">{{ $t('login.toLogin') }}</text>
+				<text v-if="activeTab === 'forgot'" class="footer-text">{{ $t('login.forgotRemember') }}</text>
+				<text v-if="activeTab === 'forgot'" class="footer-link" @click="activeTab = 'login'">{{ $t('login.backLogin') }}</text>
 			</view>
 		</view>
 	</view>
@@ -87,15 +87,19 @@ export default {
 	data() {
 		return {
 			activeTab: 'login',
-			tabs: [
-				{ key: 'register', label: '注册' },
-				{ key: 'login', label: '登录' },
-				{ key: 'forgot', label: '忘记密码' }
-			],
 			logoImage: "/static/logo.png",
 			inviteCode: "",
 			inviterInfo: null,
 		};
+	},
+	computed: {
+		tabs() {
+			return [
+				{ key: 'register', label: this.$t('login.tab.register') },
+				{ key: 'login', label: this.$t('login.tab.login') },
+				{ key: 'forgot', label: this.$t('login.tab.forgot') }
+			];
+		}
 	},
 	onLoad(options = {}) {
 		vk = this.vk;
@@ -288,7 +292,7 @@ export default {
 
 	&__btn {
 		padding: 8px 20px;
-		background: #3b82f6;
+		background: var(--vk-primary);
 		color: #ffffff;
 		border-radius: 6px;
 		font-size: 14px;
@@ -296,16 +300,16 @@ export default {
 		cursor: pointer;
 
 		&:hover {
-			background: #2563eb;
+			background: var(--vk-primary-hover);
 		}
 
 		&--ghost {
 			background: #ffffff;
-			color: #3b82f6;
-			border: 1px solid #3b82f6;
+			color: var(--vk-primary);
+			border: 1px solid var(--vk-primary);
 
 			&:hover {
-				background: #eff6ff;
+				background: var(--vk-primary-light);
 			}
 		}
 	}
@@ -385,7 +389,7 @@ export default {
 	left: 20%;
 	right: 20%;
 	height: 2px;
-	background-color: #0891B2;
+	background-color: var(--vk-primary);
 }
 
 .tab-text {
@@ -394,7 +398,7 @@ export default {
 }
 
 .tab-btn.active .tab-text {
-	color: #0891B2;
+	color: var(--vk-primary);
 	font-weight: 600;
 }
 
@@ -425,7 +429,7 @@ export default {
 .footer-link {
 	font-size: 13px;
 	font-weight: 500;
-	color: #0891B2;
+	color: var(--vk-primary);
 	margin-left: 4px;
 }
 

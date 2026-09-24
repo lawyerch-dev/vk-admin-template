@@ -1,53 +1,53 @@
 <template>
 	<view class="form-content">
 		<view class="field">
-			<text class="label">用户名 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.username') }} <text class="req">*</text></text>
 			<input 
 				class="input" 
 				v-model="form.username" 
 				type="text" 
-				placeholder="中文/英文/数字/下划线，3-32位" 
+				:placeholder="$t('login.usernamePlaceholder')" 
 			/>
 		</view>
 
 		<view class="field">
-			<text class="label">QQ邮箱 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.email') }} <text class="req">*</text></text>
 			<input 
 				class="input" 
 				v-model="form.email" 
 				type="text" 
-				placeholder="用于找回密码" 
+				:placeholder="$t('login.emailPlaceholder')" 
 			/>
 		</view>
 
 		<view class="field">
-			<text class="label">密码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.password') }} <text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
 					v-model="form.password"
 					:type="showPassword ? 'text' : 'password'"
-					placeholder="字母开头，6-18位"
+					:placeholder="$t('login.passwordPlaceholder')"
 				/>
-				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? $t('login.hide') : $t('login.show') }}</text>
 			</view>
 		</view>
 
 		<view class="field">
-			<text class="label">确认密码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.confirmPassword') }} <text class="req">*</text></text>
 			<view class="input-wrap">
 				<input
 					class="input"
 					v-model="form.password2"
 					:type="showPassword ? 'text' : 'password'"
-					placeholder="再次输入密码"
+					:placeholder="$t('login.passwordConfirmPlaceholder')"
 				/>
-				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? '隐藏' : '显示' }}</text>
+				<text class="pwd-toggle" @click="showPassword = !showPassword">{{ showPassword ? $t('login.hide') : $t('login.show') }}</text>
 			</view>
 		</view>
 
 		<view class="field">
-			<text class="label">验证码 <text class="req">*</text></text>
+			<text class="label">{{ $t('login.captcha') }} <text class="req">*</text></text>
 			<view class="captcha-wrapper">
 				<uni-captcha scene="register" v-model="form.captcha"></uni-captcha>
 			</view>
@@ -64,10 +64,10 @@
 
 		<view class="checkbox-field">
 			<checkbox-group @change="onAgreementChange">
-				<checkbox value="agree" :checked="form.agreement" color="#0891B2" />
+				<checkbox value="agree" :checked="form.agreement" :color="primaryColor" />
 			</checkbox-group>
-			<text class="checkbox-text">同意</text>
-			<text class="link" @click="$emit('open-agreement')">《用户协议》</text>
+			<text class="checkbox-text">{{ $t('login.agree') }}</text>
+			<text class="link" @click="$emit('open-agreement')">{{ $t('login.agreement') }}</text>
 		</view>
 
 		<view class="btn-primary" @click="handleSubmit">
@@ -88,6 +88,12 @@ export default {
 		inviterInfo: {
 			type: Object,
 			default: null
+		}
+	},
+	computed: {
+		primaryColor() {
+			const b = this.$brand ? this.$brand() : null;
+			return (b && b.primary) || '#3b82f6';
 		}
 	},
 	data() {
@@ -232,7 +238,7 @@ export default {
 }
 
 .input:focus {
-	border-color: #0891B2;
+	border-color: var(--vk-primary);
 	background-color: #FFFFFF;
 }
 
@@ -253,7 +259,7 @@ export default {
 	position: absolute;
 	right: 10px;
 	font-size: 12px;
-	color: #0891B2;
+	color: var(--vk-primary);
 	z-index: 2;
 	padding: 4px;
 }
@@ -281,7 +287,7 @@ export default {
 
 .link {
 	font-size: 13px;
-	color: #0891B2;
+	color: var(--vk-primary);
 	font-weight: 500;
 }
 
@@ -310,7 +316,7 @@ export default {
 .btn-primary {
 	width: 100%;
 	height: 44px;
-	background-color: #0891B2;
+	background-color: var(--vk-primary);
 	border-radius: 8px;
 	display: flex;
 	align-items: center;
