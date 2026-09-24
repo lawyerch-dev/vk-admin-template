@@ -53,11 +53,26 @@
 						<text class="title-text">{{ navigationBarTitleText }}</text>
 					</view>
 					<view class="navbar-right pointer">
+						<!-- #ifdef H5 -->
+						<view
+							v-if="vk.getVuex('$error.logs').length"
+							@click="openForm('errorLog')"
+							class="error-log-btn pointer"
+						>
+							<el-badge :value="vk.getVuex('$error.logs').length" class="item">
+								<vk-data-icon
+									name="el-icon-message-solid"
+									size="20"
+									:color="textColor"
+								></vk-data-icon>
+							</el-badge>
+						</view>
+						<!-- #endif -->
 						<view class="navbar-prefs">
 							<nav-prefs />
 						</view>
 						<view class="back-site pointer" @click.stop="goLanding">
-							<vk-data-icon name="el-icon-s-home" size="14" :color="textColor"></vk-data-icon>
+							<vk-data-icon name="el-icon-s-home" size="14" color="#ffffff"></vk-data-icon>
 							<text class="back-site__label">{{ $t('nav.backToSite') }}</text>
 						</view>
 						<view class="navbar-user navbar-user--always" :class="{ active: popupMenuOpened }" @click="togglePopupMenu">
@@ -67,21 +82,6 @@
 						</view>
 						<view class="vk-mask" @click="togglePopupMenu"></view>
 						<view class="navbar-menu">
-							<!-- #ifdef H5 -->
-							<view
-								v-if="vk.getVuex('$error.logs').length"
-								@click="openForm('errorLog')"
-								class="menu-item debug pointer"
-							>
-								<el-badge :value="vk.getVuex('$error.logs').length" class="item">
-									<vk-data-icon
-										name="el-icon-message-solid"
-										size="22"
-										:color="textColor"
-									></vk-data-icon>
-								</el-badge>
-							</view>
-							<!-- #endif -->
 							<view class="menu-header">
 								<text class="avatar avatar--lg">{{ avatarChar }}</text>
 								<view class="menu-header__meta">
@@ -235,6 +235,11 @@ export default {
 		},
 		textColor(){
 			return "var(--vk-text, #1e293b)";
+		},
+		avatarChar() {
+			const info = this.vk.getVuex("$user.userInfo") || {};
+			const name = info.nickname || info.username || "";
+			return (name && String(name).charAt(0)) || "?";
 		}
 	}
 };
@@ -361,22 +366,36 @@ export default {
 			align-items: center;
 			gap: 6px;
 			height: 34px;
-			padding: 0 12px;
+			padding: 0 20px;
 			margin-right: 4px;
 			border-radius: 6px;
-			border: 1px solid var(--vk-border, #e2e8f0);
-			background: var(--vk-bg-muted, #f1f5f9);
-			color: var(--vk-text, #1e293b);
-			font-size: 13px;
-			transition: background 0.2s, color 0.2s;
+			border: none;
+			background: var(--vk-primary, #3b82f6);
+			color: #ffffff;
+			font-size: 14px;
+			font-weight: 500;
+			transition: background 0.2s;
 
 			.back-site__label {
 				line-height: 1;
 			}
 
 			&:hover {
-				background: var(--vk-primary-light, #eff6ff);
-				color: var(--vk-primary, #3b82f6);
+				background: var(--vk-primary-hover, #2563eb);
+			}
+		}
+
+		.error-log-btn {
+			display: flex;
+			align-items: center;
+			height: 34px;
+			padding: 0 8px;
+			margin-right: 8px;
+			border-radius: 6px;
+			transition: background 0.2s;
+
+			&:hover {
+				background: var(--vk-bg-muted, #f1f5f9);
 			}
 		}
 

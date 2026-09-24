@@ -11,7 +11,10 @@
           <nav-prefs />
           <template v-if="isLoggedIn">
             <text class="nav__btn" @click="goAdmin">{{ $t('nav.admin') }}</text>
-            <text class="nav__user">{{ userInfo.nickname || userInfo.username || $t('user.fallback') }}</text>
+            <view class="nav__user">
+              <text class="nav__user-avatar">{{ avatarChar }}</text>
+              <text class="nav__user-name">{{ userInfo.nickname || userInfo.username || $t('user.fallback') }}</text>
+            </view>
           </template>
           <template v-else>
             <text class="nav__btn nav__btn--ghost" @click="goLogin">{{ $t('nav.login') }}</text>
@@ -85,6 +88,11 @@ export default {
     },
     userInfo() {
       return this.vk.getVuex('$user.userInfo') || {};
+    },
+    avatarChar() {
+      const info = this.userInfo || {};
+      const name = info.nickname || info.username || '';
+      return (name && String(name).charAt(0)) || '?';
     }
   },
   onLoad() {
@@ -206,8 +214,36 @@ export default {
   }
 
   &__user {
-    font-size: 14px;
-    color: var(--vk-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 10px 0 4px;
+    border-radius: 6px;
+    background: var(--vk-bg-muted, #f1f5f9);
+  }
+
+  &__user-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--vk-primary, #3b82f6);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__user-name {
+    font-size: 13px;
+    color: var(--vk-text, #1e293b);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__link {
