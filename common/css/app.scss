@@ -145,3 +145,6 @@ button[type="warn"] {
 .uni-scroll-view::-webkit-scrollbar-thumb {
 	background: rgba(135, 135, 135, 0.4) !important;
 }
+
+/* Element UI / 表格表单全局深浅色皮肤（必须最后加载） */
+@import "./element-theme.scss";

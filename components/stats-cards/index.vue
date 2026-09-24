@@ -37,6 +37,13 @@ export default {
     flex: 1;
     cursor: pointer;
     transition: all 0.3s;
+    background: var(--vk-card, #ffffff);
+    border-color: var(--vk-border, #e2e8f0);
+
+    ::v-deep .el-card__body {
+      background: transparent;
+      color: var(--vk-text, #1e293b);
+    }
 
     &:hover {
       transform: translateY(-4px);
