@@ -1,9 +1,9 @@
 <template>
   <view class="cta">
     <view class="cta__inner">
-      <text class="cta__title">{{ data.title || '准备好开始了吗？' }}</text>
+      <text class="cta__title">{{ data.title || $t('cta.title') }}</text>
       <text class="cta__sub">{{ data.subtitle || '' }}</text>
-      <text class="btn btn--primary btn--lg" @click="handleClick">{{ data.btn_text || '免费注册' }}</text>
+      <text class="btn btn--primary btn--lg" @click="handleClick">{{ data.btn_text || $t('cta.register') }}</text>
     </view>
   </view>
 </template>
@@ -35,14 +35,14 @@ export default {
     display: block;
     font-size: 32px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--vk-text);
     margin-bottom: 12px;
   }
 
   &__sub {
     display: block;
     font-size: 16px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     margin-bottom: 36px;
   }
 }

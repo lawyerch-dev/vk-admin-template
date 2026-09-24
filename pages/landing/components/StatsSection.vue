@@ -20,7 +20,7 @@ export default {
 <style lang="scss" scoped>
 .stats {
   padding: 60px 24px;
-  background: #f8fafc;
+  background: var(--vk-bg-secondary);
 
   &__inner {
     max-width: 1000px;
@@ -40,7 +40,7 @@ export default {
     display: block;
     font-size: 36px;
     font-weight: 800;
-    color: #1e293b;
+    color: var(--vk-text);
     line-height: 1;
     margin-bottom: 8px;
   }
@@ -48,7 +48,7 @@ export default {
   &__label {
     display: block;
     font-size: 14px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
   }
 }
 </style>

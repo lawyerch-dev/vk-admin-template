@@ -231,7 +231,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	min-height: 100vh;
-	background-color: #F1F5F9;
+	background-color: var(--vk-bg-muted);
 	padding: 20px;
 	padding-top: 84px;
 	box-sizing: border-box;
@@ -246,7 +246,7 @@ export default {
 	z-index: 100;
 	background: rgba(255, 255, 255, 0.9);
 	backdrop-filter: blur(12px);
-	border-bottom: 1px solid #e2e8f0;
+	border-bottom: 1px solid var(--vk-border);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
 	&__inner {
@@ -274,7 +274,7 @@ export default {
 	&__brand {
 		font-size: 18px;
 		font-weight: 700;
-		color: #1e293b;
+		color: var(--vk-text);
 	}
 
 	&__right {
@@ -285,11 +285,11 @@ export default {
 
 	&__link {
 		font-size: 14px;
-		color: #64748b;
+		color: var(--vk-text-secondary);
 		cursor: pointer;
 
 		&:hover {
-			color: #1e293b;
+			color: var(--vk-text);
 		}
 	}
 
@@ -307,7 +307,7 @@ export default {
 		}
 
 		&--ghost {
-			background: #ffffff;
+			background: var(--vk-bg);
 			color: var(--vk-primary);
 			border: 1px solid var(--vk-primary);
 
@@ -321,7 +321,7 @@ export default {
 .login-card {
 	width: 100%;
 	max-width: 560px;
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 	border-radius: 12px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
@@ -336,7 +336,7 @@ export default {
 	align-items: center;
 	padding: 24px;
 	border-bottom-width: 1px;
-	border-bottom-color: #E2E8F0;
+	border-bottom-color: var(--vk-border);
 	border-bottom-style: solid;
 }
 
@@ -355,20 +355,20 @@ export default {
 .title {
 	font-size: 18px;
 	font-weight: 600;
-	color: #0F172A;
+	color: var(--vk-text);
 	line-height: 24px;
 }
 
 .subtitle {
 	font-size: 13px;
-	color: #64748B;
+	color: var(--vk-text-secondary);
 	margin-top: 2px;
 }
 
 .tabs {
 	display: flex;
 	flex-direction: row;
-	background-color: #F8FAFC;
+	background-color: var(--vk-bg-secondary);
 	padding: 12px 24px 0;
 }
 
@@ -381,7 +381,7 @@ export default {
 }
 
 .tab-btn.active {
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 	position: relative;
 }
 
@@ -397,7 +397,7 @@ export default {
 
 .tab-text {
 	font-size: 14px;
-	color: #64748B;
+	color: var(--vk-text-secondary);
 }
 
 .tab-btn.active .tab-text {
@@ -418,15 +418,15 @@ export default {
 	justify-content: center;
 	align-items: center;
 	padding: 16px 24px;
-	background-color: #F8FAFC;
+	background-color: var(--vk-bg-secondary);
 	border-top-width: 1px;
-	border-top-color: #E2E8F0;
+	border-top-color: var(--vk-border);
 	border-top-style: solid;
 }
 
 .footer-text {
 	font-size: 13px;
-	color: #64748B;
+	color: var(--vk-text-secondary);
 }
 
 .footer-link {

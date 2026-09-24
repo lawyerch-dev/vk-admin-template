@@ -184,7 +184,7 @@ export default {
 .label {
 	font-size: 14px;
 	font-weight: 500;
-	color: #334155;
+	color: var(--vk-text-secondary);
 	width: 70px;
 	text-align: right;
 	margin-right: 12px;
@@ -201,17 +201,17 @@ export default {
 	padding-left: 12px;
 	padding-right: 12px;
 	font-size: 14px;
-	color: #0F172A;
-	background-color: #F8FAFC;
+	color: var(--vk-text);
+	background-color: var(--vk-bg-secondary);
 	border-width: 1px;
-	border-color: #E2E8F0;
+	border-color: var(--vk-border);
 	border-style: solid;
 	border-radius: 8px;
 }
 
 .input:focus {
 	border-color: var(--vk-primary);
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 }
 
 .input-wrap {
@@ -259,7 +259,7 @@ export default {
 
 .checkbox-text {
 	font-size: 13px;
-	color: #64748B;
+	color: var(--vk-text-secondary);
 	margin-left: 4px;
 }
 
@@ -294,12 +294,12 @@ export default {
 .demo-title {
 	font-size: 12px;
 	font-weight: 600;
-	color: #64748B;
+	color: var(--vk-text-secondary);
 }
 
 .demo-hint {
 	font-size: 11px;
-	color: #94A3B8;
+	color: var(--vk-text-muted);
 }
 
 .demo-row {
@@ -309,8 +309,8 @@ export default {
 	justify-content: space-between;
 	padding: 7px 10px;
 	margin-bottom: 6px;
-	background-color: #F8FAFC;
-	border: 1px solid #E2E8F0;
+	background-color: var(--vk-bg-secondary);
+	border: 1px solid var(--vk-border);
 	border-radius: 6px;
 }
 
@@ -322,7 +322,7 @@ export default {
 .demo-account {
 	font-size: 13px;
 	font-weight: 600;
-	color: #0F172A;
+	color: var(--vk-text);
 	font-family: Menlo, Monaco, Consolas, monospace;
 }
 
@@ -338,7 +338,7 @@ export default {
 .btn-text {
 	font-size: 15px;
 	font-weight: 600;
-	color: #FFFFFF;
+	color: #ffffff;
 }
 
 @media screen and (max-width: 480px) {

@@ -1,12 +1,23 @@
 /* 这里是你自己写的全局css样式 */
 
-/* 品牌主题变量（一键换肤：由 common/theme/runtime.js 动态覆盖） */
+/* 全局主题变量：浅色 / 深色（由 common/theme/runtime.js 覆盖） */
 page {
+	--vk-bg: #ffffff;
+	--vk-bg-secondary: #f8fafc;
+	--vk-bg-muted: #f1f5f9;
+	--vk-text: #1e293b;
+	--vk-text-secondary: #64748b;
+	--vk-text-muted: #94a3b8;
+	--vk-border: #e2e8f0;
 	--vk-primary: #3b82f6;
 	--vk-primary-hover: #2563eb;
 	--vk-primary-light: #eff6ff;
 	--vk-primary-border: #93c5fd;
 	--vk-primary-soft: #ecfeff;
+	--vk-card: #ffffff;
+	--vk-nav: rgba(255, 255, 255, 0.92);
+	color: var(--vk-text);
+	background: var(--vk-bg);
 }
 
 /* 禁用双击缩放，直接触发点击，解决Web端点击响应延迟的问题 */

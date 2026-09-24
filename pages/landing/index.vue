@@ -10,7 +10,7 @@
         <view class="nav__right">
           <nav-prefs />
           <template v-if="isLoggedIn">
-            <text class="nav__user">{{ userInfo.nickname || userInfo.username || '用户' }}</text>
+            <text class="nav__user">{{ userInfo.nickname || userInfo.username || $t('user.fallback') }}</text>
             <text class="nav__btn" @click="goAdmin">{{ $t('nav.admin') }}</text>
           </template>
           <template v-else>
@@ -152,7 +152,7 @@ export default {
 <style lang="scss" scoped>
 .landing {
   min-height: 100vh;
-  background: #ffffff;
+  background: var(--vk-bg);
 }
 
 // 导航栏
@@ -162,13 +162,13 @@ export default {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--vk-nav, rgba(255, 255, 255, 0.9));
   backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
   transition: all 0.3s;
 
   &--scrolled {
-    border-bottom-color: #e2e8f0;
+    border-bottom-color: var(--vk-border);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
@@ -196,7 +196,7 @@ export default {
   &__brand {
     font-size: 18px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--vk-text);
   }
 
   &__right {
@@ -207,16 +207,16 @@ export default {
 
   &__user {
     font-size: 14px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
   }
 
   &__link {
     font-size: 14px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     cursor: pointer;
 
     &:hover {
-      color: #1e293b;
+      color: var(--vk-text);
     }
   }
 
@@ -234,7 +234,7 @@ export default {
     }
 
     &--ghost {
-      background: #ffffff;
+      background: var(--vk-bg);
       color: var(--vk-primary);
       border: 1px solid var(--vk-primary);
 
@@ -248,12 +248,12 @@ export default {
 // Footer
 .footer {
   padding: 32px 24px;
-  background: #f8fafc;
+  background: var(--vk-bg-secondary);
   text-align: center;
 
   &__text {
     font-size: 13px;
-    color: #94a3b8;
+    color: var(--vk-text-muted);
   }
 }
 </style>

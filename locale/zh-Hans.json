@@ -45,5 +45,19 @@
 	"common.ok": "确定",
 	"common.cancel": "取消",
 	"pages.login.title": "登录",
-	"pages.products.title": "产品中心"
+	"pages.products.title": "产品中心",
+	"hero.more": "了解更多",
+	"hero.console": "登录后台",
+	"features.title": "核心功能",
+	"advantages.title": "为什么选择我们",
+	"products.title": "产品中心",
+	"products.subtitle": "选择适合您的产品",
+	"products.buy": "立即购买",
+	"products.detail": "了解详情",
+	"products.fallback": "产品",
+	"cta.title": "准备好开始了吗？",
+	"cta.register": "免费注册",
+	"user.fallback": "用户",
+	"nav.theme.light": "浅色",
+	"nav.theme.dark": "深色"
 }

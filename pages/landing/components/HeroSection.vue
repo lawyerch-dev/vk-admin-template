@@ -4,8 +4,8 @@
       <text class="hero__title">{{ data.title || '' }}</text>
       <text class="hero__sub">{{ data.subtitle || '' }}</text>
       <view class="hero__actions">
-        <text class="btn btn--primary" @click="handlePrimary">{{ (data.btn_primary || {}).text || '了解更多' }}</text>
-        <text class="btn btn--outline" @click="handleGhost">{{ (data.btn_ghost || {}).text || '登录后台' }}</text>
+        <text class="btn btn--primary" @click="handlePrimary">{{ (data.btn_primary || {}).text || $t('hero.more') }}</text>
+        <text class="btn btn--outline" @click="handleGhost">{{ (data.btn_ghost || {}).text || $t('hero.console') }}</text>
       </view>
     </view>
   </view>
@@ -39,7 +39,7 @@ export default {
   justify-content: center;
   text-align: center;
   padding: 48px 24px;
-  background: #ffffff;
+  background: var(--vk-bg);
 
   &__inner {
     max-width: 800px;
@@ -49,7 +49,7 @@ export default {
     display: block;
     font-size: 48px;
     font-weight: 800;
-    color: #1e293b;
+    color: var(--vk-text);
     line-height: 1.2;
     letter-spacing: -1px;
     white-space: pre-line;
@@ -59,7 +59,7 @@ export default {
   &__sub {
     display: block;
     font-size: 18px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     line-height: 1.6;
     white-space: pre-line;
     margin-bottom: 48px;

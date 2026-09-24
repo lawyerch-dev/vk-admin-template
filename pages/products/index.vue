@@ -17,7 +17,7 @@
 
     <!-- 页面标题 -->
     <view class="page-header">
-      <text class="page-header__title">产品中心</text>
+      <text class="page-header__title">{{ $t('products.title') }}</text>
       <text class="page-header__sub">选择适合您的产品，提升工作效率</text>
     </view>
 
@@ -118,7 +118,7 @@
                 @click="handleBuy(product)"
               >
                 <i class="el-icon-shopping-cart-2"></i>
-                <text>{{ product.buy_price > 0 ? '立即购买' : '了解详情' }}</text>
+                <text>{{ product.buy_price > 0 ? $t('products.buy') : $t('products.detail') }}</text>
               </view>
             </view>
           </view>
@@ -216,7 +216,7 @@ export default {
     // 获取类型标签
     getTypeLabel(type) {
       const found = this.categories.find(c => c.value === type);
-      return found ? found.label : type || '产品';
+      return found ? found.label : type || $t('products.fallback');
     },
 
     // 打开详情文档
@@ -269,7 +269,7 @@ export default {
 <style lang="scss" scoped>
 .products-page {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--vk-bg-secondary);
 }
 
 /* 导航栏 */
@@ -279,7 +279,7 @@ export default {
   z-index: 100;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--vk-border);
 
   &__inner {
     max-width: 1200px;
@@ -305,7 +305,7 @@ export default {
   &__brand {
     font-size: 18px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--vk-text);
   }
 
   &__right {
@@ -316,7 +316,7 @@ export default {
 
   &__link {
     font-size: 14px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     cursor: pointer;
 
     &:hover {
@@ -327,7 +327,7 @@ export default {
   &__btn {
     padding: 8px 20px;
     background: var(--vk-primary);
-    color: #fff;
+    color: #ffffff;
     border-radius: 6px;
     font-size: 14px;
     font-weight: 500;
@@ -338,7 +338,7 @@ export default {
     }
 
     &--ghost {
-      background: #ffffff;
+      background: var(--vk-bg);
       color: var(--vk-primary);
       border: 1px solid var(--vk-primary);
 
@@ -358,14 +358,14 @@ export default {
     display: block;
     font-size: 36px;
     font-weight: 800;
-    color: #1e293b;
+    color: var(--vk-text);
     margin-bottom: 12px;
   }
 
   &__sub {
     display: block;
     font-size: 16px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
   }
 }
 
@@ -385,11 +385,11 @@ export default {
 
 .filter-tag {
   padding: 8px 20px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--vk-bg);
+  border: 1px solid var(--vk-border);
   border-radius: 20px;
   font-size: 14px;
-  color: #64748b;
+  color: var(--vk-text-secondary);
   cursor: pointer;
   transition: all 0.2s;
 
@@ -401,11 +401,11 @@ export default {
   &--active {
     background: var(--vk-primary);
     border-color: var(--vk-primary);
-    color: #fff;
+    color: #ffffff;
 
     &:hover {
       background: var(--vk-primary-hover);
-      color: #fff;
+      color: #ffffff;
     }
   }
 }
@@ -421,7 +421,7 @@ export default {
 .loading-state {
   text-align: center;
   padding: 80px 0;
-  color: #94a3b8;
+  color: var(--vk-text-muted);
   font-size: 16px;
 
   i {
@@ -438,7 +438,7 @@ export default {
 
   i {
     font-size: 48px;
-    color: #cbd5e1;
+    color: var(--vk-border);
     display: block;
     margin-bottom: 16px;
   }
@@ -446,14 +446,14 @@ export default {
   &__text {
     display: block;
     font-size: 18px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     margin-bottom: 8px;
   }
 
   &__tip {
     display: block;
     font-size: 14px;
-    color: #94a3b8;
+    color: var(--vk-text-muted);
   }
 }
 
@@ -466,7 +466,7 @@ export default {
 
 /* 产品卡片 */
 .product-card {
-  background: #fff;
+  background: var(--vk-bg);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -480,7 +480,7 @@ export default {
   &__visual {
     position: relative;
     height: 200px;
-    background: #f1f5f9;
+    background: var(--vk-bg-muted);
     overflow: hidden;
   }
 
@@ -498,7 +498,7 @@ export default {
 
     i {
       font-size: 48px;
-      color: #cbd5e1;
+      color: var(--vk-border);
     }
   }
 
@@ -508,7 +508,7 @@ export default {
     left: 12px;
     padding: 4px 12px;
     background: rgba(59, 130, 246, 0.9);
-    color: #fff;
+    color: #ffffff;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
@@ -522,7 +522,7 @@ export default {
     display: block;
     font-size: 18px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--vk-text);
     margin-bottom: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -535,7 +535,7 @@ export default {
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-size: 14px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     line-height: 1.6;
     margin-bottom: 16px;
   }
@@ -546,7 +546,7 @@ export default {
     gap: 6px;
     margin-bottom: 20px;
     padding: 12px;
-    background: #f8fafc;
+    background: var(--vk-bg-secondary);
     border-radius: 8px;
   }
 
@@ -569,11 +569,11 @@ export default {
 
 .pricing-label {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--vk-text-muted);
 }
 
 .pricing-sep {
-  color: #cbd5e1;
+  color: var(--vk-border);
   font-size: 14px;
 }
 
@@ -607,7 +607,7 @@ export default {
 
   &--buy {
     background: var(--vk-primary);
-    color: #fff;
+    color: #ffffff;
 
     &:hover {
       background: var(--vk-primary-hover);
@@ -619,12 +619,12 @@ export default {
 .footer {
   text-align: center;
   padding: 24px;
-  border-top: 1px solid #e2e8f0;
-  background: #fff;
+  border-top: 1px solid var(--vk-border);
+  background: var(--vk-bg);
 
   &__text {
     font-size: 14px;
-    color: #94a3b8;
+    color: var(--vk-text-muted);
   }
 }
 </style>

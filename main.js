@@ -38,12 +38,11 @@ modulesFiles.keys().map((modulePath, index) => {
 // 引入 自定义全局css 样式
 import '@/common/css/app.scss';
 
-// 国际化（官方 VueI18n）+ 品牌换肤
+// 国际化（官方 VueI18n）+ 全局深浅色
 import i18n, { installI18n } from '@/common/i18n';
-import { restoreBrand, brandTokens } from '@/common/theme/runtime';
+import { restoreColorMode } from '@/common/theme/runtime';
 installI18n(Vue);
-Vue.prototype.$brand = () => brandTokens;
-restoreBrand();
+restoreColorMode();
 
 Vue.config.productionTip = false
 

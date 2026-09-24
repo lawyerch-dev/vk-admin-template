@@ -45,5 +45,19 @@
 	"common.ok": "OK",
 	"common.cancel": "Cancel",
 	"pages.login.title": "Sign In",
-	"pages.products.title": "Products"
+	"pages.products.title": "Products",
+	"hero.more": "Learn more",
+	"hero.console": "Open console",
+	"features.title": "Features",
+	"advantages.title": "Why us",
+	"products.title": "Products",
+	"products.subtitle": "Pick what fits you",
+	"products.buy": "Buy now",
+	"products.detail": "Details",
+	"products.fallback": "Product",
+	"cta.title": "Ready to start?",
+	"cta.register": "Sign up",
+	"user.fallback": "User",
+	"nav.theme.light": "Light",
+	"nav.theme.dark": "Dark"
 }

@@ -1,7 +1,7 @@
 <template>
   <view class="advantages">
     <view class="advantages__inner">
-      <text class="section__title">{{ data.title || '为什么选择我们' }}</text>
+      <text class="section__title">{{ data.title || $t('advantages.title') }}</text>
       <text class="section__subtitle">{{ data.subtitle || '' }}</text>
       <view class="advantages__list">
         <view class="adv-item" v-for="(item, i) in data.items" :key="i">
@@ -27,7 +27,7 @@ export default {
 <style lang="scss" scoped>
 .advantages {
   padding: 80px 24px;
-  background: #f8fafc;
+  background: var(--vk-bg-secondary);
 
   &__inner {
     max-width: 800px;
@@ -46,14 +46,14 @@ export default {
     display: block;
     font-size: 32px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--vk-text);
     margin-bottom: 12px;
   }
 
   &__subtitle {
     display: block;
     font-size: 16px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
   }
 }
 
@@ -61,7 +61,7 @@ export default {
   display: flex;
   gap: 24px;
   padding: 24px 0;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--vk-border);
 
   &:last-child {
     border-bottom: none;
@@ -82,14 +82,14 @@ export default {
     display: block;
     font-size: 18px;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--vk-text);
     margin-bottom: 6px;
   }
 
   &__desc {
     display: block;
     font-size: 14px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     line-height: 1.6;
   }
 }

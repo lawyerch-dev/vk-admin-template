@@ -212,7 +212,7 @@ export default {
 .label {
 	font-size: 14px;
 	font-weight: 500;
-	color: #334155;
+	color: var(--vk-text-secondary);
 	width: 70px;
 	text-align: right;
 	margin-right: 12px;
@@ -229,17 +229,17 @@ export default {
 	padding-left: 12px;
 	padding-right: 12px;
 	font-size: 14px;
-	color: #0F172A;
-	background-color: #F8FAFC;
+	color: var(--vk-text);
+	background-color: var(--vk-bg-secondary);
 	border-width: 1px;
-	border-color: #E2E8F0;
+	border-color: var(--vk-border);
 	border-style: solid;
 	border-radius: 8px;
 }
 
 .input:focus {
 	border-color: var(--vk-primary);
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 }
 
 .input-wrap {
@@ -281,7 +281,7 @@ export default {
 
 .checkbox-text {
 	font-size: 13px;
-	color: #64748B;
+	color: var(--vk-text-secondary);
 	margin-left: 4px;
 }
 
@@ -310,7 +310,7 @@ export default {
 .inviter-code {
 	flex: 1;
 	font-size: 14px;
-	color: #64748B;
+	color: var(--vk-text-secondary);
 }
 
 .btn-primary {
@@ -326,7 +326,7 @@ export default {
 .btn-text {
 	font-size: 15px;
 	font-weight: 600;
-	color: #FFFFFF;
+	color: #ffffff;
 }
 
 @media screen and (max-width: 480px) {

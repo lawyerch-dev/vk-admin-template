@@ -1,8 +1,8 @@
 <template>
   <view class="products-section">
     <view class="products-section__inner">
-      <text class="products-section__title">{{ data.title || '产品中心' }}</text>
-      <text class="products-section__sub">{{ data.subtitle || '选择适合您的产品' }}</text>
+      <text class="products-section__title">{{ data.title || $t('products.title') }}</text>
+      <text class="products-section__sub">{{ data.subtitle || $t('products.subtitle') }}</text>
 
       <!-- 产品网格 -->
       <view v-if="loading" class="products-section__loading">
@@ -139,7 +139,7 @@ export default {
 <style lang="scss" scoped>
 .products-section {
   padding: 80px 24px;
-  background: #f8fafc;
+  background: var(--vk-bg-secondary);
 
   &__inner {
     max-width: 1200px;
@@ -151,21 +151,21 @@ export default {
     display: block;
     font-size: 36px;
     font-weight: 800;
-    color: #1e293b;
+    color: var(--vk-text);
     margin-bottom: 12px;
   }
 
   &__sub {
     display: block;
     font-size: 16px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     margin-bottom: 48px;
   }
 
   &__loading,
   &__empty {
     padding: 40px 0;
-    color: #94a3b8;
+    color: var(--vk-text-muted);
     font-size: 16px;
 
     i {
@@ -191,7 +191,7 @@ export default {
   display: inline-block;
   padding: 12px 32px;
   background: var(--vk-primary);
-  color: #fff;
+  color: #ffffff;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
@@ -203,7 +203,7 @@ export default {
 }
 
 .product-item {
-  background: #fff;
+  background: var(--vk-bg);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -216,7 +216,7 @@ export default {
 
   &__visual {
     height: 180px;
-    background: #f1f5f9;
+    background: var(--vk-bg-muted);
     overflow: hidden;
   }
 
@@ -234,7 +234,7 @@ export default {
 
     i {
       font-size: 48px;
-      color: #cbd5e1;
+      color: var(--vk-border);
     }
   }
 
@@ -246,7 +246,7 @@ export default {
     display: block;
     font-size: 18px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--vk-text);
     margin-bottom: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -259,7 +259,7 @@ export default {
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-size: 14px;
-    color: #64748b;
+    color: var(--vk-text-secondary);
     line-height: 1.6;
     margin-bottom: 16px;
   }
@@ -270,7 +270,7 @@ export default {
     gap: 2px;
     margin-bottom: 16px;
     padding: 10px;
-    background: #f8fafc;
+    background: var(--vk-bg-secondary);
     border-radius: 6px;
   }
 
@@ -288,7 +288,7 @@ export default {
 
 .pricing-label {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--vk-text-muted);
 }
 
 .action-btn {
@@ -313,7 +313,7 @@ export default {
 
   &--buy {
     background: var(--vk-primary);
-    color: #fff;
+    color: #ffffff;
 
     &:hover {
       background: var(--vk-primary-hover);

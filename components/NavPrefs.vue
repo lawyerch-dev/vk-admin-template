@@ -11,45 +11,39 @@
 			>{{ item.label }}</view>
 		</view>
 
-		<!-- 主题：色板 -->
-		<view class="theme">
+		<!-- 主题：浅色 / 深色 -->
+		<view class="seg">
 			<view
-				v-for="item in themes"
-				:key="item.name"
-				class="theme__swatch"
-				:class="{ active: themeName === item.name }"
-				:style="{ background: item.color }"
-				@click="switchTheme(item.name)"
-			></view>
+				v-for="item in modes"
+				:key="item.value"
+				class="seg__item"
+				:class="{ active: mode === item.value }"
+				@click="switchMode(item.value)"
+			>{{ item.label }}</view>
 		</view>
 	</view>
 </template>
 
 <script>
-import { applyBrand, brandPresets, getBrandName } from '@/common/theme/runtime';
-
-const LOCALES = [
-	{ value: 'zh-Hans', label: '中' },
-	{ value: 'en', label: 'EN' }
-];
-
-const THEMES = [
-	{ name: 'blue', color: '#3b82f6', label: '蓝' },
-	{ name: 'indigo', color: '#6366f1', label: '靛' },
-	{ name: 'cyan', color: '#0891b2', label: '青' }
-];
+import { applyColorMode, getColorMode } from '@/common/theme/runtime';
 
 export default {
 	data() {
 		return {
-			locales: LOCALES,
-			themes: THEMES,
-			themeName: 'blue',
+			locales: [
+				{ value: 'zh-Hans', label: '中' },
+				{ value: 'en', label: 'EN' }
+			],
+			modes: [
+				{ value: 'light', label: '浅色' },
+				{ value: 'dark', label: '深色' }
+			],
+			mode: 'light',
 			locale: 'zh-Hans'
 		};
 	},
 	mounted() {
-		this.themeName = getBrandName();
+		this.mode = getColorMode();
 		this.locale = this.$getLocale ? this.$getLocale() : 'zh-Hans';
 	},
 	methods: {
@@ -57,31 +51,17 @@ export default {
 			if (this.locale === value) return;
 			this.locale = value;
 			this.$setLocale(value);
-			// 文案不更新时强制刷新当前页
 			this.$forceUpdate();
 			const pages = getCurrentPages();
 			const page = pages[pages.length - 1];
-			if (page && typeof page.$vm !== 'undefined') {
-				page.$vm.$forceUpdate();
-			}
+			if (page && page.$vm) page.$vm.$forceUpdate();
 			this.$emit('locale-change', value);
 		},
-		switchTheme(name) {
-			if (this.themeName === name) return;
-			this.themeName = name;
-			const tokens = applyBrand(name);
-			// 同步给页面根节点，保证非 H5 也能吃到变量
-			const pages = getCurrentPages();
-			const page = pages[pages.length - 1];
-			if (page && page.$vm && page.$vm.$el && page.$vm.$el.style) {
-				const el = page.$vm.$el;
-				el.style.setProperty('--vk-primary', tokens.primary);
-				el.style.setProperty('--vk-primary-hover', tokens.primaryHover);
-				el.style.setProperty('--vk-primary-light', tokens.primaryLight);
-				el.style.setProperty('--vk-primary-border', tokens.primaryBorder);
-				el.style.setProperty('--vk-primary-soft', tokens.primarySoft);
-			}
-			this.$emit('theme-change', name);
+		switchMode(value) {
+			if (this.mode === value) return;
+			this.mode = value;
+			applyColorMode(value);
+			this.$emit('theme-change', value);
 		}
 	}
 };
@@ -92,16 +72,15 @@ export default {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	gap: 10px;
+	gap: 8px;
 	margin-right: 8px;
 }
 
-/* 语言分段 */
 .seg {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	background: #f1f5f9;
+	background: var(--vk-bg-muted, #f1f5f9);
 	border-radius: 8px;
 	padding: 2px;
 }
@@ -113,7 +92,7 @@ export default {
 	border-radius: 6px;
 	font-size: 12px;
 	font-weight: 500;
-	color: #64748b;
+	color: var(--vk-text-secondary, #64748b);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -122,29 +101,5 @@ export default {
 .seg__item.active {
 	background: var(--vk-primary, #3b82f6);
 	color: #ffffff;
-}
-
-/* 主题色板 */
-.theme {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 6px;
-	padding: 4px 8px;
-	background: #f1f5f9;
-	border-radius: 8px;
-}
-
-.theme__swatch {
-	width: 16px;
-	height: 16px;
-	border-radius: 50%;
-	border: 2px solid transparent;
-	box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08);
-}
-
-.theme__swatch.active {
-	border-color: #0f172a;
-	transform: scale(1.1);
 }
 </style>
