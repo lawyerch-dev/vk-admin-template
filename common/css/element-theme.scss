@@ -281,18 +281,53 @@
 	color: var(--vk-text, #1e293b) !important;
 }
 
-.el-pagination button:disabled {
+.el-pagination button,
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+	border: 1px solid var(--vk-border, #e2e8f0) !important;
+	border-radius: 6px !important;
+	color: var(--vk-text, #1e293b) !important;
+	min-width: 28px;
+}
+
+.el-pagination button:hover,
+.el-pagination .btn-prev:hover,
+.el-pagination .btn-next:hover {
+	color: var(--vk-primary, #3b82f6) !important;
+	border-color: var(--vk-primary-border, #93c5fd) !important;
+}
+
+.el-pagination button:disabled,
+.el-pagination .btn-prev:disabled,
+.el-pagination .btn-next:disabled {
 	color: var(--vk-text-muted, #94a3b8) !important;
-	background: transparent !important;
+	background: var(--vk-bg-muted, #f1f5f9) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+.el-pagination .el-pager li {
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
+	border: 1px solid var(--vk-border, #e2e8f0) !important;
+	border-radius: 6px !important;
+	color: var(--vk-text, #1e293b) !important;
 }
 
 .el-pagination .el-pager li.active {
 	background-color: var(--vk-primary, #3b82f6) !important;
+	border-color: var(--vk-primary, #3b82f6) !important;
 	color: #ffffff !important;
 }
 
 .el-pagination .el-pager li:hover {
 	color: var(--vk-primary, #3b82f6) !important;
+	border-color: var(--vk-primary-border, #93c5fd) !important;
+}
+
+.el-pagination .el-pager li.btn-quicknext,
+.el-pagination .el-pager li.btn-quickprev {
+	color: var(--vk-text-secondary, #64748b) !important;
+	background-color: var(--vk-bg-muted, #f1f5f9) !important;
 }
 
 .el-pagination__total,
@@ -300,10 +335,30 @@
 	color: var(--vk-text-secondary, #64748b) !important;
 }
 
-.el-pagination .el-input__inner {
+.el-pagination__editor.el-input {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+.el-pagination__editor.el-input .el-input__inner {
 	background-color: var(--vk-bg-secondary, #f8fafc) !important;
 	color: var(--vk-text, #1e293b) !important;
 	border-color: var(--vk-border, #e2e8f0) !important;
+	text-align: center;
+}
+
+/* 每页条数下拉 */
+.el-pagination .el-input__inner,
+.el-pagination .el-select .el-input__inner {
+	background-color: var(--vk-bg-secondary, #f8fafc) !important;
+	color: var(--vk-text, #1e293b) !important;
+	border-color: var(--vk-border, #e2e8f0) !important;
+}
+
+.el-pagination .el-input__suffix,
+.el-pagination .el-input__icon,
+.el-pagination .el-select__caret {
+	color: var(--vk-text-secondary, #64748b) !important;
 }
 
 .el-pagination.is-background .btn-next,
@@ -311,10 +366,12 @@
 .el-pagination.is-background .el-pager li {
 	background-color: var(--vk-bg-muted, #f1f5f9) !important;
 	color: var(--vk-text, #1e293b) !important;
+	border: 1px solid var(--vk-border, #e2e8f0) !important;
 }
 
 .el-pagination.is-background .el-pager li:not(.disabled).active {
 	background-color: var(--vk-primary, #3b82f6) !important;
+	border-color: var(--vk-primary, #3b82f6) !important;
 	color: #ffffff !important;
 }
 
